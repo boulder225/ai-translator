@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.pyc
+.python-version
+
+# Environments
+.env
+.venv/
+
+# Build artifacts
+dist/
+build/
+.ruff_cache/
+.mypy_cache/
+
+# App data
+data/
+logs/
+
+# Streamlit
+.streamlit/
+
+

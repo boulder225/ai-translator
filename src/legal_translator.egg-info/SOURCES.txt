@@ -1,0 +1,10 @@
+README.md
+pyproject.toml
+src/legal_translator.egg-info/PKG-INFO
+src/legal_translator.egg-info/SOURCES.txt
+src/legal_translator.egg-info/dependency_links.txt
+src/legal_translator.egg-info/entry_points.txt
+src/legal_translator.egg-info/requires.txt
+src/legal_translator.egg-info/top_level.txt
+src/translator/__init__.py
+src/translator/cli.py

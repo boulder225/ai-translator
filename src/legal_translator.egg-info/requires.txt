@@ -1,0 +1,15 @@
+anthropic>=0.35.0
+python-docx>=1.1.0
+pdfplumber>=0.11.4
+PyPDF2>=3.0.1
+streamlit>=1.39.0
+rapidfuzz>=3.10.0
+python-dotenv>=1.0.1
+typer>=0.12.5
+pydantic>=2.9.2
+tenacity>=9.0.0
+
+[dev]
+pytest>=8.3.3
+ruff>=0.7.4
+mypy>=1.13.0

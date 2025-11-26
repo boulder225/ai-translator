@@ -1,0 +1,35 @@
+# Legal Translation Prototype - Development Rules
+
+## Project Mission
+Build a minimal viable prototype that demonstrates legal document translation capability to secure the first paying customer within 3-4 weeks.
+
+## Core Principles
+1. SPEED OVER PERFECTION: Every decision optimizes for fastest path to customer demo
+2. VALIDATION OVER ARCHITECTURE: Build to learn if the client will pay, not to scale
+3. SIMPLICITY OVER ELEGANCE: Use the simplest approach that works
+4. WORKING OVER COMPREHENSIVE: Feature completeness is irrelevant until there's revenue
+
+## Technical Constraints
+
+### Must Have
+- Process 50+ documents in batch
+- Maintain terminology consistency across translations
+- Preserve document formatting (DOCX in, DOCX out)
+- Use Claude API for translations
+- Support French/German ↔ English/German
+- Run locally or on Heroku
+- Complete in 3-4 weeks of part-time work
+
+### Must NOT Have (Initially)
+- MCP server implementation
+- User authentication system
+- Database (use file system)
+- Enterprise architecture
+- API endpoints for external use
+- Advanced workflow engine
+- Multi-tenant support
+- On-premises deployment option
+
+## Code Guidelines
+
+### File Structure
