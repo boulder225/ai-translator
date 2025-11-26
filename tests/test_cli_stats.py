@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from translator.cli import _translate_paragraphs
+from translator.processing import _translate_paragraphs
 from translator.terminology.glossary import Glossary, GlossaryEntry
 from translator.terminology.memory import TranslationMemory
 
