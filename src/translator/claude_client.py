@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Sequence
+import os
 
 from anthropic import Anthropic
 
@@ -45,11 +46,14 @@ def _format_memory(records: Sequence[TranslationRecord]) -> str:
     return "\n".join(lines)
 
 
+DEFAULT_MODEL = os.getenv("ANTHROPIC_MODEL", "claude-3-sonnet-20240229")
+
+
 @dataclass
 class ClaudeTranslator:
     api_key: str
-    model: str = "claude-3-5-sonnet-20241022"
-    max_output_tokens: int = 512
+    model: str = DEFAULT_MODEL
+    max_tokens: int = 512
     dry_run: bool = False
 
     def __post_init__(self) -> None:
@@ -79,7 +83,7 @@ class ClaudeTranslator:
             return f"[{target_lang} draft] {paragraph}"
         response = self._client.messages.create(
             model=self.model,
-            max_output_tokens=self.max_output_tokens,
+            max_tokens=self.max_tokens,
             temperature=0,
             messages=[{"role": "user", "content": prompt}],
         )
