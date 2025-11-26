@@ -17,3 +17,10 @@ def write_paragraphs(source_path: str | Path, translations: Iterable[str], outpu
         para.text = translated
     document.save(output_path)
 
+
+def write_new_document(translations: Iterable[str], output_path: str | Path) -> None:
+    doc = Document()
+    for paragraph in translations:
+        doc.add_paragraph(paragraph)
+    doc.save(output_path)
+
