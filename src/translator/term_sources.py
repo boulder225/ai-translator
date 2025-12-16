@@ -179,6 +179,44 @@ class AdminChSource(TermSource):
         return None
 
 
+class ReferenceDocSource(TermSource):
+    """Term lookup from reference document (highest priority)."""
+    
+    def __init__(self, translation_pairs: dict[str, str] | None) -> None:
+        """
+        Initialize reference document source.
+        
+        Args:
+            translation_pairs: Dictionary mapping source terms (lowercase) to target translations
+        """
+        self.translation_pairs = translation_pairs or {}
+        # Normalize keys to lowercase for case-insensitive lookup
+        self._normalized_pairs = {k.lower().strip(): v for k, v in self.translation_pairs.items()}
+    
+    @property
+    def source_id(self) -> str:
+        return "reference_doc"
+    
+    def is_enabled(self) -> bool:
+        return len(self._normalized_pairs) > 0
+    
+    def lookup(self, term: str, source_lang: str, target_lang: str) -> TermTranslation | None:
+        if not self.is_enabled():
+            return None
+        
+        # Case-insensitive lookup
+        normalized_term = term.lower().strip()
+        if normalized_term in self._normalized_pairs:
+            return TermTranslation(
+                source_term=term,
+                translated_term=self._normalized_pairs[normalized_term],
+                source=self.source_id,
+                confidence=1.0,
+                metadata={"reference_doc": True},
+            )
+        return None
+
+
 class PlaceholderSource(TermSource):
     """Fallback source that creates placeholders for unfound terms."""
     

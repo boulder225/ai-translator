@@ -34,7 +34,7 @@ export const detectLanguage = async (file) => {
 
 export const startTranslation = async (file, options) => {
   // #region agent log
-  fetch('http://127.0.0.1:7242/ingest/c9cfb42e-68cf-4957-89f2-8cb5ca71e323',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'api.js:35',message:'startTranslation called',data:{targetLang:options.target_lang,sourceLang:options.source_lang,hasTargetLang:!!options.target_lang},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+  fetch('http://127.0.0.1:7242/ingest/c9cfb42e-68cf-4957-89f2-8cb5ca71e323',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'api.js:35',message:'startTranslation called',data:{targetLang:options.target_lang,sourceLang:options.source_lang,hasTargetLang:!!options.target_lang,hasReferenceDoc:!!options.reference_doc},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
   // #endregion
   
   const formData = new FormData();
@@ -45,8 +45,12 @@ export const startTranslation = async (file, options) => {
   formData.append('use_glossary', options.use_glossary !== false);
   formData.append('skip_memory', options.skip_memory !== false);
   
+  if (options.reference_doc) {
+    formData.append('reference_doc', options.reference_doc);
+  }
+  
   // #region agent log
-  fetch('http://127.0.0.1:7242/ingest/c9cfb42e-68cf-4957-89f2-8cb5ca71e323',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'api.js:42',message:'FormData prepared',data:{targetLangValue,sourceLang:options.source_lang || 'fr'},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+  fetch('http://127.0.0.1:7242/ingest/c9cfb42e-68cf-4957-89f2-8cb5ca71e323',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'api.js:42',message:'FormData prepared',data:{targetLangValue,sourceLang:options.source_lang || 'fr',hasReferenceDoc:!!options.reference_doc},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
   // #endregion
   
   if (options.custom_prompt) {

@@ -8,6 +8,7 @@ import logoLexDeep from './assets/logos/logo-lexdeep-transparent.png';
 function App() {
   const [currentJob, setCurrentJob] = useState(null);
   const [status, setStatus] = useState(null);
+  const [report, setReport] = useState(null);
 
   useEffect(() => {
     if (currentJob) {
@@ -41,11 +42,17 @@ function App() {
     // #endregion
     setCurrentJob(jobId);
     setStatus({ status: 'pending', job_id: jobId });
+    setReport(null); // Reset report when starting new translation
   };
 
   const handleReset = () => {
     setCurrentJob(null);
     setStatus(null);
+    setReport(null);
+  };
+
+  const handleReportUpdate = (reportData) => {
+    setReport(reportData);
   };
 
   return (
@@ -56,22 +63,61 @@ function App() {
             <img src={logoLexDeep} alt="LexDeep" className="nav-logo-image" />
           </div>
           <div className="nav-menu">
-            <a href="#" className="nav-link">Products</a>
-            <a href="#" className="nav-link">Features</a>
-            <a href="#" className="nav-link">Solutions</a>
-            <a href="#" className="nav-link">Resources</a>
-            <a href="#" className="nav-link">Pricing</a>
+            {report && report.stats ? (
+              <div className="nav-stats">
+                <span className="nav-stat-item">
+                  <span className="nav-stat-value">{report.stats?.paragraphs_total || 0}</span>
+                  <span className="nav-stat-label">Paragraphs</span>
+                </span>
+                <span className="nav-stat-separator">•</span>
+                <span className="nav-stat-item">
+                  <span className="nav-stat-value">{report.stats?.model_calls || 0}</span>
+                  <span className="nav-stat-label">API Calls</span>
+                </span>
+                <span className="nav-stat-separator">•</span>
+                <span className="nav-stat-item">
+                  <span className="nav-stat-value">{report.stats?.reused_from_memory || 0}</span>
+                  <span className="nav-stat-label">Memory</span>
+                </span>
+                <span className="nav-stat-separator">•</span>
+                <span className="nav-stat-item">
+                  <span className="nav-stat-value">{report.stats?.glossary_matches || 0}</span>
+                  <span className="nav-stat-label">Glossary</span>
+                </span>
+                {report.stats?.reference_doc_applied !== undefined && (
+                  <>
+                    <span className="nav-stat-separator">•</span>
+                    <span className="nav-stat-item">
+                      <span className="nav-stat-value">{report.stats?.reference_doc_applied || 0}</span>
+                      <span className="nav-stat-label">Reference</span>
+                    </span>
+                  </>
+                )}
+                {report.duration_seconds && (
+                  <>
+                    <span className="nav-stat-separator">•</span>
+                    <span className="nav-stat-item">
+                      <span className="nav-stat-value">{report.duration_seconds.toFixed(1)}s</span>
+                      <span className="nav-stat-label">Time</span>
+                    </span>
+                  </>
+                )}
+              </div>
+            ) : (
+              <p className="nav-tagline">Translate legal documents using controlled AI with glossary and memory support</p>
+            )}
           </div>
           <div className="nav-actions">
             <button className="nav-button nav-button-secondary">Log in</button>
-            <button className="nav-button nav-button-primary">Get Started</button>
+            <button 
+              className="nav-button nav-button-primary"
+              onClick={currentJob ? handleReset : undefined}
+            >
+              Translate Document
+            </button>
           </div>
         </div>
       </nav>
-
-      <header className="App-header">
-        <p>Translate legal documents using controlled AI with glossary and translation memory support</p>
-      </header>
 
       <main className="App-main">
         {!currentJob ? (
@@ -83,6 +129,7 @@ function App() {
             jobId={currentJob}
             status={status}
             onReset={handleReset}
+            onReportUpdate={handleReportUpdate}
           />
         )}
       </main>

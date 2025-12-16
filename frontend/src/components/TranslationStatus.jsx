@@ -4,11 +4,12 @@ import remarkGfm from 'remark-gfm';
 import { downloadTranslation, getTranslationReport, cancelTranslation, downloadTranslatedText } from '../services/api';
 import './TranslationStatus.css';
 
-function TranslationStatus({ jobId, status, onReset }) {
+function TranslationStatus({ jobId, status, onReset, onReportUpdate }) {
   const [report, setReport] = useState(null);
   const [downloading, setDownloading] = useState(false);
   const [downloadingText, setDownloadingText] = useState(false);
   const [cancelling, setCancelling] = useState(false);
+  const [fullscreenColumn, setFullscreenColumn] = useState(null); // 'original', 'translated', or null
 
   useEffect(() => {
     if (status?.status === 'completed' && !report) {
@@ -20,6 +21,10 @@ function TranslationStatus({ jobId, status, onReset }) {
     try {
       const reportData = await getTranslationReport(jobId);
       setReport(reportData);
+      // Notify parent component about the report
+      if (onReportUpdate) {
+        onReportUpdate(reportData);
+      }
     } catch (error) {
       console.error('Failed to load report:', error);
     }
@@ -69,6 +74,25 @@ function TranslationStatus({ jobId, status, onReset }) {
     }
   };
 
+  const toggleFullscreen = (column) => {
+    if (fullscreenColumn === column) {
+      setFullscreenColumn(null);
+    } else {
+      setFullscreenColumn(column);
+    }
+  };
+
+  // Close fullscreen on Escape key
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape' && fullscreenColumn) {
+        setFullscreenColumn(null);
+      }
+    };
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
+  }, [fullscreenColumn]);
+
   if (!status) {
     return <div className="card">Loading status...</div>;
   }
@@ -94,11 +118,11 @@ function TranslationStatus({ jobId, status, onReset }) {
 
   return (
     <div className="card">
-      <h2>Translation Status</h2>
-
-      <div className={`status-message ${statusMsg.type}`}>
-        {statusMsg.text}
-      </div>
+      {status.status !== 'completed' && (
+        <div className={`status-message ${statusMsg.type}`}>
+          {statusMsg.text}
+        </div>
+      )}
 
       {(status.status === 'in_progress' || status.status === 'pending') && (
         <>
@@ -134,10 +158,39 @@ function TranslationStatus({ jobId, status, onReset }) {
           {/* Display original and translated text side-by-side */}
           {status.translated_text && status.translated_text.length > 0 ? (
             <div className="comparison-content">
-              <h3>Translation Review</h3>
-              <div className="comparison-container">
-                <div className="original-column">
-                  <h4>Original ({status.report?.source_lang || 'Source'})</h4>
+              <div className="comparison-header">
+                <div className="action-buttons">
+                  <button
+                    className="button"
+                    onClick={handleDownload}
+                    disabled={downloading}
+                  >
+                    {downloading ? 'Downloading...' : '📄 Download PDF'}
+                  </button>
+                  {status.translated_text && (
+                    <button
+                      className="button button-secondary"
+                      onClick={handleDownloadText}
+                      disabled={downloadingText}
+                    >
+                      {downloadingText ? 'Downloading...' : '📝 Download as Text'}
+                    </button>
+                  )}
+                </div>
+              </div>
+              <div className={`comparison-container ${fullscreenColumn ? 'fullscreen-active' : ''}`}>
+                <div className={`original-column ${fullscreenColumn === 'original' ? 'fullscreen' : ''} ${fullscreenColumn === 'translated' ? 'hidden' : ''}`}>
+                  <div className="column-header">
+                    <h4>Original ({status.report?.source_lang || 'Source'})</h4>
+                    <button
+                      className="fullscreen-toggle"
+                      onClick={() => toggleFullscreen('original')}
+                      title={fullscreenColumn === 'original' ? 'Exit fullscreen (Esc)' : 'Enter fullscreen'}
+                      aria-label={fullscreenColumn === 'original' ? 'Exit fullscreen' : 'Enter fullscreen'}
+                    >
+                      {fullscreenColumn === 'original' ? '🗗' : '🗖'}
+                    </button>
+                  </div>
                   <div className="text-content original-text markdown-content">
                     {status.original_text && status.original_text.length > 0 ? (
                       status.original_text.map((paragraph, idx) => (
@@ -154,8 +207,18 @@ function TranslationStatus({ jobId, status, onReset }) {
                     )}
                   </div>
                 </div>
-                <div className="translated-column">
-                  <h4>Translated ({status.report?.target_lang || 'Target'})</h4>
+                <div className={`translated-column ${fullscreenColumn === 'translated' ? 'fullscreen' : ''} ${fullscreenColumn === 'original' ? 'hidden' : ''}`}>
+                  <div className="column-header">
+                    <h4>Translated ({status.report?.target_lang || 'Target'})</h4>
+                    <button
+                      className="fullscreen-toggle"
+                      onClick={() => toggleFullscreen('translated')}
+                      title={fullscreenColumn === 'translated' ? 'Exit fullscreen (Esc)' : 'Enter fullscreen'}
+                      aria-label={fullscreenColumn === 'translated' ? 'Exit fullscreen' : 'Enter fullscreen'}
+                    >
+                      {fullscreenColumn === 'translated' ? '🗗' : '🗖'}
+                    </button>
+                  </div>
                   <div className="text-content translated-text markdown-content">
                     {status.translated_text.map((paragraph, idx) => {
                       if (!paragraph) return null;
@@ -227,60 +290,6 @@ function TranslationStatus({ jobId, status, onReset }) {
             </div>
           )}
 
-          <div className="action-buttons">
-            <button
-              className="button"
-              onClick={handleDownload}
-              disabled={downloading}
-            >
-              {downloading ? 'Downloading...' : '📄 Download PDF'}
-            </button>
-            {status.translated_text && (
-              <button
-                className="button button-secondary"
-                onClick={handleDownloadText}
-                disabled={downloadingText}
-              >
-                {downloadingText ? 'Downloading...' : '📝 Download as Text'}
-              </button>
-            )}
-            <button
-              className="button button-secondary"
-              onClick={onReset}
-            >
-              Translate Another Document
-            </button>
-          </div>
-
-          {report && (
-            <div className="stats-section">
-              <h3>Translation Statistics</h3>
-              <div className="stats-grid">
-                <div className="stat-card">
-                  <div className="stat-value">{report.stats?.paragraphs_total || 0}</div>
-                  <div className="stat-label">Total Paragraphs</div>
-                </div>
-                <div className="stat-card">
-                  <div className="stat-value">{report.stats?.model_calls || 0}</div>
-                  <div className="stat-label">API Calls</div>
-                </div>
-                <div className="stat-card">
-                  <div className="stat-value">{report.stats?.reused_from_memory || 0}</div>
-                  <div className="stat-label">Memory Hits</div>
-                </div>
-                <div className="stat-card">
-                  <div className="stat-value">{report.stats?.glossary_matches || 0}</div>
-                  <div className="stat-label">Glossary Matches</div>
-                </div>
-                {report.duration_seconds && (
-                  <div className="stat-card">
-                    <div className="stat-value">{report.duration_seconds.toFixed(1)}s</div>
-                    <div className="stat-label">Duration</div>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
         </>
       )}
 

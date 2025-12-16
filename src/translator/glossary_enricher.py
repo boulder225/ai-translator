@@ -388,3 +388,98 @@ def apply_memory_with_highlighting(
     
     return enriched_text, applied_terms
 
+
+def apply_reference_doc_with_highlighting(
+    translated_text: str,
+    reference_doc_pairs: dict[str, str] | None,
+) -> tuple[str, list[dict]]:
+    """
+    Apply reference document translations to translated text and highlight them.
+    
+    Finds reference doc target terms in the translated text and highlights them.
+    
+    Args:
+        translated_text: The translated text to enrich
+        reference_doc_pairs: Dictionary mapping source terms to target terms from reference doc
+    
+    Returns:
+        Tuple of (enriched_text_with_highlights, list_of_applied_terms)
+        enriched_text uses HTML-like markers: <reference_doc>term</reference_doc>
+    """
+    if not reference_doc_pairs:
+        return translated_text, []
+    
+    applied_terms = []
+    enriched_text = translated_text
+    
+    logger.info(f"[apply_reference_doc_with_highlighting] Applying reference doc: {len(reference_doc_pairs)} translation pairs")
+    logger.info(f"[apply_reference_doc_with_highlighting] Translated text length: {len(translated_text)}")
+    
+    # Sort pairs by target term length (longest first) to avoid partial matches
+    pairs_by_target = sorted(
+        reference_doc_pairs.items(),
+        key=lambda x: len(x[1]) if x[1] else 0,
+        reverse=True
+    )
+    
+    # Track positions to avoid overlapping replacements
+    replacement_positions: list[tuple[int, int, str, str, str]] = []
+    # Format: (start, end, matched_text, source_term, target_term)
+    
+    # Find reference doc target terms in translated text
+    for source_term, target_term in pairs_by_target:
+        if not target_term or not target_term.strip():
+            continue
+        
+        # Use word boundaries to avoid partial matches
+        # Escape special regex characters in target term
+        escaped_target = re.escape(target_term)
+        # Use word boundaries for whole-word matching
+        pattern = r'\b' + escaped_target + r'\b'
+        
+        for match in re.finditer(pattern, enriched_text, re.IGNORECASE):
+            start, end = match.span()
+            matched_text = enriched_text[start:end]
+            
+            # Check for overlaps with existing tags or other replacements
+            overlap = False
+            for pos_start, pos_end, _, _, _ in replacement_positions:
+                if not (end <= pos_start or start >= pos_end):
+                    overlap = True
+                    break
+            
+            # Also check if there are existing tags nearby
+            context_start = max(0, start - 100)
+            context_end = min(len(enriched_text), end + 100)
+            context = enriched_text[context_start:context_end]
+            if re.search(r'<glossary>.*?</glossary>|<memory>.*?</memory>|<reference_doc>.*?</reference_doc>', context):
+                # Check if tags overlap with our position
+                for tag_match in re.finditer(r'<glossary>.*?</glossary>|<memory>.*?</memory>|<reference_doc>.*?</reference_doc>', context):
+                    tag_start = context_start + tag_match.start()
+                    tag_end = context_start + tag_match.end()
+                    if not (end <= tag_start or start >= tag_end):
+                        overlap = True
+                        break
+            
+            if not overlap:
+                replacement_positions.append((start, end, matched_text, source_term, target_term))
+                applied_terms.append({
+                    "source": source_term,
+                    "target": target_term,
+                    "matched_text": matched_text,
+                    "type": "reference_doc_match",
+                })
+    
+    # Sort positions by start index (reverse order for safe replacement)
+    replacement_positions.sort(key=lambda x: x[0], reverse=True)
+    
+    # Apply replacements from end to start to preserve positions
+    for start, end, matched_text, source_term, target_term in replacement_positions:
+        # Wrap the matched text with reference_doc marker
+        highlighted = f"<reference_doc>{matched_text}</reference_doc>"
+        enriched_text = enriched_text[:start] + highlighted + enriched_text[end:]
+    
+    logger.info(f"[apply_reference_doc_with_highlighting] Applied {len(applied_terms)} reference doc terms")
+    
+    return enriched_text, applied_terms
+

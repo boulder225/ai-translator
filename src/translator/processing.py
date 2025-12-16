@@ -1,6 +1,9 @@
 from __future__ import annotations
 
+import json
 import logging
+import re
+import time
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
@@ -88,6 +91,7 @@ def _split_into_chunks(text: str, max_length: int = MAX_PARAGRAPH_LENGTH, overla
 def _build_term_source_chain(
     glossary: Glossary | None,
     memory: TranslationMemory,
+    reference_doc_pairs: dict[str, str] | None = None,
 ) -> TermSourceChain:
     """
     Build a term source chain with the standard hierarchy.
@@ -99,22 +103,34 @@ def _build_term_source_chain(
     2. Or pass a custom TermSourceChain directly to the translation functions
     
     The standard hierarchy is:
-    1. Glossary (exact match)
-    2. Translation Memory (similarity)
-    3. Placeholder (fallback)
+    1. Reference Document (highest priority - exact matches from reference doc)
+    2. Glossary (exact match)
+    3. Translation Memory (similarity)
+    4. Placeholder (fallback)
     
     Args:
         glossary: Optional glossary for exact term matching
         memory: Translation memory for similarity search
+        reference_doc_pairs: Optional dictionary of translation pairs from reference document
     
     Returns:
         TermSourceChain with sources in priority order
     """
-    sources = [
+    from .term_sources import ReferenceDocSource
+    
+    sources = []
+    
+    # Reference document has highest priority
+    if reference_doc_pairs:
+        sources.append(ReferenceDocSource(reference_doc_pairs))
+    
+    # Standard sources
+    sources.extend([
         GlossarySource(glossary),
         MemorySource(memory),
         PlaceholderSource(),
-    ]
+    ])
+    
     return TermSourceChain(sources)
 
 
@@ -369,6 +385,104 @@ def translate_file(
     )
 
 
+def extract_translation_pairs_from_reference_doc(
+    reference_doc_path: Path,
+    translator: ClaudeTranslator,
+    source_lang: str,
+    target_lang: str,
+) -> dict[str, str]:
+    """
+    Extract translation pairs from a reference document using Claude.
+    
+    The reference document should contain examples of how terms/phrases were translated.
+    Claude will analyze it and extract source->target translation pairs.
+    
+    Args:
+        reference_doc_path: Path to reference document (DOCX, PDF, or TXT)
+        translator: Claude translator instance
+        source_lang: Source language code
+        target_lang: Target language code
+    
+    Returns:
+        Dictionary mapping source terms (lowercase) to target translations
+    """
+    logger.info(f"[extract_translation_pairs] Extracting translation pairs from reference doc: {reference_doc_path}")
+    
+    # Read reference document text
+    reference_text = _read_file_as_text(reference_doc_path)
+    
+    if not reference_text or len(reference_text.strip()) < 50:
+        logger.warning(f"[extract_translation_pairs] Reference doc has insufficient text ({len(reference_text)} chars)")
+        return {}
+    
+    # Use Claude to extract translation pairs
+    extraction_prompt = f"""You are analyzing a reference document that shows translation guidelines and examples.
+
+Your task is to extract translation pairs (source term/phrase -> target translation) from this document.
+
+The document is written in {source_lang} and contains translations to {target_lang}.
+
+Extract ALL translation pairs you can find. Look for:
+- Direct translations (e.g., "Appartement" -> "Apartment" or "dog")
+- Translation guidelines (e.g., "translate X as Y")
+- Side-by-side comparisons
+- Any examples showing how terms were translated
+
+Return ONLY a JSON object with this exact format:
+{{
+  "pairs": [
+    {{"source": "source term", "target": "target translation"}},
+    {{"source": "another term", "target": "another translation"}}
+  ]
+}}
+
+Be thorough - extract as many pairs as possible. Include phrases, not just single words.
+
+Reference document:
+{reference_text[:10000]}  # Limit to first 10k chars to avoid token limits
+"""
+    
+    try:
+        # Use Claude to extract pairs
+        response = translator._client.messages.create(
+            model=translator.model,
+            max_tokens=4096,
+            messages=[
+                {"role": "user", "content": extraction_prompt}
+            ]
+        )
+        
+        import json
+        import re
+        
+        # Extract JSON from response
+        content = response.content[0].text
+        # Try to find JSON in the response
+        json_match = re.search(r'\{[^{}]*"pairs"[^{}]*\[.*?\]\s*\}', content, re.DOTALL)
+        if json_match:
+            json_str = json_match.group(0)
+            data = json.loads(json_str)
+            pairs = data.get("pairs", [])
+            
+            # Build dictionary
+            translation_pairs = {}
+            for pair in pairs:
+                source = pair.get("source", "").strip().lower()
+                target = pair.get("target", "").strip()
+                if source and target:
+                    translation_pairs[source] = target
+            
+            logger.info(f"[extract_translation_pairs] Extracted {len(translation_pairs)} translation pairs from reference doc")
+            return translation_pairs
+        else:
+            logger.warning(f"[extract_translation_pairs] Could not parse JSON from Claude response")
+            return {}
+            
+    except Exception as e:
+        logger.error(f"[extract_translation_pairs] Error extracting pairs: {e}", exc_info=True)
+        return {}
+
+
 def _read_file_as_text(input_path: Path) -> str:
     """Read entire file as raw text without parsing into paragraphs."""
     import hashlib
@@ -425,6 +539,7 @@ def translate_file_to_memory(
     target_lang: str,
     progress_callback: ProgressCallback | None = None,
     skip_memory: bool = False,
+    reference_doc_pairs: dict[str, str] | None = None,
 ) -> tuple[bytes, list[str], dict]:
     """
     Translate entire file in a single API call - no chunking, no paragraph splitting.
@@ -452,12 +567,44 @@ def translate_file_to_memory(
     if not document_text or not document_text.strip():
         raise ValueError("No text found to translate.")
 
-    # Get glossary matches for entire document
+    # Apply reference document translations first (highest priority)
+    reference_doc_matches = []
+    reference_doc_applied = {}
+    if reference_doc_pairs:
+        logger.info(f"[translate_file_to_memory] ===== APPLYING REFERENCE DOCUMENT TRANSLATIONS =====")
+        logger.info(f"[translate_file_to_memory] Reference doc has {len(reference_doc_pairs)} translation pairs")
+        
+        # Find terms in document that match reference doc pairs
+        import re
+        normalized_doc = document_text.lower()
+        for source_term, target_term in reference_doc_pairs.items():
+            # Case-insensitive search for the source term
+            pattern = re.compile(re.escape(source_term), re.IGNORECASE)
+            matches = pattern.findall(document_text)
+            if matches:
+                reference_doc_matches.append({
+                    "source": source_term,
+                    "target": target_term,
+                    "count": len(matches)
+                })
+                reference_doc_applied[source_term.lower()] = target_term
+                logger.info(f"[translate_file_to_memory] Reference doc: '{source_term}' -> '{target_term}' (found {len(matches)} times)")
+        
+        logger.info(f"[translate_file_to_memory] Applied {len(reference_doc_applied)} reference doc translations")
+    
+    # Get glossary matches for entire document (excluding terms already in reference doc)
     glossary_matches = []
     if glossary:
         logger.info(f"[translate_file_to_memory] Looking up glossary matches...")
-        glossary_matches = glossary.matches_in_text(document_text)
-        logger.info(f"[translate_file_to_memory] Found {len(glossary_matches)} glossary matches")
+        all_glossary_matches = glossary.matches_in_text(document_text)
+        # Filter out matches that conflict with reference doc
+        for match in all_glossary_matches:
+            term_lower = match.entry.term.lower()
+            if term_lower not in reference_doc_applied:
+                glossary_matches.append(match)
+            else:
+                logger.info(f"[translate_file_to_memory] Skipping glossary match '{match.entry.term}' (overridden by reference doc)")
+        logger.info(f"[translate_file_to_memory] Found {len(glossary_matches)} glossary matches (after filtering reference doc conflicts)")
     
     # STEP 1: Check translation memory first (if memory is enabled)
     translated_text = None
@@ -485,6 +632,11 @@ def translate_file_to_memory(
             
             if similarity_score >= 95.0:
                 translated_text = best_match.translated_text
+                # CRITICAL FIX: Remove ReportLab XML tags (<para>, </para>) from memory content
+                # These tags should not be in memory, but if they are (from a previous bug), remove them
+                if '<para>' in translated_text or '</para>' in translated_text:
+                    translated_text = re.sub(r'</?para>', '', translated_text, flags=re.IGNORECASE)
+                    logger.warning(f"[translate_file_to_memory] Removed <para> tags from memory content (should not have been there)")
                 memory_used = True
                 memory_record_used = best_match  # Store for highlighting
                 logger.info(f"[translate_file_to_memory] ✅ STEP 1 RESULT: Using translation from memory (similarity: {similarity_score}%)")
@@ -525,6 +677,7 @@ def translate_file_to_memory(
             target_lang=target_lang,
             glossary_matches=glossary_matches,
             memory_hits=memory_hits,
+            reference_doc_pairs=reference_doc_applied if reference_doc_pairs else None,
         )
         duration = perf_counter() - start
         
@@ -539,7 +692,10 @@ def translate_file_to_memory(
             logger.info(f"[translate_file_to_memory] Translated text length: {len(translated_text):,} characters")
             
             try:
-                memory.record(document_text, translated_text, source_lang, target_lang)
+                # CRITICAL FIX: Remove ReportLab XML tags before storing in memory
+                # Ensure memory never contains <para> tags
+                cleaned_translated_text = re.sub(r'</?para>', '', translated_text, flags=re.IGNORECASE)
+                memory.record(document_text, cleaned_translated_text, source_lang, target_lang)
                 logger.info(f"[translate_file_to_memory] ✅ STEP 3 RESULT: Translation stored in memory successfully")
                 logger.info(f"[translate_file_to_memory] Memory file: {memory.path}")
                 logger.info(f"[translate_file_to_memory] Total records in memory: {len(memory._records)}")
@@ -560,15 +716,65 @@ def translate_file_to_memory(
     logger.info(f"[translate_file_to_memory] Translation complete: {duration:.2f}s")
     logger.info(f"[translate_file_to_memory] Translated length: {len(translated_text):,} characters")
 
-    # Apply glossary to enrich translation and highlight terms
-    from .glossary_enricher import apply_glossary_with_highlighting, apply_memory_with_highlighting
+    # Apply reference document translations to ensure they're used (highest priority)
+    # Note: Reference doc pairs are already in Claude's prompt, but we verify and track usage here
+    applied_reference_doc_terms = []
+    if reference_doc_pairs and reference_doc_matches:
+        logger.info(f"[translate_file_to_memory] ===== VERIFYING REFERENCE DOC TRANSLATIONS =====")
+        import re
+        enriched_text = translated_text
+        
+        # Check which reference doc terms were found and track overrides
+        for match_info in reference_doc_matches:
+            source_term = match_info["source"]
+            target_term = match_info["target"]
+            
+            # Check if this overrode glossary or memory
+            overridden_glossary = any(m.entry.term.lower() == source_term.lower() for m in glossary_matches)
+            overridden_memory = False
+            if memory_hits:
+                # Check if any memory hit contains this source term
+                for mem_hit in memory_hits:
+                    if source_term.lower() in mem_hit.source_text.lower():
+                        overridden_memory = True
+                        break
+            
+            applied_reference_doc_terms.append({
+                "source": source_term,
+                "target": target_term,
+                "count": match_info["count"],
+                "overridden_glossary": overridden_glossary,
+                "overridden_memory": overridden_memory,
+            })
+            logger.info(f"[translate_file_to_memory] Reference doc: '{source_term}' -> '{target_term}' (found {match_info['count']} times, overrode glossary: {overridden_glossary}, memory: {overridden_memory})")
+        
+        logger.info(f"[translate_file_to_memory] Tracked {len(applied_reference_doc_terms)} reference doc translation applications")
+        enriched_text = translated_text  # Claude should have already applied them via prompt
+    else:
+        enriched_text = translated_text
+    
+    # Apply reference doc highlighting first (highest priority)
+    from .glossary_enricher import apply_glossary_with_highlighting, apply_memory_with_highlighting, apply_reference_doc_with_highlighting
+    if reference_doc_pairs:
+        enriched_text, applied_reference_doc_highlighting = apply_reference_doc_with_highlighting(
+            translated_text=enriched_text,
+            reference_doc_pairs=reference_doc_pairs,
+        )
+        logger.info(f"[translate_file_to_memory] Reference doc highlighting: {len(applied_reference_doc_highlighting)} terms highlighted")
+    else:
+        applied_reference_doc_highlighting = []
+    
+    # Apply glossary to enrich translation and highlight terms (excluding reference doc terms)
     enriched_text, applied_glossary_terms = apply_glossary_with_highlighting(
-        translated_text=translated_text,
+        translated_text=enriched_text,
         glossary=glossary,
         source_lang=source_lang,
         target_lang=target_lang,
     )
-    logger.info(f"[translate_file_to_memory] Glossary enrichment: {len(applied_glossary_terms)} terms highlighted")
+    # Filter out glossary terms that were overridden by reference doc
+    applied_glossary_terms = [t for t in applied_glossary_terms 
+                             if t.get("term", "").lower() not in reference_doc_applied]
+    logger.info(f"[translate_file_to_memory] Glossary enrichment: {len(applied_glossary_terms)} terms highlighted (after filtering reference doc)")
     
     # Apply translation memory to enrich translation and highlight approved terms
     if not skip_memory:
@@ -597,10 +803,25 @@ def translate_file_to_memory(
     if not translated_paragraphs:
         # Last resort: entire text as one paragraph
         translated_paragraphs = [translated_text]
+    
+    # Split source document text into paragraphs for side-by-side display
+    source_paragraphs = [p.strip() for p in document_text.split("\n\n") if p.strip()]
+    if not source_paragraphs:
+        # Fallback: use single newlines
+        source_paragraphs = [p.strip() for p in document_text.split("\n") if p.strip()]
+    if not source_paragraphs:
+        # Last resort: entire text as one paragraph
+        source_paragraphs = [document_text]
 
-    # Generate PDF in memory
-    logger.info(f"[translate_file_to_memory] Generating PDF from {len(translated_paragraphs)} paragraphs")
-    pdf_bytes = write_pdf_to_bytes(translated_paragraphs, title=f"Translated Document ({source_lang}->{target_lang})")
+    # Generate PDF in memory with source and translated content side by side
+    logger.info(f"[translate_file_to_memory] Generating PDF from {len(source_paragraphs)} source paragraphs and {len(translated_paragraphs)} translated paragraphs")
+    pdf_bytes = write_pdf_to_bytes(
+        translated_paragraphs=translated_paragraphs,
+        title=f"Translated Document ({source_lang}->{target_lang})",
+        source_paragraphs=source_paragraphs,
+        source_lang=source_lang,
+        target_lang=target_lang,
+    )
     logger.info(f"[translate_file_to_memory] PDF generated: {len(pdf_bytes):,} bytes")
 
     # Build report
@@ -625,8 +846,15 @@ def translate_file_to_memory(
         },
         "applied_glossary_terms": applied_glossary_terms,
         "applied_memory_terms": applied_memory_terms,
+        "applied_reference_doc_terms": applied_reference_doc_terms,
+        "reference_doc_pairs_count": len(reference_doc_pairs) if reference_doc_pairs else 0,
         "generated_at": datetime.now(timezone.utc).isoformat(),
     }
+    
+    # Update stats to include reference doc info
+    if reference_doc_pairs:
+        report["stats"]["reference_doc_matches"] = len(reference_doc_matches)
+        report["stats"]["reference_doc_applied"] = len(applied_reference_doc_terms)
 
     return pdf_bytes, translated_paragraphs, report
 

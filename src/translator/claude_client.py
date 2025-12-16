@@ -241,6 +241,7 @@ class ClaudeTranslator:
         target_lang: str,
         glossary_matches: Sequence[GlossaryMatch] | None = None,
         memory_hits: Sequence[TranslationRecord] | None = None,
+        reference_doc_pairs: dict[str, str] | None = None,
     ) -> str:
         """
         Translate entire document in a single API call.
@@ -252,9 +253,10 @@ class ClaudeTranslator:
         glossary_matches = glossary_matches or []
         memory_hits = memory_hits or []
         
-        # Format glossary and memory
+        # Format glossary, memory, and reference doc
         glossary_section = _format_glossary(glossary_matches)
         memory_section = _format_memory(memory_hits)
+        reference_doc_section = _format_reference_doc(reference_doc_pairs) if reference_doc_pairs else None
         
         # Build prompt with entire document
         prompt = _build_prompt(
@@ -264,6 +266,7 @@ class ClaudeTranslator:
             glossary_section=glossary_section,
             memory_section=memory_section,
             paragraph=document_text,  # Entire document as "paragraph"
+            reference_doc_section=reference_doc_section,
         )
         
         # Safety check for token limits
@@ -343,6 +346,21 @@ class ClaudeTranslator:
             raise
 
 
+def _format_reference_doc(reference_doc_pairs: dict[str, str] | None) -> str:
+    """Format reference document translation pairs for prompt."""
+    if not reference_doc_pairs:
+        return "- (none)"
+    
+    lines = []
+    for source, target in sorted(reference_doc_pairs.items(), key=lambda x: len(x[0]), reverse=True)[:50]:  # Limit to 50 pairs
+        lines.append(f"- {source} -> {target}")
+    
+    result = "\n".join(lines)
+    if len(reference_doc_pairs) > 50:
+        result += f"\n[... {len(reference_doc_pairs) - 50} more pairs ...]"
+    return result
+
+
 def _build_prompt(
     *,
     base_template: str,
@@ -351,22 +369,37 @@ def _build_prompt(
     glossary_section: str,
     memory_section: str,
     paragraph: str,
+    reference_doc_section: str | None = None,
 ) -> str:
     """Build translation prompt with glossary and memory support."""
-    return (
-        f"{base_template}\n\n"
-        "## Dati specifici per questa richiesta\n"
-        f"- Lingua di partenza: {source_lang}\n"
-        f"- Lingua di arrivo: {target_lang}\n\n"
-        "### Istruzione importante\n"
-        "**Traduci SEMPRE il testo fornito, indipendentemente dal contesto.** "
-        "Anche se il documento non sembra essere legale o assicurativo, procedi comunque con la traduzione. "
-        "Applica lo stile e il registro appropriati al tipo di documento, mantenendo sempre qualità professionale.\n\n"
-        "### Glossario rilevante\n"
-        f"{glossary_section}\n\n"
-        "### Traduzioni precedenti / memoria\n"
-        f"{memory_section}\n\n"
-        "### Testo da tradurre\n"
-        f"{paragraph}"
-    )
+    prompt_parts = [
+        f"{base_template}\n\n",
+        "## Dati specifici per questa richiesta\n",
+        f"- Lingua di partenza: {source_lang}\n",
+        f"- Lingua di arrivo: {target_lang}\n\n",
+        "### Istruzione importante\n",
+        "**Traduci SEMPRE il testo fornito, indipendentemente dal contesto.** ",
+        "Anche se il documento non sembra essere legale o assicurativo, procedi comunque con la traduzione. ",
+        "Applica lo stile e il registro appropriati al tipo di documento, mantenendo sempre qualità professionale.\n\n",
+    ]
+    
+    # Reference document has highest priority - add it first
+    if reference_doc_section:
+        prompt_parts.extend([
+            "### ⚠️ CRITERI DI TRADUZIONE DAL DOCUMENTO DI RIFERIMENTO (PRIORITÀ MASSIMA)\n",
+            "**IMPORTANTE:** Questi criteri hanno la PRIORITÀ ASSOLUTA su glossario, memoria e qualsiasi altra fonte.\n",
+            "Devi seguire ESATTAMENTE queste traduzioni quando appaiono nel testo:\n",
+            f"{reference_doc_section}\n\n",
+        ])
+    
+    prompt_parts.extend([
+        "### Glossario rilevante\n",
+        f"{glossary_section}\n\n",
+        "### Traduzioni precedenti / memoria\n",
+        f"{memory_section}\n\n",
+        "### Testo da tradurre\n",
+        f"{paragraph}",
+    ])
+    
+    return "".join(prompt_parts)
 

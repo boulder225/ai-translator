@@ -20,12 +20,44 @@ from .processing import PDF_SUFFIX, translate_file_to_memory
 from .settings import get_settings
 from .terminology import Glossary, TranslationMemory
 
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S'
-)
+# Configure logging with both console and file handlers
+def setup_logging():
+    """Configure logging to write to both console and file."""
+    log_dir = Path(__file__).parent.parent.parent / "logs"
+    log_dir.mkdir(parents=True, exist_ok=True)
+    log_file = log_dir / "backend.log"
+    
+    # Create formatter
+    formatter = logging.Formatter(
+        '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S'
+    )
+    
+    # Get root logger
+    root_logger = logging.getLogger()
+    root_logger.setLevel(logging.INFO)
+    
+    # Remove existing handlers to avoid duplicates
+    root_logger.handlers.clear()
+    
+    # Console handler (stdout)
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(logging.INFO)
+    console_handler.setFormatter(formatter)
+    root_logger.addHandler(console_handler)
+    
+    # File handler (append mode)
+    file_handler = logging.FileHandler(log_file, mode='a', encoding='utf-8')
+    file_handler.setLevel(logging.INFO)
+    file_handler.setFormatter(formatter)
+    root_logger.addHandler(file_handler)
+    
+    return log_file
+
+# Setup logging on module import
+log_file_path = setup_logging()
 logger = logging.getLogger(__name__)
+logger.info(f"Logging initialized. Log file: {log_file_path}")
 
 app = FastAPI(title="Legal Translator API", version="0.1.0")
 
@@ -111,28 +143,6 @@ def detect_language_from_file(file_path: Path) -> str:
         
         # Get language probabilities
         languages = detect_langs(sample_text)
-        
-        # #region agent log
-        log_data = {
-            "location": "api.py:76",
-            "message": "Language detection results",
-            "data": {
-                "file_path": str(file_path),
-                "text_length": len(text),
-                "sample_length": len(sample_text),
-                "detected_languages": [{"lang": str(lang.lang), "prob": lang.prob} for lang in languages[:3]]
-            },
-            "timestamp": int(time.time() * 1000),
-            "sessionId": "debug-session",
-            "runId": "run1",
-            "hypothesisId": "A"
-        }
-        try:
-            with open("/Users/enrico/workspace/translator/.cursor/debug.log", "a") as f:
-                f.write(json.dumps(log_data) + "\n")
-        except:
-            pass
-        # #endregion
         
         # Map langdetect codes to our language codes
         lang_map = {
@@ -250,6 +260,29 @@ def _run_translation(job_id: str) -> None:
             logger.info(f"Job {job_id}: Using shared translation memory from {memory_file}")
             logger.info(f"Job {job_id}: Memory contains {len(memory)} existing records")
             
+            # Extract translation pairs from reference document if provided
+            reference_doc_pairs = {}
+            reference_doc_path_str = job.get("reference_doc_path")
+            if reference_doc_path_str:
+                reference_doc_path_obj = Path(reference_doc_path_str)
+                if reference_doc_path_obj.exists():
+                    logger.info(f"Job {job_id}: Extracting translation pairs from reference document...")
+                    from .processing import extract_translation_pairs_from_reference_doc
+                    # Create translator temporarily for extraction
+                    temp_translator = ClaudeTranslator(
+                        api_key=settings.anthropic_api_key,
+                        dry_run=False,
+                    )
+                    reference_doc_pairs = extract_translation_pairs_from_reference_doc(
+                        reference_doc_path=reference_doc_path_obj,
+                        translator=temp_translator,
+                        source_lang=source_lang,
+                        target_lang=target_lang,
+                    )
+                    logger.info(f"Job {job_id}: Extracted {len(reference_doc_pairs)} translation pairs from reference doc")
+                else:
+                    logger.warning(f"Job {job_id}: Reference doc path provided but file not found: {reference_doc_path_obj}")
+            
             # Create translator
             translator = ClaudeTranslator(
                 api_key=settings.anthropic_api_key,
@@ -285,27 +318,6 @@ def _run_translation(job_id: str) -> None:
             
             logger.info(f"Job {job_id}: [PRE-TRANSLATE] File verified, calling translate_file_to_memory")
             logger.info(f"Job {job_id}: [PRE-TRANSLATE] Source lang: {source_lang}, Target lang: {target_lang}")
-            
-            # #region agent log
-            log_data = {
-                "location": "api.py:192",
-                "message": "About to call translate_file_to_memory",
-                "data": {
-                    "job_id": job_id,
-                    "source_lang": source_lang,
-                    "target_lang": target_lang
-                },
-                "timestamp": int(time.time() * 1000),
-                "sessionId": "debug-session",
-                "runId": "run1",
-                "hypothesisId": "B"
-            }
-            try:
-                with open("/Users/enrico/workspace/translator/.cursor/debug.log", "a") as f:
-                    f.write(json.dumps(log_data) + "\n")
-            except:
-                pass
-            # #endregion
             
             # Read original text before translation (using the same function that translate_file_to_memory uses)
             # Import here to avoid circular imports
@@ -350,6 +362,7 @@ def _run_translation(job_id: str) -> None:
                 target_lang=target_lang,
                 progress_callback=update_progress,
                 skip_memory=skip_memory,
+                reference_doc_pairs=reference_doc_pairs if reference_doc_pairs else None,
             )
             
             logger.info(f"[TRANSLATION {job_id}] Translation complete")
@@ -370,31 +383,6 @@ def _run_translation(job_id: str) -> None:
             # Extract applied glossary and memory terms from report
             applied_glossary_terms = report.get("applied_glossary_terms", [])
             applied_memory_terms = report.get("applied_memory_terms", [])
-            
-            # #region agent log
-            pdf_hash = hashlib.md5(pdf_bytes).hexdigest()[:16]
-            log_data = {
-                "location": "api.py:256",
-                "message": "Storing PDF bytes in job",
-                "data": {
-                    "job_id": job_id,
-                    "pdf_size": len(pdf_bytes),
-                    "pdf_hash": pdf_hash,
-                    "file_hash": expected_hash,
-                    "status_before": job.get("status"),
-                    "has_existing_pdf": "pdf_bytes" in job
-                },
-                "timestamp": int(time.time() * 1000),
-                "sessionId": "debug-session",
-                "runId": "run1",
-                "hypothesisId": "C,D"
-            }
-            try:
-                with open("/Users/enrico/workspace/translator/.cursor/debug.log", "a") as f:
-                    f.write(json.dumps(log_data) + "\n")
-            except:
-                pass
-            # #endregion
             
             job.update({
                 "status": "completed",
@@ -493,6 +481,7 @@ async def start_translation(
     use_glossary: bool = Form(False),
     skip_memory: bool = Form(True),
     custom_prompt: Optional[str] = Form(None),
+    reference_doc: Optional[UploadFile] = File(None),
 ):
     """Start translation job. Each job is completely isolated."""
     import time
@@ -500,27 +489,6 @@ async def start_translation(
     # Track this request
     request_timestamp = time.time()
     request_id = str(uuid.uuid4())[:8]
-    
-    # #region agent log
-    log_data = {
-        "location": "api.py:468",
-        "message": "Translation request received",
-        "data": {
-            "source_lang": source_lang,
-            "target_lang": target_lang,
-            "request_id": request_id
-        },
-        "timestamp": int(time.time() * 1000),
-        "sessionId": "debug-session",
-        "runId": "run1",
-        "hypothesisId": "A,B"
-    }
-    try:
-        with open("/Users/enrico/workspace/translator/.cursor/debug.log", "a") as f:
-            f.write(json.dumps(log_data) + "\n")
-    except:
-        pass
-    # #endregion
     
     logger.info("=" * 80)
     logger.info(f"[REQUEST {request_id}] ===== NEW TRANSLATION REQUEST =====")
@@ -616,6 +584,22 @@ async def start_translation(
     logger.info(f"Job {job_id}: Created isolated input file: {input_path.name}")
     logger.info(f"Job {job_id}: File hash: {file_hash[:16]}...")
     
+    # Handle reference document if provided
+    reference_doc_path = None
+    if reference_doc:
+        ref_doc_content = await reference_doc.read()
+        ref_doc_suffix = Path(reference_doc.filename).suffix if reference_doc.filename else ".pdf"
+        temp_ref = tempfile.NamedTemporaryFile(
+            delete=False,
+            suffix=ref_doc_suffix,
+            prefix=f"reference_{job_id}_"
+        )
+        temp_ref.write(ref_doc_content)
+        temp_ref.close()
+        reference_doc_path = Path(temp_ref.name)
+        logger.info(f"Job {job_id}: Reference document uploaded: {reference_doc_path.name}")
+        logger.info(f"Job {job_id}: Reference doc size: {len(ref_doc_content):,} bytes")
+    
     # Store ALL job data in job storage - no closure variables
     # CRITICAL: Check if job_id already exists (should never happen, but protect against it)
     if job_id in translation_jobs:
@@ -634,6 +618,7 @@ async def start_translation(
         "use_glossary": use_glossary,
         "skip_memory": skip_memory,
         "custom_prompt": custom_prompt,
+        "reference_doc_path": str(reference_doc_path) if reference_doc_path else None,
         "progress": 0.0,
         "current_paragraph": 0,
         "total_paragraphs": 0,
@@ -680,96 +665,17 @@ async def get_translation_status(job_id: str):
 async def download_translation(job_id: str):
     from fastapi.responses import Response
     
-    # #region agent log
-    log_data = {
-        "location": "api.py:486",
-        "message": "Download request received",
-        "data": {
-            "job_id": job_id,
-            "available_jobs": list(translation_jobs.keys()),
-            "total_jobs": len(translation_jobs)
-        },
-        "timestamp": int(time.time() * 1000),
-        "sessionId": "debug-session",
-        "runId": "run1",
-        "hypothesisId": "A,B"
-    }
-    try:
-        with open("/Users/enrico/workspace/translator/.cursor/debug.log", "a") as f:
-            f.write(json.dumps(log_data) + "\n")
-    except:
-        pass
-    # #endregion
-    
     if job_id not in translation_jobs:
-        # #region agent log
-        log_data = {
-            "location": "api.py:495",
-            "message": "Job not found",
-            "data": {"job_id": job_id, "available_jobs": list(translation_jobs.keys())},
-            "timestamp": int(time.time() * 1000),
-            "sessionId": "debug-session",
-            "runId": "run1",
-            "hypothesisId": "A"
-        }
-        try:
-            with open("/Users/enrico/workspace/translator/.cursor/debug.log", "a") as f:
-                f.write(json.dumps(log_data) + "\n")
-        except:
-            pass
-        # #endregion
         raise HTTPException(status_code=404, detail=JOB_NOT_FOUND)
     
     job = translation_jobs[job_id]
     if job["status"] != "completed":
-        # #region agent log
-        log_data = {
-            "location": "api.py:500",
-            "message": "Job not completed",
-            "data": {"job_id": job_id, "status": job.get("status")},
-            "timestamp": int(time.time() * 1000),
-            "sessionId": "debug-session",
-            "runId": "run1",
-            "hypothesisId": "B"
-        }
-        try:
-            with open("/Users/enrico/workspace/translator/.cursor/debug.log", "a") as f:
-                f.write(json.dumps(log_data) + "\n")
-        except:
-            pass
-        # #endregion
         raise HTTPException(status_code=400, detail="Translation not completed")
     
     # Get PDF bytes from memory
     pdf_bytes = job.get("pdf_bytes")
     if not pdf_bytes:
         raise HTTPException(status_code=404, detail="PDF not found in memory")
-    
-    # #region agent log
-    pdf_hash = hashlib.md5(pdf_bytes).hexdigest()[:16]
-    log_data = {
-        "location": "api.py:515",
-        "message": "PDF bytes retrieved",
-        "data": {
-            "job_id": job_id,
-            "pdf_size": len(pdf_bytes),
-            "pdf_hash": pdf_hash,
-            "file_hash": job.get("file_hash"),
-            "created_at": job.get("created_at"),
-            "source_lang": job.get("source_lang"),
-            "target_lang": job.get("target_lang")
-        },
-        "timestamp": int(time.time() * 1000),
-        "sessionId": "debug-session",
-        "runId": "run1",
-        "hypothesisId": "C,D"
-    }
-    try:
-        with open("/Users/enrico/workspace/translator/.cursor/debug.log", "a") as f:
-            f.write(json.dumps(log_data) + "\n")
-    except:
-        pass
-    # #endregion
     
     logger.info(f"[DOWNLOAD {job_id}] Serving PDF from memory: {len(pdf_bytes):,} bytes")
     

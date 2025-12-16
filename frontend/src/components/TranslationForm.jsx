@@ -4,6 +4,7 @@ import './TranslationForm.css';
 
 function TranslationForm({ onTranslationStart }) {
   const [file, setFile] = useState(null);
+  const [referenceDoc, setReferenceDoc] = useState(null);
   const [sourceLang, setSourceLang] = useState('fr');
   const [targetLang, setTargetLang] = useState('it');
   const [useGlossary, setUseGlossary] = useState(true);
@@ -62,6 +63,7 @@ function TranslationForm({ onTranslationStart }) {
         use_glossary: useGlossary,
         skip_memory: skipMemory,
         custom_prompt: customPrompt || null,
+        reference_doc: referenceDoc || null,
       });
 
       console.log(`[FRONTEND] Translation started, job_id: ${result.job_id}`);
@@ -84,39 +86,65 @@ function TranslationForm({ onTranslationStart }) {
       )}
 
       <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="file">Choose a DOCX, PDF, or TXT file</label>
-          <input
-            type="file"
-            id="file"
-            accept=".docx,.pdf,.txt"
-            onChange={async (e) => {
-              const selectedFile = e.target.files[0];
-              if (selectedFile) {
-                setFile(selectedFile);
-                setDetectingLanguage(true);
-                try {
-                  const result = await detectLanguage(selectedFile);
-                  if (result.detected_language) {
-                    setSourceLang(result.detected_language);
+        <div className="form-row">
+          <div className="form-group">
+            <label htmlFor="file">Choose a DOCX, PDF, or TXT file</label>
+            <input
+              type="file"
+              id="file"
+              accept=".docx,.pdf,.txt"
+              onChange={async (e) => {
+                const selectedFile = e.target.files[0];
+                if (selectedFile) {
+                  setFile(selectedFile);
+                  setDetectingLanguage(true);
+                  try {
+                    const result = await detectLanguage(selectedFile);
+                    if (result.detected_language) {
+                      setSourceLang(result.detected_language);
+                    }
+                  } catch (err) {
+                    console.error('Language detection failed:', err);
+                    // Keep default language on error
+                  } finally {
+                    setDetectingLanguage(false);
                   }
-                } catch (err) {
-                  console.error('Language detection failed:', err);
-                  // Keep default language on error
-                } finally {
-                  setDetectingLanguage(false);
                 }
-              }
-            }}
-            required
-            disabled={loading}
-          />
-          {file && (
-            <p className="file-info">
-              Selected: {file.name} ({(file.size / 1024).toFixed(2)} KB)
-              {detectingLanguage && <span style={{ marginLeft: '0.5rem', color: '#666' }}>Detecting language...</span>}
+              }}
+              required
+              disabled={loading}
+            />
+            {file && (
+              <p className="file-info">
+                Selected: {file.name} ({(file.size / 1024).toFixed(2)} KB)
+                {detectingLanguage && <span style={{ marginLeft: '0.5rem', color: '#666' }}>Detecting language...</span>}
+              </p>
+            )}
+            <p className="help-text" style={{ marginTop: '0.25rem', fontSize: '0.875rem', color: '#666' }}>
+              Document to translate. Source language will be auto-detected.
             </p>
-          )}
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="reference_doc">
+              Reference Document (Optional)
+            </label>
+            <input
+              type="file"
+              id="reference_doc"
+              accept=".docx,.pdf,.txt"
+              onChange={(e) => setReferenceDoc(e.target.files[0] || null)}
+              disabled={loading}
+            />
+            {referenceDoc && (
+              <p className="file-info">
+                Reference: {referenceDoc.name} ({(referenceDoc.size / 1024).toFixed(2)} KB)
+              </p>
+            )}
+            <p className="help-text" style={{ marginTop: '0.25rem', fontSize: '0.875rem', color: '#666' }}>
+              Defines translation guidelines with highest priority
+            </p>
+          </div>
         </div>
 
         <div className="form-row">
@@ -158,30 +186,38 @@ function TranslationForm({ onTranslationStart }) {
           </div>
         </div>
 
-        <div className="form-group checkbox-group-container">
-          <div className="checkbox-group">
-            <input
-              type="checkbox"
-              id="use_glossary"
-              checked={useGlossary}
-              onChange={(e) => setUseGlossary(e.target.checked)}
-              disabled={loading}
-            />
-            <label htmlFor="use_glossary">Use Glossary</label>
+        <div className="form-row">
+          <div className="form-group">
+            <div className="checkbox-group">
+              <input
+                type="checkbox"
+                id="use_glossary"
+                checked={useGlossary}
+                onChange={(e) => setUseGlossary(e.target.checked)}
+                disabled={loading}
+              />
+              <label htmlFor="use_glossary">Use Glossary</label>
+            </div>
+            <p className="help-text" style={{ marginTop: '0.25rem', fontSize: '0.875rem', color: '#666' }}>
+              Ensures consistent terminology across translations
+            </p>
           </div>
-          <div className="checkbox-group">
-            <input
-              type="checkbox"
-              id="skip_memory"
-              checked={skipMemory}
-              onChange={(e) => setSkipMemory(e.target.checked)}
-              disabled={loading}
-            />
-            <label htmlFor="skip_memory">Skip Translation Memory</label>
+
+          <div className="form-group">
+            <div className="checkbox-group">
+              <input
+                type="checkbox"
+                id="skip_memory"
+                checked={skipMemory}
+                onChange={(e) => setSkipMemory(e.target.checked)}
+                disabled={loading}
+              />
+              <label htmlFor="skip_memory">Skip Memory</label>
+            </div>
+            <p className="help-text" style={{ marginTop: '0.25rem', fontSize: '0.875rem', color: '#666' }}>
+              Uses approved translations from memory when available
+            </p>
           </div>
-          <p className="help-text" style={{ marginTop: '0.5rem' }}>
-            Glossary: Ensures consistent terminology. Memory: Uses approved translations when available.
-          </p>
         </div>
 
         <div className="form-group">
