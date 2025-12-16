@@ -15,6 +15,19 @@ function TranslationForm({ onTranslationStart }) {
   const [submitting, setSubmitting] = useState(false);
   const [loadingPrompt, setLoadingPrompt] = useState(true);
   const [detectingLanguage, setDetectingLanguage] = useState(false);
+  const [showToolbar, setShowToolbar] = useState(false);
+  
+  const handleToggleToolbar = () => {
+    setShowToolbar(!showToolbar);
+  };
+  
+  // Expose toggle function to parent via window object
+  useEffect(() => {
+    window.translationFormToggleToolbar = handleToggleToolbar;
+    return () => {
+      delete window.translationFormToggleToolbar;
+    };
+  }, [showToolbar]);
 
   // Load default prompt on component mount
   useEffect(() => {
@@ -78,17 +91,18 @@ function TranslationForm({ onTranslationStart }) {
   };
 
   return (
-    <div className="card">
+    <div className="translation-form-container">
       {error && (
         <div className="status-message error">
           {error}
         </div>
       )}
 
-      <form onSubmit={handleSubmit}>
-        <div className="form-row">
-          <div className="form-group">
-            <label htmlFor="file">Choose a DOCX, PDF, or TXT file</label>
+      <div className="translation-form-layout">
+        <div className="translation-form-main">
+          <form onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label htmlFor="file">Choose a DOCX, PDF, or TXT file</label>
             <input
               type="file"
               id="file"
@@ -120,34 +134,12 @@ function TranslationForm({ onTranslationStart }) {
                 {detectingLanguage && <span style={{ marginLeft: '0.5rem', color: '#666' }}>Detecting language...</span>}
               </p>
             )}
-            <p className="help-text" style={{ marginTop: '0.25rem', fontSize: '0.875rem', color: '#666' }}>
-              Document to translate. Source language will be auto-detected.
-            </p>
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="reference_doc">
-              Reference Document (Optional)
-            </label>
-            <input
-              type="file"
-              id="reference_doc"
-              accept=".docx,.pdf,.txt"
-              onChange={(e) => setReferenceDoc(e.target.files[0] || null)}
-              disabled={loading}
-            />
-            {referenceDoc && (
-              <p className="file-info">
-                Reference: {referenceDoc.name} ({(referenceDoc.size / 1024).toFixed(2)} KB)
+              <p className="help-text" style={{ marginTop: '0.25rem', fontSize: '0.875rem', color: '#666' }}>
+                Document to translate. Source language will be auto-detected.
               </p>
-            )}
-            <p className="help-text" style={{ marginTop: '0.25rem', fontSize: '0.875rem', color: '#666' }}>
-              Defines translation guidelines with highest priority
-            </p>
-          </div>
-        </div>
+            </div>
 
-        <div className="form-row">
+            <div className="form-row">
           <div className="form-group">
             <label htmlFor="source_lang">Source Language</label>
             {detectingLanguage ? (
@@ -186,40 +178,6 @@ function TranslationForm({ onTranslationStart }) {
           </div>
         </div>
 
-        <div className="form-row">
-          <div className="form-group">
-            <div className="checkbox-group">
-              <input
-                type="checkbox"
-                id="use_glossary"
-                checked={useGlossary}
-                onChange={(e) => setUseGlossary(e.target.checked)}
-                disabled={loading}
-              />
-              <label htmlFor="use_glossary">Use Glossary</label>
-            </div>
-            <p className="help-text" style={{ marginTop: '0.25rem', fontSize: '0.875rem', color: '#666' }}>
-              Ensures consistent terminology across translations
-            </p>
-          </div>
-
-          <div className="form-group">
-            <div className="checkbox-group">
-              <input
-                type="checkbox"
-                id="skip_memory"
-                checked={skipMemory}
-                onChange={(e) => setSkipMemory(e.target.checked)}
-                disabled={loading}
-              />
-              <label htmlFor="skip_memory">Skip Memory</label>
-            </div>
-            <p className="help-text" style={{ marginTop: '0.25rem', fontSize: '0.875rem', color: '#666' }}>
-              Uses approved translations from memory when available
-            </p>
-          </div>
-        </div>
-
         <div className="form-group">
           <label htmlFor="custom_prompt">
             Translation Prompt
@@ -243,7 +201,6 @@ function TranslationForm({ onTranslationStart }) {
           </p>
         </div>
 
-
         <button
           type="submit"
           className="button"
@@ -252,6 +209,84 @@ function TranslationForm({ onTranslationStart }) {
           {loading ? 'Starting Translation...' : '🚀 Translate Document'}
         </button>
       </form>
+    </div>
+
+        {showToolbar && (
+          <div className="translation-form-toolbar">
+            <div className="toolbar-section">
+              <div className="toolbar-header">
+                <h3 className="toolbar-title">Settings</h3>
+                <button
+                  type="button"
+                  className="toolbar-close"
+                  onClick={handleToggleToolbar}
+                  aria-label="Close toolbar"
+                >
+                  ×
+                </button>
+              </div>
+            
+            <div className="toolbar-item">
+              <label htmlFor="reference_doc" className="toolbar-label">
+                Reference Document
+              </label>
+              <input
+                type="file"
+                id="reference_doc"
+                accept=".docx,.pdf,.txt"
+                onChange={(e) => setReferenceDoc(e.target.files[0] || null)}
+                disabled={loading}
+                className="toolbar-file-input"
+              />
+              {referenceDoc && (
+                <p className="toolbar-file-info">
+                  {referenceDoc.name} ({(referenceDoc.size / 1024).toFixed(2)} KB)
+                </p>
+              )}
+              <p className="toolbar-help-text">
+                Defines translation guidelines with highest priority
+              </p>
+            </div>
+
+            <div className="toolbar-item">
+              <div className="toolbar-checkbox">
+                <input
+                  type="checkbox"
+                  id="use_glossary"
+                  checked={useGlossary}
+                  onChange={(e) => setUseGlossary(e.target.checked)}
+                  disabled={loading}
+                />
+                <label htmlFor="use_glossary" className="toolbar-checkbox-label">
+                  Use Glossary
+                </label>
+              </div>
+              <p className="toolbar-help-text">
+                Ensures consistent terminology across translations
+              </p>
+            </div>
+
+            <div className="toolbar-item">
+              <div className="toolbar-checkbox">
+                <input
+                  type="checkbox"
+                  id="skip_memory"
+                  checked={skipMemory}
+                  onChange={(e) => setSkipMemory(e.target.checked)}
+                  disabled={loading}
+                />
+                <label htmlFor="skip_memory" className="toolbar-checkbox-label">
+                  Skip Memory
+                </label>
+              </div>
+              <p className="toolbar-help-text">
+                Uses approved translations from memory when available
+              </p>
+            </div>
+          </div>
+        </div>
+        )}
+      </div>
     </div>
   );
 }

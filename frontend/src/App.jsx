@@ -107,6 +107,19 @@ function App() {
           </div>
           <div className="nav-actions">
             <button className="nav-button nav-button-secondary">Log in</button>
+            {!currentJob && (
+              <button 
+                className="nav-button nav-button-secondary"
+                onClick={() => {
+                  if (window.translationFormToggleToolbar) {
+                    window.translationFormToggleToolbar();
+                  }
+                }}
+                title="Toggle settings toolbar"
+              >
+                ⚙️ Settings
+              </button>
+            )}
             <button 
               className="nav-button nav-button-primary"
               onClick={currentJob ? handleReset : undefined}

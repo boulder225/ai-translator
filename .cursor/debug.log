@@ -40,3 +40,5 @@
 {"location":"api.js:42","message":"FormData prepared","data":{"targetLangValue":"it","sourceLang":"fr","hasReferenceDoc":true},"timestamp":1765901861140,"sessionId":"debug-session","runId":"run1","hypothesisId":"A"}
 {"location":"api.js:35","message":"startTranslation called","data":{"targetLang":"it","sourceLang":"fr","hasTargetLang":true,"hasReferenceDoc":false},"timestamp":1765902038900,"sessionId":"debug-session","runId":"run1","hypothesisId":"A"}
 {"location":"api.js:42","message":"FormData prepared","data":{"targetLangValue":"it","sourceLang":"fr","hasReferenceDoc":false},"timestamp":1765902038901,"sessionId":"debug-session","runId":"run1","hypothesisId":"A"}
+{"location":"api.js:35","message":"startTranslation called","data":{"targetLang":"it","sourceLang":"fr","hasTargetLang":true,"hasReferenceDoc":false},"timestamp":1765902490503,"sessionId":"debug-session","runId":"run1","hypothesisId":"A"}
+{"location":"api.js:42","message":"FormData prepared","data":{"targetLangValue":"it","sourceLang":"fr","hasReferenceDoc":false},"timestamp":1765902490504,"sessionId":"debug-session","runId":"run1","hypothesisId":"A"}
