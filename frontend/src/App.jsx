@@ -17,6 +17,7 @@ function App() {
   }, [currentJob]);
 
 
+
   const pollStatus = async () => {
     if (!currentJob) return;
 
@@ -37,9 +38,6 @@ function App() {
   };
 
   const handleTranslationStart = (jobId) => {
-    // #region agent log
-    fetch('http://127.0.0.1:7242/ingest/c9cfb42e-68cf-4957-89f2-8cb5ca71e323',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'App.jsx:38',message:'New translation started',data:{newJobId:jobId,previousJobId:currentJob},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
-    // #endregion
     setCurrentJob(jobId);
     setStatus({ status: 'pending', job_id: jobId });
     setReport(null); // Reset report when starting new translation
