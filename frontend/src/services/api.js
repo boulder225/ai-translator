@@ -19,13 +19,35 @@ export const getPrompt = async () => {
   return response.data;
 };
 
+export const detectLanguage = async (file) => {
+  const formData = new FormData();
+  formData.append('file', file);
+  
+  const response = await axios.post(`${API_BASE_URL}/detect-language`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+  
+  return response.data;
+};
+
 export const startTranslation = async (file, options) => {
+  // #region agent log
+  fetch('http://127.0.0.1:7242/ingest/c9cfb42e-68cf-4957-89f2-8cb5ca71e323',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'api.js:35',message:'startTranslation called',data:{targetLang:options.target_lang,sourceLang:options.source_lang,hasTargetLang:!!options.target_lang},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+  // #endregion
+  
   const formData = new FormData();
   formData.append('file', file);
   formData.append('source_lang', options.source_lang || 'fr');
-  formData.append('target_lang', options.target_lang || 'it');
+  const targetLangValue = options.target_lang || 'it';
+  formData.append('target_lang', targetLangValue);
   formData.append('use_glossary', options.use_glossary !== false);
   formData.append('skip_memory', options.skip_memory !== false);
+  
+  // #region agent log
+  fetch('http://127.0.0.1:7242/ingest/c9cfb42e-68cf-4957-89f2-8cb5ca71e323',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'api.js:42',message:'FormData prepared',data:{targetLangValue,sourceLang:options.source_lang || 'fr'},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+  // #endregion
   
   if (options.custom_prompt) {
     formData.append('custom_prompt', options.custom_prompt);

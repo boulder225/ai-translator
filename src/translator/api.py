@@ -73,6 +73,100 @@ def find_glossary_files() -> list[Path]:
     return sorted(set(glossaries))
 
 
+def detect_language_from_file(file_path: Path) -> str:
+    """Detect language from a document file."""
+    try:
+        from langdetect import detect_langs, LangDetectException
+    except ImportError:
+        logger.warning("langdetect not available, falling back to default language")
+        return "fr"
+    
+    try:
+        # Extract text from file
+        text = ""
+        if file_path.suffix.lower() == ".docx":
+            from docx import Document
+            doc = Document(file_path)
+            text = "\n\n".join(para.text for para in doc.paragraphs if para.text.strip())
+        elif file_path.suffix.lower() == ".pdf":
+            import pdfplumber
+            text_parts = []
+            with pdfplumber.open(file_path) as pdf:
+                for page in pdf.pages:
+                    page_text = page.extract_text() or ""
+                    if page_text.strip():
+                        text_parts.append(page_text)
+            text = "\n\n".join(text_parts)
+        elif file_path.suffix.lower() == ".txt":
+            with open(file_path, 'r', encoding='utf-8') as f:
+                text = f.read()
+        
+        if not text or len(text.strip()) < 50:
+            logger.warning(f"Not enough text to detect language (got {len(text.strip())} chars)")
+            return "fr"
+        
+        # Use more text for better accuracy (langdetect works better with more text)
+        # Use up to 5000 characters for better detection accuracy
+        sample_text = text[:5000] if len(text) > 5000 else text
+        
+        # Get language probabilities
+        languages = detect_langs(sample_text)
+        
+        # #region agent log
+        log_data = {
+            "location": "api.py:76",
+            "message": "Language detection results",
+            "data": {
+                "file_path": str(file_path),
+                "text_length": len(text),
+                "sample_length": len(sample_text),
+                "detected_languages": [{"lang": str(lang.lang), "prob": lang.prob} for lang in languages[:3]]
+            },
+            "timestamp": int(time.time() * 1000),
+            "sessionId": "debug-session",
+            "runId": "run1",
+            "hypothesisId": "A"
+        }
+        try:
+            with open("/Users/enrico/workspace/translator/.cursor/debug.log", "a") as f:
+                f.write(json.dumps(log_data) + "\n")
+        except:
+            pass
+        # #endregion
+        
+        # Map langdetect codes to our language codes
+        lang_map = {
+            "fr": "fr",  # French
+            "de": "de",  # German
+            "it": "it",  # Italian
+            "en": "en",  # English
+        }
+        
+        # Get the most probable language that we support
+        for lang_obj in languages:
+            detected_code = lang_obj.lang
+            if detected_code in lang_map:
+                detected = lang_map[detected_code]
+                logger.info(f"Detected language: {detected_code} (prob: {lang_obj.prob:.2f}) -> {detected}")
+                return detected
+        
+        # If none of the detected languages are in our map, use the most probable one
+        # and log a warning
+        if languages:
+            best_match = languages[0].lang
+            logger.warning(f"Detected language '{best_match}' not in supported languages, defaulting to 'fr'")
+            logger.info(f"All detected languages: {[(l.lang, l.prob) for l in languages[:5]]}")
+        
+        return "fr"
+        
+    except LangDetectException as e:
+        logger.warning(f"Language detection failed: {e}, using default 'fr'")
+        return "fr"
+    except Exception as e:
+        logger.error(f"Error detecting language: {e}", exc_info=True)
+        return "fr"
+
+
 def _run_translation(job_id: str) -> None:
     """
     Run translation in a completely isolated context.
@@ -190,6 +284,28 @@ def _run_translation(job_id: str) -> None:
                 raise ValueError(f"File changed! Expected {expected_hash[:16]}..., got {verify_hash[:16]}...")
             
             logger.info(f"Job {job_id}: [PRE-TRANSLATE] File verified, calling translate_file_to_memory")
+            logger.info(f"Job {job_id}: [PRE-TRANSLATE] Source lang: {source_lang}, Target lang: {target_lang}")
+            
+            # #region agent log
+            log_data = {
+                "location": "api.py:192",
+                "message": "About to call translate_file_to_memory",
+                "data": {
+                    "job_id": job_id,
+                    "source_lang": source_lang,
+                    "target_lang": target_lang
+                },
+                "timestamp": int(time.time() * 1000),
+                "sessionId": "debug-session",
+                "runId": "run1",
+                "hypothesisId": "B"
+            }
+            try:
+                with open("/Users/enrico/workspace/translator/.cursor/debug.log", "a") as f:
+                    f.write(json.dumps(log_data) + "\n")
+            except:
+                pass
+            # #endregion
             
             # Read original text before translation (using the same function that translate_file_to_memory uses)
             # Import here to avoid circular imports
@@ -341,6 +457,34 @@ async def get_prompt():
     return {"prompt": prompt}
 
 
+@app.post("/api/detect-language")
+async def detect_language(file: UploadFile = File(...)):
+    """Detect the language of an uploaded document."""
+    import tempfile
+    
+    try:
+        # Save uploaded file temporarily
+        file_content = await file.read()
+        file_suffix = Path(file.filename).suffix if file.filename else ".pdf"
+        
+        temp_file = tempfile.NamedTemporaryFile(delete=False, suffix=file_suffix)
+        temp_file.write(file_content)
+        temp_file.close()
+        temp_path = Path(temp_file.name)
+        
+        try:
+            detected_lang = detect_language_from_file(temp_path)
+            return {"detected_language": detected_lang}
+        finally:
+            # Clean up temp file
+            if temp_path.exists():
+                temp_path.unlink()
+    except Exception as e:
+        logger.error(f"Language detection failed: {e}", exc_info=True)
+        # Return default language on error
+        return {"detected_language": "fr"}
+
+
 @app.post("/api/translate", status_code=status.HTTP_202_ACCEPTED)
 async def start_translation(
     file: UploadFile = File(...),
@@ -356,6 +500,27 @@ async def start_translation(
     # Track this request
     request_timestamp = time.time()
     request_id = str(uuid.uuid4())[:8]
+    
+    # #region agent log
+    log_data = {
+        "location": "api.py:468",
+        "message": "Translation request received",
+        "data": {
+            "source_lang": source_lang,
+            "target_lang": target_lang,
+            "request_id": request_id
+        },
+        "timestamp": int(time.time() * 1000),
+        "sessionId": "debug-session",
+        "runId": "run1",
+        "hypothesisId": "A,B"
+    }
+    try:
+        with open("/Users/enrico/workspace/translator/.cursor/debug.log", "a") as f:
+            f.write(json.dumps(log_data) + "\n")
+    except:
+        pass
+    # #endregion
     
     logger.info("=" * 80)
     logger.info(f"[REQUEST {request_id}] ===== NEW TRANSLATION REQUEST =====")

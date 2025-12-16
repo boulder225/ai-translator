@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { startTranslation, getPrompt } from '../services/api';
+import { startTranslation, getPrompt, detectLanguage } from '../services/api';
 import './TranslationForm.css';
 
 function TranslationForm({ onTranslationStart }) {
@@ -13,6 +13,7 @@ function TranslationForm({ onTranslationStart }) {
   const [error, setError] = useState(null);
   const [submitting, setSubmitting] = useState(false);
   const [loadingPrompt, setLoadingPrompt] = useState(true);
+  const [detectingLanguage, setDetectingLanguage] = useState(false);
 
   // Load default prompt on component mount
   useEffect(() => {
@@ -52,6 +53,8 @@ function TranslationForm({ onTranslationStart }) {
 
     console.log(`[FRONTEND] Starting translation for file: ${file.name}, size: ${file.size} bytes`);
 
+    console.log(`[FRONTEND] Starting translation with source_lang: ${sourceLang}, target_lang: ${targetLang}`);
+    
     try {
       const result = await startTranslation(file, {
         source_lang: sourceLang,
@@ -87,29 +90,52 @@ function TranslationForm({ onTranslationStart }) {
             type="file"
             id="file"
             accept=".docx,.pdf,.txt"
-            onChange={(e) => setFile(e.target.files[0])}
+            onChange={async (e) => {
+              const selectedFile = e.target.files[0];
+              if (selectedFile) {
+                setFile(selectedFile);
+                setDetectingLanguage(true);
+                try {
+                  const result = await detectLanguage(selectedFile);
+                  if (result.detected_language) {
+                    setSourceLang(result.detected_language);
+                  }
+                } catch (err) {
+                  console.error('Language detection failed:', err);
+                  // Keep default language on error
+                } finally {
+                  setDetectingLanguage(false);
+                }
+              }
+            }}
             required
             disabled={loading}
           />
           {file && (
-            <p className="file-info">Selected: {file.name} ({(file.size / 1024).toFixed(2)} KB)</p>
+            <p className="file-info">
+              Selected: {file.name} ({(file.size / 1024).toFixed(2)} KB)
+              {detectingLanguage && <span style={{ marginLeft: '0.5rem', color: '#666' }}>Detecting language...</span>}
+            </p>
           )}
         </div>
 
         <div className="form-row">
           <div className="form-group">
             <label htmlFor="source_lang">Source Language</label>
-            <select
-              id="source_lang"
-              value={sourceLang}
-              onChange={(e) => setSourceLang(e.target.value)}
-              disabled={loading}
-            >
-              <option value="fr">French</option>
-              <option value="de">German</option>
-              <option value="it">Italian</option>
-              <option value="en">English</option>
-            </select>
+            {detectingLanguage ? (
+              <div style={{ padding: '0.75rem', border: '1px solid #e5e5e5', borderRadius: '4px', backgroundColor: '#fafafa', color: '#666' }}>
+                Detecting language...
+              </div>
+            ) : file ? (
+              <div style={{ padding: '0.75rem', border: '1px solid #e5e5e5', borderRadius: '4px', backgroundColor: '#fafafa' }}>
+                {sourceLang === 'fr' ? 'French' : sourceLang === 'de' ? 'German' : sourceLang === 'it' ? 'Italian' : sourceLang === 'en' ? 'English' : sourceLang}
+                <span style={{ marginLeft: '0.5rem', fontSize: '0.875rem', color: '#666' }}>(Auto-detected)</span>
+              </div>
+            ) : (
+              <div style={{ padding: '0.75rem', border: '1px solid #e5e5e5', borderRadius: '4px', backgroundColor: '#fafafa', color: '#999' }}>
+                Will be detected from document
+              </div>
+            )}
           </div>
 
           <div className="form-group">
@@ -117,7 +143,11 @@ function TranslationForm({ onTranslationStart }) {
             <select
               id="target_lang"
               value={targetLang}
-              onChange={(e) => setTargetLang(e.target.value)}
+              onChange={(e) => {
+                const newTargetLang = e.target.value;
+                console.log('[FRONTEND] Target language changed:', newTargetLang);
+                setTargetLang(newTargetLang);
+              }}
               disabled={loading}
             >
               <option value="it">Italian</option>

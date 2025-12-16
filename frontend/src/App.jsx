@@ -50,8 +50,26 @@ function App() {
 
   return (
     <div className="App">
+      <nav className="App-nav">
+        <div className="nav-container">
+          <div className="nav-logo">
+            <img src={logoLexDeep} alt="LexDeep" className="nav-logo-image" />
+          </div>
+          <div className="nav-menu">
+            <a href="#" className="nav-link">Products</a>
+            <a href="#" className="nav-link">Features</a>
+            <a href="#" className="nav-link">Solutions</a>
+            <a href="#" className="nav-link">Resources</a>
+            <a href="#" className="nav-link">Pricing</a>
+          </div>
+          <div className="nav-actions">
+            <button className="nav-button nav-button-secondary">Log in</button>
+            <button className="nav-button nav-button-primary">Get Started</button>
+          </div>
+        </div>
+      </nav>
+
       <header className="App-header">
-        <img src={logoLexDeep} alt="LexDeep" className="logo-image" />
         <p>Translate legal documents using controlled AI with glossary and translation memory support</p>
       </header>
 
