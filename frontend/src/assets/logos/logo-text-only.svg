@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 120" width="600" height="120">
+  <defs>
+    <style>
+      .logo-text {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        font-size: 48px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        fill: #000000;
+      }
+    </style>
+  </defs>
+  <text x="0" y="85" class="logo-text">Legal Document Translator</text>
+</svg>

@@ -9,9 +9,9 @@
 - [x] **Error handling** for authentication and model availability
 
 ### Document Processing
-- [x] **DOCX input/output** with paragraph-level processing
-- [x] **PDF input** with automatic conversion to DOCX output
-- [x] **Format preservation** for DOCX documents (structure, styling)
+- [x] **DOCX ingestion** with paragraph-level processing
+- [x] **PDF input** with automatic extraction to paragraphs
+- [x] **PDF output generation** (ReportLab) for translated documents
 - [x] **Paragraph extraction** from both file types
 
 ### Terminology Management
@@ -43,7 +43,7 @@
 - [x] **Git repository** with clean commit history
 
 ### Verified Working
-- [x] **End-to-end translation** of real Swiss lease contract (PDF → DOCX)
+- [x] **End-to-end translation** of real Swiss lease contract (PDF → translated PDF)
 - [x] **Glossary integration** with 40+ legal terms
 - [x] **Translation memory** preventing duplicate API calls
 - [x] **Report generation** with full audit trail
@@ -61,7 +61,7 @@
   - View reports inline
 - [ ] **Error recovery** for partial batch failures
 - [ ] **Resume capability** for interrupted batches
-- [ ] **Output validation** (verify DOCX opens correctly)
+- [ ] **Output validation** (verify generated PDFs open correctly)
 - [ ] **Better PDF handling** (preserve tables, headers, footers)
 
 ### Week 2-3: Quality & Consistency
@@ -94,7 +94,7 @@
 ✅ **Technical**
 - Process 50+ documents in a single batch
 - Maintain terminology consistency across documents
-- Preserve document formatting (DOCX in, DOCX out)
+- Preserve readable formatting (DOCX/PDF in, PDF out)
 - Complete translation in < 5 minutes per document (avg)
 - 90%+ memory reuse on similar documents
 
@@ -103,7 +103,7 @@
 - System produces translations maintaining terminology consistency
 - Quality is good enough that client would sign a contract
 - Processing time beats current manual workflow
-- Output is in usable DOCX format
+- Output is in usable PDF format
 
 ✅ **Demo Readiness**
 - Working web UI for client demonstration
@@ -137,4 +137,5 @@
 **Blockers**: None
 
 **Test Coverage**: 5 passing tests (terminology, PDF, batch runner, stats)
+
 

@@ -7,10 +7,10 @@ from time import perf_counter
 from typing import Iterable, Sequence
 
 from .claude_client import ClaudeTranslator
-from .processing import DOCX_SUFFIX, build_report_payload, translate_file
+from .processing import DOCX_SUFFIX, PDF_SUFFIX, TXT_SUFFIX, build_report_payload, translate_file
 from .terminology import Glossary, TranslationMemory
 
-SUPPORTED_SUFFIXES = {DOCX_SUFFIX, ".pdf"}
+SUPPORTED_SUFFIXES = {DOCX_SUFFIX, ".pdf", TXT_SUFFIX}
 
 
 def discover_documents(input_dir: Path) -> list[Path]:
@@ -29,6 +29,7 @@ def run_batch(
     translator: ClaudeTranslator,
     source_lang: str,
     target_lang: str,
+    skip_memory: bool = False,
 ) -> tuple[Path, dict]:
     output_dir.mkdir(parents=True, exist_ok=True)
     batch_id = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
@@ -57,7 +58,7 @@ def run_batch(
         manifest["files"].append(entry)
 
         try:
-            default_output = output_dir / f"{path.stem}.{target_lang}{DOCX_SUFFIX}"
+            default_output = output_dir / f"{path.stem}.{target_lang}{PDF_SUFFIX}"
             start = perf_counter()
             outcome = translate_file(
                 path,
@@ -67,6 +68,7 @@ def run_batch(
                 translator=translator,
                 source_lang=source_lang,
                 target_lang=target_lang,
+                skip_memory=skip_memory,
             )
             duration = perf_counter() - start
             report_payload = build_report_payload(outcome=outcome, source_lang=source_lang, target_lang=target_lang)
@@ -96,4 +98,5 @@ def run_batch(
     manifest_path = output_dir / "batch_manifest.json"
     manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
     return manifest_path, manifest
+
 

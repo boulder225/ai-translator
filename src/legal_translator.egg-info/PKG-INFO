@@ -16,6 +16,7 @@ Requires-Dist: python-dotenv>=1.0.1
 Requires-Dist: typer>=0.12.5
 Requires-Dist: pydantic>=2.9.2
 Requires-Dist: tenacity>=9.0.0
+Requires-Dist: reportlab>=4.0.0
 Provides-Extra: dev
 Requires-Dist: pytest>=8.3.3; extra == "dev"
 Requires-Dist: ruff>=0.7.4; extra == "dev"
@@ -23,7 +24,7 @@ Requires-Dist: mypy>=1.13.0; extra == "dev"
 
 # Legal Translation MVP
 
-Prototype that batches DOCX/PDF legal documents through Claude while keeping terminology consistent and returning formatted DOCX outputs.
+Prototype that batches DOCX/PDF legal documents through Claude while keeping terminology consistent and returning polished PDF outputs.
 
 ## Getting Started
 
@@ -40,6 +41,7 @@ Prototype that batches DOCX/PDF legal documents through Claude while keeping ter
 ## Next Steps
 
 - Implement glossary + translation memory helpers.
-- Build single-document CLI that reads DOCX, calls Claude with translator prompt, and writes translated DOCX.
+- Build single-document CLI that reads DOCX, calls Claude with translator prompt, and writes translated PDFs ready for sharing.
+
 
 

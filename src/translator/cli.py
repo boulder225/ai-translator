@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import logging
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
@@ -9,9 +10,16 @@ import typer
 
 from .batch_runner import discover_documents, run_batch
 from .claude_client import ClaudeTranslator
-from .processing import DOCX_SUFFIX, build_report_payload, translate_file
+from .processing import PDF_SUFFIX, build_report_payload, translate_file
 from .settings import get_settings
 from .terminology import Glossary, TranslationMemory
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(message)s",
+    handlers=[logging.StreamHandler()],
+)
 
 app = typer.Typer(help="Legal translation CLI placeholder.")
 
@@ -28,20 +36,21 @@ def _progress_echo(idx: int, total: int, length: int) -> None:
 
 @app.command()
 def translate_doc(
-    input_path: Path = typer.Argument(..., exists=True, readable=True, help="Input DOCX/PDF file."),
-    output_path: Optional[Path] = typer.Option(None, "--output", "-o", help="Output DOCX file (defaults to <name>.<lang>.docx)"),
+    input_path: Path = typer.Argument(..., exists=True, readable=True, help="Input DOCX/PDF/TXT file."),
+    output_path: Optional[Path] = typer.Option(None, "--output", "-o", help="Output PDF file (defaults to <name>.<lang>.pdf)"),
     glossary_path: Optional[Path] = typer.Option(None, "--glossary", "-g", help="Glossary CSV file."),
     memory_path: Optional[Path] = typer.Option(None, "--memory", help="Translation memory JSON (defaults to data/memory.json)"),
     source_lang: Optional[str] = typer.Option(None, "--source-lang", "-s", help="Source language code (default from settings)."),
     target_lang: Optional[str] = typer.Option(None, "--target-lang", "-t", help="Target language code (default from settings)."),
     dry_run: bool = typer.Option(False, "--dry-run", help="Skip Claude calls and echo text for testing."),
     report_path: Optional[Path] = typer.Option(None, "--report", help="Optional JSON file to store translation stats."),
+    skip_memory: bool = typer.Option(False, "--skip-memory", help="Force skip translation memory, always apply term hierarchy and translate."),
 ) -> None:
-    """Translate a DOCX or PDF file with glossary + translation memory support."""
+    """Translate a DOCX, PDF, or TXT file with glossary + translation memory support."""
     settings = get_settings()
     src_lang = source_lang or settings.default_source_lang
     tgt_lang = target_lang or settings.default_target_lang
-    default_output = input_path.with_name(f"{input_path.stem}.{tgt_lang}{DOCX_SUFFIX}")
+    default_output = input_path.with_name(f"{input_path.stem}.{tgt_lang}{PDF_SUFFIX}")
     output = output_path or default_output
     translation_memory_path = memory_path or settings.data_root / "memory.json"
 
@@ -60,6 +69,7 @@ def translate_doc(
             source_lang=src_lang,
             target_lang=tgt_lang,
             progress_callback=_progress_echo,
+            skip_memory=skip_memory,
         )
     except ValueError as exc:
         raise typer.BadParameter(str(exc)) from exc
@@ -73,15 +83,16 @@ def translate_doc(
 
 @app.command("translate-batch")
 def translate_batch(
-    input_dir: Path = typer.Argument(..., exists=True, file_okay=False, dir_okay=True, readable=True, help="Directory containing DOCX/PDF files."),
+    input_dir: Path = typer.Argument(..., exists=True, file_okay=False, dir_okay=True, readable=True, help="Directory containing DOCX/PDF/TXT files."),
     output_dir: Optional[Path] = typer.Option(None, "--output-dir", "-o", help="Directory for translated files (defaults to data/exports/<timestamp>)."),
     glossary_path: Optional[Path] = typer.Option(None, "--glossary", "-g", help="Glossary CSV file."),
     memory_path: Optional[Path] = typer.Option(None, "--memory", help="Translation memory JSON (defaults to data/memory.json)"),
     source_lang: Optional[str] = typer.Option(None, "--source-lang", "-s", help="Source language code (default from settings)."),
     target_lang: Optional[str] = typer.Option(None, "--target-lang", "-t", help="Target language code (default from settings)."),
     dry_run: bool = typer.Option(False, "--dry-run", help="Skip Claude calls and echo text for testing."),
+    skip_memory: bool = typer.Option(False, "--skip-memory", help="Force skip translation memory, always apply term hierarchy and translate."),
 ) -> None:
-    """Translate every DOCX/PDF in a directory and emit a batch manifest."""
+    """Translate every DOCX/PDF/TXT in a directory and emit a batch manifest."""
     settings = get_settings()
     src_lang = source_lang or settings.default_source_lang
     tgt_lang = target_lang or settings.default_target_lang
@@ -91,7 +102,7 @@ def translate_batch(
 
     files = discover_documents(input_dir)
     if not files:
-        typer.echo("No DOCX or PDF files found in the input directory.")
+        typer.echo("No DOCX, PDF, or TXT files found in the input directory.")
         raise typer.Exit(code=1)
 
     glossary = _load_glossary(glossary_path, src_lang, tgt_lang)
@@ -107,6 +118,7 @@ def translate_batch(
         translator=translator,
         source_lang=src_lang,
         target_lang=tgt_lang,
+        skip_memory=skip_memory,
     )
     summary = manifest["summary"]
     typer.echo(
@@ -114,6 +126,22 @@ def translate_batch(
         f"{summary['model_calls']} Claude calls."
     )
     typer.echo(f"Manifest saved to {manifest_path}")
+
+
+@app.command()
+def web() -> None:
+    """Launch the web UI for document translation."""
+    import subprocess
+    import sys
+    from pathlib import Path
+    
+    ui_file = Path(__file__).parent / "web_ui.py"
+    typer.echo("Starting web UI at http://localhost:8501")
+    typer.echo("Press Ctrl+C to stop the server.")
+    subprocess.run([
+        sys.executable, "-m", "streamlit", "run", str(ui_file),
+        "--server.port", "8501"
+    ])
 
 
 @app.command()

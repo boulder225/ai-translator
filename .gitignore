@@ -19,5 +19,8 @@ logs/
 
 # Streamlit
 .streamlit/
+prompt.md
+glossary/
+
 
 

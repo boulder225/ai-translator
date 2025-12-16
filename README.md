@@ -1,22 +1,84 @@
-# Legal Translation MVP
+# Legal Document Translator
 
-Prototype that batches DOCX/PDF legal documents through Claude while keeping terminology consistent and returning formatted DOCX outputs.
+Minimal viable prototype for batch legal document translation with Claude AI.
 
-## Getting Started
+## Architecture
 
-1. **Python**: use 3.11.
-2. **Install**: `pip install -e .` or `uv pip install -e .`.
-3. **Env vars**: copy `.env.example` to `.env` and fill the Anthropic key.
-4. **Test run** (placeholder): `python -m translator.cli --help`.
+- **Backend**: FastAPI REST API (`src/translator/api.py`)
+- **Frontend**: React application (`frontend/`)
+- **CLI**: Command-line interface (`src/translator/cli.py`)
 
-## Project Layout
+## Setup
 
-- `src/translator/`: application code (ingest, glossary, Claude client, CLI, UI).
-- `data/`: runtime storage for uploads, exports, logs (not committed).
+### Backend
 
-## Next Steps
+1. Create virtual environment:
+```bash
+python -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+```
 
-- Implement glossary + translation memory helpers.
-- Build single-document CLI that reads DOCX, calls Claude with translator prompt, and writes translated DOCX.
+2. Install dependencies:
+```bash
+pip install -e .
+```
 
+3. Configure environment variables (create `.env` file):
+```bash
+ANTHROPIC_API_KEY=your_api_key_here
+DATA_ROOT=./data
+DEFAULT_SOURCE_LANG=fr
+DEFAULT_TARGET_LANG=it
+```
 
+### Frontend
+
+1. Install dependencies:
+```bash
+cd frontend
+npm install
+```
+
+## Running
+
+### Backend API
+
+```bash
+./run_api.sh
+# Or: uvicorn src.translator.api:app --host 0.0.0.0 --port 8000 --reload
+```
+
+API will be available at http://localhost:8000
+
+### Frontend
+
+```bash
+cd frontend
+npm run dev
+```
+
+Frontend will be available at http://localhost:3000
+
+### CLI
+
+```bash
+translate translate-doc input.pdf --target-lang it
+translate translate-batch ./documents --output-dir ./output
+```
+
+## API Endpoints
+
+- `GET /` - API info
+- `GET /api/glossaries` - List available glossaries
+- `POST /api/translate` - Start translation job (returns job_id)
+- `GET /api/translate/{job_id}/status` - Get translation status
+- `GET /api/translate/{job_id}/download` - Download translated PDF
+- `GET /api/translate/{job_id}/report` - Get translation report
+
+## Features
+
+- Translate DOCX, PDF, and TXT files
+- Glossary support for terminology consistency
+- Translation memory for reuse
+- Progress tracking
+- Batch processing via CLI

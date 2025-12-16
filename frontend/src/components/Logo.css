@@ -1,0 +1,43 @@
+.logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+}
+
+.logo-image {
+  height: auto;
+  width: auto;
+  max-width: 100%;
+  display: block;
+  background: transparent;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  object-fit: contain;
+}
+
+/* Default sizing for LexDeep logo */
+.logo-container .logo-image {
+  height: 200px;
+  width: auto;
+}
+
+/* Badge variants */
+.logo-container[class*="badge"] .logo-image {
+  width: 120px;
+  height: 120px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .logo-container .logo-image {
+    height: 150px;
+    width: auto;
+  }
+  
+  .logo-container[class*="badge"] .logo-image {
+    width: 80px;
+    height: 80px;
+  }
+}
+

@@ -1,0 +1,90 @@
+{
+  "input_file": "tests/docs/formulaire-contrat-de-bail-général-pour-logements-immoscout24.pdf",
+  "output_file": "tests/docs/formulaire-contrat-de-bail-général-pour-logements-immoscout24.en.pdf",
+  "file_type": "PDF",
+  "source_lang": "fr",
+  "target_lang": "en",
+  "duration_seconds": 0.015,
+  "stats": {
+    "paragraphs_total": 6,
+    "empty_paragraphs": 0,
+    "reused_from_memory": 6,
+    "model_calls": 0,
+    "glossary_matches": 13,
+    "paragraphs": [
+      {
+        "index": 1,
+        "length": 1533,
+        "source_preview": "Contrat de bail général pour logements\n1. Parties au contrat\n1.1 Bailleresse/ bailleur\nPrénom, nom:\nAdresse:\nNPA, locali",
+        "used_memory": true,
+        "model_called": false,
+        "glossary_terms": [],
+        "output_preview": "# OSSERVAZIONE PRELIMINARE IMPORTANTE\n\nIl testo fornito è in **francese** e la richiesta indica:\n\n- **Lingua di partenza"
+      },
+      {
+        "index": 2,
+        "length": 3297,
+        "source_preview": "La ou le locataire est autorisé à utiliser les installations communes suivantes en respectant les dispositions du\nrèglem",
+        "used_memory": true,
+        "model_called": false,
+        "glossary_terms": [
+          "prend effet",
+          "Résilier",
+          "Résiliation"
+        ],
+        "output_preview": "# TRADUZIONE FR → IT (Svizzera)\n\n## Testo tradotto\n\nIl/la locatario/a è autorizzato/a a utilizzare le seguenti installaz"
+      },
+      {
+        "index": 3,
+        "length": 2154,
+        "source_preview": "5.2 Charges\nLes charges incluent les services suivants: Acompte** Forfait*\nChauffage et eau chaude   CHF _____________",
+        "used_memory": true,
+        "model_called": false,
+        "glossary_terms": [
+          "cours",
+          "entretien"
+        ],
+        "output_preview": "# ANALISI PRELIMINARE\n\n**ATTENZIONE**: hai indicato:\n- Lingua di partenza: **FR** (francese)\n- Lingua di arrivo: **EN** "
+      },
+      {
+        "index": 4,
+        "length": 3848,
+        "source_preview": "Les coûts de chauffage et d’eau chaude facturés correspondent aux dépenses effectives directement liées\nà l’utilisation ",
+        "used_memory": true,
+        "model_called": false,
+        "glossary_terms": [
+          "destinataire",
+          "entretien",
+          "En fonction de",
+          "Ordinaire",
+          "Prime"
+        ],
+        "output_preview": "# ANALISI PRELIMINARE E CHIARIMENTO\n\nPrima di procedere, devo segnalare **un'incongruenza fondamentale** nella richiesta"
+      },
+      {
+        "index": 5,
+        "length": 2736,
+        "source_preview": "7. Garantie de loyer\nLa ou le locataire verse une caution de CHF _______________________________________.\nLadite caution",
+        "used_memory": true,
+        "model_called": false,
+        "glossary_terms": [
+          "cours",
+          "entretien"
+        ],
+        "output_preview": "# ANALISI PRELIMINARE CRITICA\n\n**ATTENZIONE**: il prompt che mi hai fornito è configurato per traduzioni **verso l'itali"
+      },
+      {
+        "index": 6,
+        "length": 2685,
+        "source_preview": "________________________________________________________________________________________________________________________",
+        "used_memory": true,
+        "model_called": false,
+        "glossary_terms": [
+          "prend effet"
+        ],
+        "output_preview": "# TRADUZIONE VERSO L'ITALIANO DI SVIZZERA\n\n## Testo tradotto\n\n---\n\n**Elemento/i che costituisce/costituiscono parte inte"
+      }
+    ]
+  },
+  "generated_at": "2025-11-28T14:05:05.360141+00:00"
+}

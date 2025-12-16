@@ -36,3 +36,11 @@ def test_read_paragraphs_from_pdf(monkeypatch, tmp_path: Path) -> None:
     paragraphs = pdf_io.read_paragraphs_from_pdf(tmp_path / "file.pdf")
     assert paragraphs == ["First paragraph.", "Second paragraph."]
 
+
+
+
+
+
+
+
+

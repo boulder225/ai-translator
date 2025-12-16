@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Legal Document Translator - Logo Preview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f5f5f5;
+      padding: 40px 20px;
+      line-height: 1.6;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      padding: 60px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    h1 {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: #000;
+      letter-spacing: -0.02em;
+    }
+    
+    .subtitle {
+      color: #666;
+      margin-bottom: 40px;
+      font-size: 16px;
+    }
+    
+    .logo-section {
+      margin-bottom: 60px;
+      padding-bottom: 40px;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .logo-section:last-child {
+      border-bottom: none;
+    }
+    
+    .logo-section h2 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: #000;
+      letter-spacing: -0.01em;
+    }
+    
+    .logo-section p {
+      color: #666;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+    
+    .logo-preview {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      align-items: flex-start;
+    }
+    
+    .preview-item {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .preview-item label {
+      font-size: 12px;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+    }
+    
+    .preview-item img {
+      display: block;
+      height: auto;
+    }
+    
+    .preview-item.large img {
+      max-width: 600px;
+    }
+    
+    .preview-item.medium img {
+      max-width: 400px;
+    }
+    
+    .preview-item.small img {
+      max-width: 200px;
+    }
+    
+    .badge-preview {
+      display: flex;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+    
+    .color-swatch {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+      vertical-align: middle;
+      margin-left: 10px;
+    }
+    
+    .color-info {
+      display: flex;
+      align-items: center;
+      margin-top: 10px;
+      font-size: 14px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Legal Document Translator</h1>
+    <p class="subtitle">Logo & Brand Identity Preview</p>
+    
+    <div class="logo-section">
+      <h2>1. Text-Only Horizontal Logo</h2>
+      <p>Pure black text, bold condensed typography. Use for headers, navigation, and print materials.</p>
+      <div class="logo-preview">
+        <div class="preview-item large">
+          <label>Full Size</label>
+          <img src="logo-text-only.svg" alt="Text-only logo">
+        </div>
+      </div>
+    </div>
+    
+    <div class="logo-section">
+      <h2>2. Icon + Text (Icon Left)</h2>
+      <p>Teal-blue document icon with translation arrows, combined with black text. Primary branding logo.</p>
+      <div class="logo-preview">
+        <div class="preview-item large">
+          <label>Full Size</label>
+          <img src="logo-icon-text.svg" alt="Icon + text logo">
+        </div>
+        <div class="preview-item medium">
+          <label>Medium Size</label>
+          <img src="logo-icon-text.svg" alt="Icon + text logo" style="max-width: 400px;">
+        </div>
+      </div>
+    </div>
+    
+    <div class="logo-section">
+      <h2>3. Integrated Icon Version</h2>
+      <p>Icon replaces the first "L" in "Legal" for a compact, unified design.</p>
+      <div class="logo-preview">
+        <div class="preview-item large">
+          <label>Full Size</label>
+          <img src="logo-integrated.svg" alt="Integrated logo">
+        </div>
+      </div>
+    </div>
+    
+    <div class="logo-section">
+      <h2>4. Circular Badge Versions</h2>
+      <p>App icon style badges optimized for app stores, social media, and favicons.</p>
+      <div class="badge-preview">
+        <div class="preview-item small">
+          <label>Dark Background</label>
+          <img src="logo-badge-dark.svg" alt="Dark badge">
+        </div>
+        <div class="preview-item small">
+          <label>Light Background</label>
+          <img src="logo-badge-light.svg" alt="Light badge">
+        </div>
+        <div class="preview-item small">
+          <label>Favicon (64x64)</label>
+          <img src="logo-favicon.svg" alt="Favicon">
+        </div>
+      </div>
+    </div>
+    
+    <div class="logo-section">
+      <h2>Color Palette</h2>
+      <div class="color-info">
+        <strong>Primary Text:</strong> 
+        <span class="color-swatch" style="background: #000000;"></span>
+        <code>#000000</code>
+      </div>
+      <div class="color-info">
+        <strong>Icon Color:</strong> 
+        <span class="color-swatch" style="background: #00a0a0;"></span>
+        <code>#00a0a0</code> (DeepL teal-blue)
+      </div>
+      <div class="color-info">
+        <strong>Background:</strong> 
+        <span class="color-swatch" style="background: #ffffff; border: 1px solid #ddd;"></span>
+        <code>#ffffff</code> (White) or transparent
+      </div>
+    </div>
+    
+    <div class="logo-section">
+      <h2>Typography</h2>
+      <p><strong>Font:</strong> Inter (700 weight)</p>
+      <p><strong>Style:</strong> Bold, condensed, geometric sans-serif</p>
+      <p><strong>Letter Spacing:</strong> -0.02em (slightly tighter)</p>
+    </div>
+  </div>
+</body>
+</html>

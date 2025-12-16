@@ -5,7 +5,7 @@ from pathlib import Path
 from docx import Document
 
 from translator.batch_runner import run_batch
-from translator.processing import DOCX_SUFFIX
+from translator.processing import DOCX_SUFFIX, PDF_SUFFIX
 from translator.terminology.memory import TranslationMemory
 
 
@@ -48,6 +48,7 @@ def test_run_batch_creates_manifest(tmp_path: Path) -> None:
     assert manifest_path.exists()
     for entry in manifest["files"]:
         assert Path(entry["output_file"]).exists()
-        assert entry["output_file"].endswith(f".en{DOCX_SUFFIX}")
+        assert entry["output_file"].endswith(f".en{PDF_SUFFIX}")
         assert Path(entry["report_file"]).exists()
+
 
