@@ -20,8 +20,21 @@ export const getGlossaryContent = async (glossaryName) => {
 };
 
 export const getPrompt = async () => {
-  const response = await api.get('/prompt');
-  return response.data;
+  // #region agent log
+  fetch('http://127.0.0.1:7242/ingest/c9cfb42e-68cf-4957-89f2-8cb5ca71e323',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'api.js:getPrompt',message:'getPrompt called',data:{baseURL:'/api',endpoint:'/prompt'},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A,B,C'})}).catch(()=>{});
+  // #endregion
+  try {
+    const response = await api.get('/prompt');
+    // #region agent log
+    fetch('http://127.0.0.1:7242/ingest/c9cfb42e-68cf-4957-89f2-8cb5ca71e323',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'api.js:getPrompt',message:'getPrompt success',data:{status:response.status,hasData:!!response.data},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A,B,C'})}).catch(()=>{});
+    // #endregion
+    return response.data;
+  } catch (error) {
+    // #region agent log
+    fetch('http://127.0.0.1:7242/ingest/c9cfb42e-68cf-4957-89f2-8cb5ca71e323',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'api.js:getPrompt',message:'getPrompt error',data:{error:error.message,status:error.response?.status,statusText:error.response?.statusText,responseData:error.response?.data},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A,B,C,D'})}).catch(()=>{});
+    // #endregion
+    throw error;
+  }
 };
 
 export const detectLanguage = async (file) => {
