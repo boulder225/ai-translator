@@ -437,6 +437,50 @@ async def list_glossaries():
     return {"glossaries": [str(g) for g in find_glossary_files()]}
 
 
+@app.get("/api/glossary/{glossary_name}/content")
+async def get_glossary_content(glossary_name: str):
+    """Get the content of a glossary file."""
+    import csv
+    
+    # Find the glossary file
+    glossary_files = find_glossary_files()
+    glossary_path = None
+    for g in glossary_files:
+        if g.stem == glossary_name or g.name == glossary_name:
+            glossary_path = g
+            break
+    
+    if not glossary_path or not glossary_path.exists():
+        raise HTTPException(status_code=404, detail=f"Glossary '{glossary_name}' not found")
+    
+    # Read and return glossary content
+    entries = []
+    try:
+        with glossary_path.open("r", encoding="utf-8-sig", newline="") as handle:
+            reader = csv.DictReader(handle)
+            if not {"term", "translation"}.issubset(reader.fieldnames or []):
+                raise HTTPException(status_code=400, detail="Invalid glossary format")
+            for row in reader:
+                term = (row.get("term") or "").strip()
+                translation = (row.get("translation") or "").strip()
+                if term and translation:
+                    entries.append({
+                        "term": term,
+                        "translation": translation,
+                        "context": (row.get("context") or "").strip() or None
+                    })
+    except Exception as e:
+        logger.error(f"Error reading glossary {glossary_name}: {e}")
+        raise HTTPException(status_code=500, detail=f"Error reading glossary: {str(e)}")
+    
+    return {
+        "name": glossary_path.stem,
+        "path": str(glossary_path),
+        "entries": entries,
+        "total": len(entries)
+    }
+
+
 @app.get("/api/prompt")
 async def get_prompt():
     """Get the current translation prompt template."""

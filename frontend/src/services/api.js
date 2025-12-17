@@ -14,6 +14,11 @@ export const listGlossaries = async () => {
   return response.data;
 };
 
+export const getGlossaryContent = async (glossaryName) => {
+  const response = await api.get(`/glossary/${glossaryName}/content`);
+  return response.data;
+};
+
 export const getPrompt = async () => {
   const response = await api.get('/prompt');
   return response.data;

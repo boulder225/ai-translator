@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { startTranslation, getPrompt, detectLanguage } from '../services/api';
+import { startTranslation, getPrompt, detectLanguage, getGlossaryContent } from '../services/api';
 import './TranslationForm.css';
 
 function TranslationForm({ onTranslationStart }) {
@@ -8,7 +8,7 @@ function TranslationForm({ onTranslationStart }) {
   const [sourceLang, setSourceLang] = useState('fr');
   const [targetLang, setTargetLang] = useState('it');
   const [useGlossary, setUseGlossary] = useState(true);
-  const [skipMemory, setSkipMemory] = useState(true);
+  const [useMemory, setUseMemory] = useState(true);
   const [customPrompt, setCustomPrompt] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -16,9 +16,26 @@ function TranslationForm({ onTranslationStart }) {
   const [loadingPrompt, setLoadingPrompt] = useState(true);
   const [detectingLanguage, setDetectingLanguage] = useState(false);
   const [showToolbar, setShowToolbar] = useState(false);
+  const [showGlossaryModal, setShowGlossaryModal] = useState(false);
+  const [glossaryContent, setGlossaryContent] = useState(null);
+  const [loadingGlossary, setLoadingGlossary] = useState(false);
   
   const handleToggleToolbar = () => {
     setShowToolbar(!showToolbar);
+  };
+  
+  const handleViewGlossary = async () => {
+    setLoadingGlossary(true);
+    setShowGlossaryModal(true);
+    try {
+      const content = await getGlossaryContent('glossary');
+      setGlossaryContent(content);
+    } catch (error) {
+      console.error('Failed to load glossary:', error);
+      setGlossaryContent({ error: error.message || 'Failed to load glossary' });
+    } finally {
+      setLoadingGlossary(false);
+    }
   };
   
   // Expose toggle function to parent via window object
@@ -74,7 +91,7 @@ function TranslationForm({ onTranslationStart }) {
         source_lang: sourceLang,
         target_lang: targetLang,
         use_glossary: useGlossary,
-        skip_memory: skipMemory,
+        skip_memory: !useMemory,
         custom_prompt: customPrompt || null,
         reference_doc: referenceDoc || null,
       });
@@ -249,34 +266,51 @@ function TranslationForm({ onTranslationStart }) {
             </div>
 
             <div className="toolbar-item">
-              <div className="toolbar-checkbox">
-                <input
-                  type="checkbox"
-                  id="use_glossary"
-                  checked={useGlossary}
-                  onChange={(e) => setUseGlossary(e.target.checked)}
-                  disabled={loading}
-                />
-                <label htmlFor="use_glossary" className="toolbar-checkbox-label">
-                  Use Glossary
+              <div className="toolbar-toggle">
+                <label htmlFor="use_glossary" className="toolbar-toggle-label">
+                  <input
+                    type="checkbox"
+                    id="use_glossary"
+                    checked={useGlossary}
+                    onChange={(e) => setUseGlossary(e.target.checked)}
+                    disabled={loading}
+                    className="toolbar-toggle-input"
+                  />
+                  <span className="toolbar-toggle-slider"></span>
+                  <span className="toolbar-toggle-text">Glossary</span>
                 </label>
               </div>
               <p className="toolbar-help-text">
                 Ensures consistent terminology across translations
               </p>
+              <button
+                type="button"
+                className="toolbar-view-button"
+                onClick={handleViewGlossary}
+                disabled={loading}
+              >
+                <svg className="toolbar-view-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3 2h10v12H3V2zm1 1v10h8V3H4z" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+                  <path d="M5 5.5h6M5 7.5h4" stroke="currentColor" strokeWidth="1" strokeLinecap="round"/>
+                  <path d="M11 9l2-2m0 0l1 1m-1-1l-1 1" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+                </svg>
+                View glossary
+              </button>
             </div>
 
             <div className="toolbar-item">
-              <div className="toolbar-checkbox">
-                <input
-                  type="checkbox"
-                  id="skip_memory"
-                  checked={skipMemory}
-                  onChange={(e) => setSkipMemory(e.target.checked)}
-                  disabled={loading}
-                />
-                <label htmlFor="skip_memory" className="toolbar-checkbox-label">
-                  Skip Memory
+              <div className="toolbar-toggle">
+                <label htmlFor="use_memory" className="toolbar-toggle-label">
+                  <input
+                    type="checkbox"
+                    id="use_memory"
+                    checked={useMemory}
+                    onChange={(e) => setUseMemory(e.target.checked)}
+                    disabled={loading}
+                    className="toolbar-toggle-input"
+                  />
+                  <span className="toolbar-toggle-slider"></span>
+                  <span className="toolbar-toggle-text">Use Translation Memory</span>
                 </label>
               </div>
               <p className="toolbar-help-text">
@@ -287,6 +321,60 @@ function TranslationForm({ onTranslationStart }) {
         </div>
         )}
       </div>
+
+      {/* Glossary Modal */}
+      {showGlossaryModal && (
+        <div className="glossary-modal-overlay" onClick={() => setShowGlossaryModal(false)}>
+          <div className="glossary-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="glossary-modal-header">
+              <h2 className="glossary-modal-title">Glossary</h2>
+              <button
+                type="button"
+                className="glossary-modal-close"
+                onClick={() => setShowGlossaryModal(false)}
+                aria-label="Close glossary"
+              >
+                ×
+              </button>
+            </div>
+            <div className="glossary-modal-content">
+              {loadingGlossary ? (
+                <div className="glossary-loading">Loading glossary...</div>
+              ) : glossaryContent?.error ? (
+                <div className="glossary-error">Error: {glossaryContent.error}</div>
+              ) : glossaryContent ? (
+                <>
+                  <div className="glossary-info">
+                    <p>{glossaryContent.total} entries</p>
+                  </div>
+                  <div className="glossary-table-container">
+                    <table className="glossary-table">
+                      <thead>
+                        <tr>
+                          <th>Term</th>
+                          <th>Translation</th>
+                          {glossaryContent.entries.some(e => e.context) && <th>Context</th>}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {glossaryContent.entries.map((entry, index) => (
+                          <tr key={index}>
+                            <td className="glossary-term">{entry.term}</td>
+                            <td className="glossary-translation">{entry.translation}</td>
+                            {glossaryContent.entries.some(e => e.context) && (
+                              <td className="glossary-context">{entry.context || '-'}</td>
+                            )}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </>
+              ) : null}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

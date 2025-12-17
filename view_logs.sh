@@ -26,3 +26,4 @@ echo "  tail -f $LOG_DIR/backend.log"
 echo "  tail -f $LOG_DIR/frontend.log"
 
 
+
