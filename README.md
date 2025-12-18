@@ -57,7 +57,36 @@ cd frontend
 npm run dev
 ```
 
-Frontend will be available at http://localhost:3000
+Frontend will be available at http://localhost:5173
+
+### Public Access (ngrok)
+
+**Quick Start (All Services + ngrok):**
+
+```bash
+./start_all_with_ngrok.sh
+```
+
+This will start backend, frontend, and ngrok tunnel together. The public URL will be displayed.
+
+**Individual ngrok tunnels:**
+
+To expose the backend API publicly:
+
+```bash
+./run_ngrok.sh
+```
+
+To expose the frontend publicly:
+
+```bash
+./run_ngrok_frontend.sh
+```
+
+**Note:** 
+- CORS is already configured to allow ngrok domains automatically
+- The frontend proxy will continue to work through ngrok, forwarding `/api` requests to the backend
+- Ngrok dashboard is available at http://localhost:4040
 
 ### CLI
 

@@ -10,7 +10,7 @@ import uuid
 from pathlib import Path
 from typing import Optional
 
-from fastapi import FastAPI, File, Form, HTTPException, Request, UploadFile, status
+from fastapi import FastAPI, File, Form, HTTPException, UploadFile, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
@@ -63,7 +63,11 @@ app = FastAPI(title="Legal Translator API", version="0.1.0")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://localhost:5173"],
+    allow_origins=[
+        "http://localhost:3000",
+        "http://localhost:5173",
+    ],
+    allow_origin_regex=r"https://.*\.ngrok\.(io|app|free\.app)",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -482,31 +486,8 @@ async def get_glossary_content(glossary_name: str):
 
 
 @app.get("/api/prompt")
-async def get_prompt(request: Request):
+async def get_prompt():
     """Get the current translation prompt template."""
-    # #region agent log
-    try:
-        log_dir = Path("/Users/enrico/workspace/translator/.cursor")
-        log_dir.mkdir(parents=True, exist_ok=True)
-        log_data = {
-            "location": "api.py:get_prompt",
-            "message": "get_prompt endpoint called",
-            "data": {
-                "method": request.method,
-                "url": str(request.url),
-                "headers": dict(request.headers),
-                "client": str(request.client) if request.client else None,
-            },
-            "timestamp": int(time.time() * 1000),
-            "sessionId": "debug-session",
-            "runId": "run1",
-            "hypothesisId": "B,D"
-        }
-        with open(log_dir / "debug.log", "a") as f:
-            f.write(json.dumps(log_data) + "\n")
-    except Exception as e:
-        logger.warning(f"Failed to write debug log: {e}")
-    # #endregion
     from .claude_client import _load_prompt_template
     prompt = _load_prompt_template()
     return {"prompt": prompt}
