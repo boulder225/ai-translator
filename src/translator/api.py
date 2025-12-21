@@ -378,7 +378,7 @@ def _run_translation(job_id: str) -> None:
         source_lang = job["source_lang"]
         target_lang = job["target_lang"]
         glossary_path_str = job.get("glossary_path")
-        skip_memory = job.get("skip_memory", True)
+        skip_memory = job.get("skip_memory", False)  # Default to False: use memory by default
         custom_prompt = job.get("custom_prompt")
         
         # Verify input file exists and hash matches
@@ -836,7 +836,7 @@ async def start_translation(
     source_lang: str = Form("fr"),
     target_lang: str = Form("it"),
     use_glossary: bool = Form(False),
-    skip_memory: bool = Form(True),
+    skip_memory: bool = Form(False),  # Default to False: use memory by default
     custom_prompt: Optional[str] = Form(None),
     reference_doc: Optional[UploadFile] = File(None),
 ):
