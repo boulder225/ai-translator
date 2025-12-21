@@ -69,8 +69,8 @@ nginx.conf
 start_all_with_ngrok.sh
 run_*.sh
 
-# Frontend (handled separately)
-frontend/
+# Frontend is needed for frontend Dockerfile builds
+# frontend/ - REMOVED: needed for frontend Docker builds
 
 # Temporary files
 *.tmp
