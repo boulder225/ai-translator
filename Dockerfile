@@ -23,6 +23,9 @@ COPY prompt.md ./
 # Copy source directory structure  
 COPY src/ ./src/
 
+# Copy glossary directory (needed for glossary lookup)
+COPY glossary/ ./glossary/
+
 # Install Python dependencies (after copying src directory)
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -e .
