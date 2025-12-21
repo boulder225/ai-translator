@@ -72,3 +72,4 @@ Professional logo and wordmark designs following DeepL's visual identity.
 - Font loading via Google Fonts (Inter)
 - Compatible with all modern browsers
 
+

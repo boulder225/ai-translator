@@ -85,7 +85,7 @@ function TranslationForm({ onTranslationStart }) {
     console.log(`[FRONTEND] Starting translation for file: ${file.name}, size: ${file.size} bytes`);
 
     console.log(`[FRONTEND] Starting translation with source_lang: ${sourceLang}, target_lang: ${targetLang}`);
-    
+
     try {
       const result = await startTranslation(file, {
         source_lang: sourceLang,
@@ -117,13 +117,13 @@ function TranslationForm({ onTranslationStart }) {
 
       <div className="translation-form-layout">
         <div className="translation-form-main">
-          <form onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label htmlFor="file">Choose a DOCX, PDF, or TXT file</label>
-            <input
-              type="file"
-              id="file"
-              accept=".docx,.pdf,.txt"
+      <form onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label htmlFor="file">Choose a DOCX, PDF, or TXT file</label>
+          <input
+            type="file"
+            id="file"
+            accept=".docx,.pdf,.txt"
               onChange={async (e) => {
                 const selectedFile = e.target.files[0];
                 if (selectedFile) {
@@ -142,21 +142,21 @@ function TranslationForm({ onTranslationStart }) {
                   }
                 }
               }}
-              required
-              disabled={loading}
-            />
-            {file && (
+            required
+            disabled={loading}
+          />
+          {file && (
               <p className="file-info">
                 Selected: {file.name} ({(file.size / 1024).toFixed(2)} KB)
                 {detectingLanguage && <span style={{ marginLeft: '0.5rem', color: '#666' }}>Detecting language...</span>}
               </p>
-            )}
+          )}
               <p className="help-text" style={{ marginTop: '0.25rem', fontSize: '0.875rem', color: '#666' }}>
                 Document to translate. Source language will be auto-detected.
               </p>
-            </div>
+        </div>
 
-            <div className="form-row">
+        <div className="form-row">
           <div className="form-group">
             <label htmlFor="source_lang">Source Language</label>
             {detectingLanguage ? (

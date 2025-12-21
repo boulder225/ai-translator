@@ -20,9 +20,11 @@ from .processing import PDF_SUFFIX, translate_file_to_memory
 from .settings import get_settings
 from .terminology import Glossary, TranslationMemory
 
-# Configure logging with both console and file handlers
+# Configure logging with both console, file, and optional Loki handlers
 def setup_logging():
-    """Configure logging to write to both console and file."""
+    """Configure logging to write to console, file, and optionally Grafana Cloud Loki."""
+    import os
+    
     log_dir = Path(__file__).parent.parent.parent / "logs"
     log_dir.mkdir(parents=True, exist_ok=True)
     log_file = log_dir / "backend.log"
@@ -30,8 +32,8 @@ def setup_logging():
     # Create formatter
     formatter = logging.Formatter(
         '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S'
-)
+        datefmt='%Y-%m-%d %H:%M:%S'
+    )
     
     # Get root logger
     root_logger = logging.getLogger()
@@ -52,6 +54,36 @@ def setup_logging():
     file_handler.setFormatter(formatter)
     root_logger.addHandler(file_handler)
     
+    # Loki handler (optional, if configured)
+    loki_url = os.getenv("LOKI_URL")
+    loki_username = os.getenv("LOKI_USERNAME")
+    loki_password = os.getenv("LOKI_PASSWORD")
+    
+    if loki_url and loki_username and loki_password:
+        try:
+            import logging_loki
+            
+            loki_handler = logging_loki.LokiHandler(
+                url=loki_url,
+                tags={
+                    "application": "legal-translator",
+                    "environment": os.getenv("ENVIRONMENT", "production"),
+                },
+                auth=(loki_username, loki_password),
+                version="1",
+            )
+            loki_handler.setLevel(logging.INFO)
+            loki_handler.setFormatter(formatter)
+            root_logger.addHandler(loki_handler)
+            logger = logging.getLogger(__name__)
+            logger.info("Loki logging handler enabled")
+        except ImportError:
+            logger = logging.getLogger(__name__)
+            logger.warning("python-logging-loki-v2 not installed, skipping Loki handler")
+        except Exception as e:
+            logger = logging.getLogger(__name__)
+            logger.warning(f"Failed to setup Loki handler: {e}")
+    
     return log_file
 
 # Setup logging on module import
@@ -64,85 +96,11 @@ app = FastAPI(title="Legal Translator API", version="0.1.0")
 # Add middleware to log all requests and catch exceptions
 @app.middleware("http")
 async def log_requests_and_errors(request, call_next):
-    # #region agent log
-    import json
-    import os
     request_start_time = time.time()
-    # Use environment variable for log directory, fallback to /tmp in production
-    log_dir = Path(os.getenv("DEBUG_LOG_DIR", "/tmp"))
-    if log_dir.exists() or os.getenv("DEBUG_ENABLED", "false").lower() == "true":
-        try:
-            log_dir.mkdir(parents=True, exist_ok=True)
-            log_data = {
-                "location": "api.py:middleware",
-                "message": "Request received",
-                "data": {
-                    "method": request.method,
-                    "url": str(request.url),
-                    "path": request.url.path,
-                    "client": str(request.client) if request.client else None,
-                },
-                "timestamp": int(time.time() * 1000),
-                "sessionId": "debug-session",
-                "runId": "run1",
-                "hypothesisId": "A,B,C"
-            }
-            with open(log_dir / "debug.log", "a") as f:
-                f.write(json.dumps(log_data) + "\n")
-        except Exception as e:
-            logger.warning(f"Failed to write request log: {e}")
-    # #endregion
-    
     try:
         response = await call_next(request)
-        # #region agent log
-        if log_dir.exists() or os.getenv("DEBUG_ENABLED", "false").lower() == "true":
-            try:
-                duration = time.time() - request_start_time
-                log_data = {
-                    "location": "api.py:middleware",
-                    "message": "Request completed",
-                    "data": {
-                        "method": request.method,
-                        "path": request.url.path,
-                        "status_code": response.status_code,
-                        "duration_seconds": duration,
-                    },
-                    "timestamp": int(time.time() * 1000),
-                    "sessionId": "debug-session",
-                    "runId": "run1",
-                    "hypothesisId": "A,B,C"
-                }
-                with open(log_dir / "debug.log", "a") as f:
-                    f.write(json.dumps(log_data) + "\n")
-            except Exception as e:
-                logger.warning(f"Failed to write completion log: {e}")
-        # #endregion
         return response
     except Exception as e:
-        # #region agent log
-        if log_dir.exists() or os.getenv("DEBUG_ENABLED", "false").lower() == "true":
-            try:
-                log_data = {
-                    "location": "api.py:middleware",
-                    "message": "Request exception",
-                    "data": {
-                        "method": request.method,
-                        "path": request.url.path,
-                        "error": str(e),
-                        "error_type": type(e).__name__,
-                        "traceback": str(e.__traceback__) if hasattr(e, '__traceback__') else None,
-                    },
-                    "timestamp": int(time.time() * 1000),
-                    "sessionId": "debug-session",
-                    "runId": "run1",
-                    "hypothesisId": "B,C"
-                }
-                with open(log_dir / "debug.log", "a") as f:
-                    f.write(json.dumps(log_data) + "\n")
-            except Exception as log_err:
-                logger.error(f"Failed to write error log: {log_err}")
-        # #endregion
         logger.error(f"Unhandled exception in request: {e}", exc_info=True)
         raise
 
@@ -187,96 +145,12 @@ def _load_glossary(glossary_path: Path | None, source_lang: str, target_lang: st
 
 
 def find_glossary_files() -> list[Path]:
-    # #region agent log
-    import json
-    import os
-    log_path = Path("/Users/enrico/workspace/translator/.cursor/debug.log")
-    try:
-        if log_path.parent.exists() or os.getenv("DEBUG_ENABLED", "false").lower() == "true":
-            log_path.parent.mkdir(parents=True, exist_ok=True)
-            with open(log_path, "a") as f:
-                f.write(json.dumps({
-                    "location": "api.py:find_glossary_files",
-                    "message": "Finding glossary files",
-                    "data": {
-                        "cwd": str(Path.cwd()),
-                        "search_dirs": ["glossary", "tests/docs"]
-                    },
-                    "timestamp": int(time.time() * 1000),
-                    "sessionId": "debug-session",
-                    "runId": "run1",
-                    "hypothesisId": "A,B,C"
-                }) + "\n")
-    except Exception as e:
-        pass
-    # #endregion
     glossaries = []
     for dir_path in [Path("glossary"), Path("tests/docs")]:
-        # #region agent log
-        try:
-            if log_path.parent.exists() or os.getenv("DEBUG_ENABLED", "false").lower() == "true":
-                with open(log_path, "a") as f:
-                    f.write(json.dumps({
-                        "location": "api.py:find_glossary_files",
-                        "message": "Checking directory",
-                        "data": {
-                            "dir_path": str(dir_path),
-                            "exists": dir_path.exists(),
-                            "absolute": str(dir_path.resolve())
-                        },
-                        "timestamp": int(time.time() * 1000),
-                        "sessionId": "debug-session",
-                        "runId": "run1",
-                        "hypothesisId": "A,B,C"
-                    }) + "\n")
-            logger.info(f"[DEBUG] Checking dir_path={dir_path}, exists={dir_path.exists()}, absolute={dir_path.resolve()}")
-        except Exception as e:
-            logger.warning(f"[DEBUG] Failed to log directory check: {e}")
-        # #endregion
         if dir_path.exists():
             found = list(dir_path.glob("*.csv"))
-            # #region agent log
-            try:
-                if log_path.parent.exists() or os.getenv("DEBUG_ENABLED", "false").lower() == "true":
-                    with open(log_path, "a") as f:
-                        f.write(json.dumps({
-                            "location": "api.py:find_glossary_files",
-                            "message": "Found CSV files in directory",
-                            "data": {
-                                "dir_path": str(dir_path),
-                                "found_files": [str(f) for f in found]
-                            },
-                            "timestamp": int(time.time() * 1000),
-                            "sessionId": "debug-session",
-                            "runId": "run1",
-                            "hypothesisId": "A,B,C"
-                        }) + "\n")
-            except Exception:
-                pass
-            # #endregion
             glossaries.extend(found)
-    result = sorted(set(glossaries))
-    # #region agent log
-    try:
-        if log_path.parent.exists() or os.getenv("DEBUG_ENABLED", "false").lower() == "true":
-            with open(log_path, "a") as f:
-                f.write(json.dumps({
-                    "location": "api.py:find_glossary_files",
-                    "message": "Returning glossary files",
-                    "data": {
-                        "total_found": len(result),
-                        "files": [str(f) for f in result]
-                    },
-                    "timestamp": int(time.time() * 1000),
-                    "sessionId": "debug-session",
-                    "runId": "run1",
-                    "hypothesisId": "A,B,C"
-                }) + "\n")
-            logger.info(f"[DEBUG] Returning {len(result)} glossary files: {[str(f) for f in result]}")
-    except Exception as e:
-        logger.warning(f"[DEBUG] Failed to log return: {e}")
-    # #endregion
-    return result
+    return sorted(set(glossaries))
 
 
 def detect_language_from_file(file_path: Path) -> str:
@@ -430,54 +304,9 @@ def _run_translation(job_id: str) -> None:
             # Use shared translation memory (persisted across jobs)
             settings = get_settings()
             memory_file = settings.data_root / "memory.json"
-            import os
-            logger.info(f"[DEBUG] Job {job_id}: Memory file path check - path={memory_file}, absolute={memory_file.resolve()}, data_root={settings.data_root}, data_root_exists={settings.data_root.exists()}, data_root_writable={os.access(settings.data_root, os.W_OK) if settings.data_root.exists() else False}")
-            # #region agent log
-            try:
-                log_path.parent.mkdir(parents=True, exist_ok=True)
-                with open(log_path, "a") as f:
-                    f.write(json.dumps({
-                        "location": "api.py:translate_job",
-                        "message": "Loading translation memory",
-                        "data": {
-                            "memory_file": str(memory_file),
-                            "memory_file_exists": memory_file.exists(),
-                            "data_root": str(settings.data_root),
-                            "skip_memory": skip_memory
-                        },
-                        "timestamp": int(time.time() * 1000),
-                        "sessionId": "debug-session",
-                        "runId": "run1",
-                        "hypothesisId": "B"
-                    }) + "\n")
-            except Exception:
-                pass
-            logger.info(f"[DEBUG] Job {job_id}: Loading translation memory: file={memory_file}, exists={memory_file.exists()}, skip_memory={skip_memory}")
-            # #endregion
             memory = TranslationMemory(memory_file)
-            # #region agent log
-            try:
-                with open(log_path, "a") as f:
-                    f.write(json.dumps({
-                        "location": "api.py:translate_job",
-                        "message": "Translation memory loaded",
-                        "data": {
-                            "memory_file": str(memory_file),
-                            "records_count": len(memory),
-                            "skip_memory": skip_memory
-                        },
-                        "timestamp": int(time.time() * 1000),
-                        "sessionId": "debug-session",
-                        "runId": "run1",
-                        "hypothesisId": "B"
-                    }) + "\n")
-            except Exception:
-                pass
-            logger.info(f"[DEBUG] Job {job_id}: Translation memory loaded: records={len(memory)}, skip_memory={skip_memory}")
-            # #endregion
             logger.info(f"Job {job_id}: Using shared translation memory from {memory_file}")
             logger.info(f"Job {job_id}: Memory contains {len(memory)} existing records")
-            logger.info(f"[DEBUG] Job {job_id}: skip_memory={skip_memory}, memory_records={len(memory)}")
             
             # Extract translation pairs from reference document if provided
             reference_doc_pairs = {}
@@ -661,109 +490,16 @@ async def get_glossary_content(glossary_name: str):
     """Get the content of a glossary file."""
     import csv
     
-    # #region agent log
-    import json
-    import os
-    log_path = Path("/Users/enrico/workspace/translator/.cursor/debug.log")
-    try:
-        if log_path.parent.exists() or os.getenv("DEBUG_ENABLED", "false").lower() == "true":
-            log_path.parent.mkdir(parents=True, exist_ok=True)
-            with open(log_path, "a") as f:
-                f.write(json.dumps({
-                    "location": "api.py:get_glossary_content",
-                    "message": "Request received",
-                    "data": {
-                        "glossary_name": glossary_name,
-                        "cwd": str(Path.cwd())
-                    },
-                    "timestamp": int(time.time() * 1000),
-                    "sessionId": "debug-session",
-                    "runId": "run1",
-                    "hypothesisId": "D"
-                }) + "\n")
-            logger.info(f"[DEBUG] get_glossary_content: glossary_name={glossary_name}, cwd={Path.cwd()}")
-    except Exception as e:
-        logger.warning(f"[DEBUG] Failed to log request: {e}")
-    # #endregion
-    
     # Find the glossary file
     glossary_files = find_glossary_files()
-    # #region agent log
-    try:
-        if log_path.parent.exists() or os.getenv("DEBUG_ENABLED", "false").lower() == "true":
-            with open(log_path, "a") as f:
-                f.write(json.dumps({
-                    "location": "api.py:get_glossary_content",
-                    "message": "Found glossary files",
-                    "data": {
-                        "glossary_name": glossary_name,
-                        "found_files": [str(g) for g in glossary_files],
-                        "file_stems": [g.stem for g in glossary_files],
-                        "file_names": [g.name for g in glossary_files]
-                    },
-                    "timestamp": int(time.time() * 1000),
-                    "sessionId": "debug-session",
-                    "runId": "run1",
-                    "hypothesisId": "D"
-                }) + "\n")
-    except Exception:
-        pass
-    # #endregion
     glossary_path = None
     for g in glossary_files:
-        # #region agent log
-        try:
-            if log_path.parent.exists() or os.getenv("DEBUG_ENABLED", "false").lower() == "true":
-                with open(log_path, "a") as f:
-                    f.write(json.dumps({
-                        "location": "api.py:get_glossary_content",
-                        "message": "Matching glossary file",
-                        "data": {
-                            "glossary_name": glossary_name,
-                            "file_path": str(g),
-                            "file_stem": g.stem,
-                            "file_name": g.name,
-                            "stem_match": g.stem == glossary_name,
-                            "name_match": g.name == glossary_name
-                        },
-                        "timestamp": int(time.time() * 1000),
-                        "sessionId": "debug-session",
-                        "runId": "run1",
-                        "hypothesisId": "D"
-                    }) + "\n")
-                logger.info(f"[DEBUG] Matching: glossary_name={glossary_name}, file={g}, stem={g.stem}, name={g.name}, stem_match={g.stem == glossary_name}, name_match={g.name == glossary_name}")
-        except Exception as e:
-            logger.warning(f"[DEBUG] Failed to log match: {e}")
-        # #endregion
         if g.stem == glossary_name or g.name == glossary_name:
             glossary_path = g
             break
     
-    # #region agent log
-    try:
-        if log_path.parent.exists() or os.getenv("DEBUG_ENABLED", "false").lower() == "true":
-            with open(log_path, "a") as f:
-                f.write(json.dumps({
-                    "location": "api.py:get_glossary_content",
-                    "message": "Glossary path resolution",
-                    "data": {
-                        "glossary_name": glossary_name,
-                        "glossary_path": str(glossary_path) if glossary_path else None,
-                        "path_exists": glossary_path.exists() if glossary_path else False,
-                        "path_absolute": str(glossary_path.resolve()) if glossary_path else None
-                    },
-                    "timestamp": int(time.time() * 1000),
-                    "sessionId": "debug-session",
-                    "runId": "run1",
-                    "hypothesisId": "D"
-                    }) + "\n")
-            logger.info(f"[DEBUG] Glossary path resolution: glossary_name={glossary_name}, glossary_path={glossary_path}, exists={glossary_path.exists() if glossary_path else False}")
-    except Exception as e:
-        logger.warning(f"[DEBUG] Failed to log path resolution: {e}")
-    # #endregion
-    
     if not glossary_path or not glossary_path.exists():
-        logger.error(f"[DEBUG] Glossary '{glossary_name}' not found. Found files: {[str(g) for g in glossary_files]}")
+        logger.error(f"Glossary '{glossary_name}' not found. Found files: {[str(g) for g in glossary_files]}")
         raise HTTPException(status_code=404, detail=f"Glossary '{glossary_name}' not found")
     
     # Read and return glossary content
@@ -870,31 +606,6 @@ async def start_translation(
     logger.info(f"[REQUEST {request_id}] File hash: {file_hash}")
     logger.info(f"[REQUEST {request_id}] First 200 bytes: {file_content[:200]}")
     logger.info(f"[REQUEST {request_id}] Use glossary: {use_glossary}")
-    # #region agent log
-    import json
-    import os
-    log_path = Path("/Users/enrico/workspace/translator/.cursor/debug.log")
-    try:
-        log_path.parent.mkdir(parents=True, exist_ok=True)
-        with open(log_path, "a") as f:
-            f.write(json.dumps({
-                "location": "api.py:start_translation",
-                "message": "skip_memory parameter received",
-                "data": {
-                    "skip_memory": skip_memory,
-                    "skip_memory_type": type(skip_memory).__name__,
-                    "source_lang": source_lang,
-                    "target_lang": target_lang
-                },
-                "timestamp": int(time.time() * 1000),
-                "sessionId": "debug-session",
-                "runId": "run1",
-                "hypothesisId": "A"
-            }) + "\n")
-        logger.info(f"[DEBUG] skip_memory={skip_memory} (type={type(skip_memory).__name__})")
-    except Exception as e:
-        logger.warning(f"[DEBUG] Failed to log skip_memory: {e}")
-    # #endregion
     logger.info(f"[REQUEST {request_id}] Skip memory: {skip_memory}")
     
     # Determine glossary path - use default if enabled

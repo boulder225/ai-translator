@@ -74,23 +74,23 @@ export const downloadTranslation = async (jobId) => {
   try {
     // Use api instance instead of axios directly to get /api prefix automatically
     const response = await api.get(url, {
-      responseType: 'blob',
-    });
+    responseType: 'blob',
+  });
     
     // Check if response is HTML (error page)
     if (response.headers['content-type']?.includes('text/html')) {
       const text = await response.data.text();
       throw new Error('Server returned HTML instead of PDF. Check URL and endpoint.');
     }
-    
-    // Create download link
+  
+  // Create download link
     const url_blob = window.URL.createObjectURL(new Blob([response.data], { type: 'application/pdf' }));
-    const link = document.createElement('a');
+  const link = document.createElement('a');
     link.href = url_blob;
-    link.setAttribute('download', `translated_${jobId}.pdf`);
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
+  link.setAttribute('download', `translated_${jobId}.pdf`);
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
     window.URL.revokeObjectURL(url_blob);
   } catch (error) {
     throw error;

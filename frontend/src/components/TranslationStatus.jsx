@@ -116,9 +116,9 @@ function TranslationStatus({ jobId, status, onReset, onReportUpdate }) {
   return (
     <div className="card">
       {status.status !== 'completed' && (
-        <div className={`status-message ${statusMsg.type}`}>
-          {statusMsg.text}
-        </div>
+      <div className={`status-message ${statusMsg.type}`}>
+        {statusMsg.text}
+      </div>
       )}
 
       {(status.status === 'in_progress' || status.status === 'pending') && (
@@ -178,7 +178,7 @@ function TranslationStatus({ jobId, status, onReset, onReportUpdate }) {
               <div className={`comparison-container ${fullscreenColumn ? 'fullscreen-active' : ''}`}>
                 <div className={`original-column ${fullscreenColumn === 'original' ? 'fullscreen' : ''} ${fullscreenColumn === 'translated' ? 'hidden' : ''}`}>
                   <div className="column-header">
-                    <h4>Original ({status.report?.source_lang || 'Source'})</h4>
+                  <h4>Original ({status.report?.source_lang || 'Source'})</h4>
                     <button
                       className="fullscreen-toggle"
                       onClick={() => toggleFullscreen('original')}
@@ -206,7 +206,7 @@ function TranslationStatus({ jobId, status, onReset, onReportUpdate }) {
                 </div>
                 <div className={`translated-column ${fullscreenColumn === 'translated' ? 'fullscreen' : ''} ${fullscreenColumn === 'original' ? 'hidden' : ''}`}>
                   <div className="column-header">
-                    <h4>Translated ({status.report?.target_lang || 'Target'})</h4>
+                  <h4>Translated ({status.report?.target_lang || 'Target'})</h4>
                     <button
                       className="fullscreen-toggle"
                       onClick={() => toggleFullscreen('translated')}

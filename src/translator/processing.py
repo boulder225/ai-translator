@@ -193,53 +193,7 @@ def _translate_paragraphs(
             continue
         
         # Check memory first (unless skipped)
-        # #region agent log
-        import json
-        import os
-        import time
-        log_path = Path("/Users/enrico/workspace/translator/.cursor/debug.log")
-        try:
-            log_path.parent.mkdir(parents=True, exist_ok=True)
-            with open(log_path, "a") as f:
-                f.write(json.dumps({
-                    "location": "processing.py:translate_file_to_memory",
-                    "message": "Checking memory for paragraph",
-                    "data": {
-                        "paragraph_idx": idx,
-                        "skip_memory": skip_memory,
-                        "text_preview": text[:100],
-                        "source_lang": source_lang,
-                        "target_lang": target_lang,
-                        "memory_records_count": len(memory)
-                    },
-                    "timestamp": int(time.time() * 1000),
-                    "sessionId": "debug-session",
-                    "runId": "run1",
-                    "hypothesisId": "E"
-                }) + "\n")
-        except Exception:
-            pass
-        # #endregion
         memory_hit = None if skip_memory else memory.get(text, source_lang, target_lang)
-        # #region agent log
-        try:
-            with open(log_path, "a") as f:
-                f.write(json.dumps({
-                    "location": "processing.py:translate_file_to_memory",
-                    "message": "Memory lookup result",
-                    "data": {
-                        "paragraph_idx": idx,
-                        "skip_memory": skip_memory,
-                        "memory_hit_found": memory_hit is not None
-                    },
-                    "timestamp": int(time.time() * 1000),
-                    "sessionId": "debug-session",
-                    "runId": "run1",
-                    "hypothesisId": "E"
-                }) + "\n")
-        except Exception:
-            pass
-        # #endregion
         
         if memory_hit:
             # Use cached translation
@@ -257,27 +211,6 @@ def _translate_paragraphs(
             
             # Get memory suggestions
             memory_suggestions = memory.similar(text, source_lang, target_lang, limit=3, threshold=80.0) if not skip_memory else []
-            # #region agent log
-            try:
-                with open(log_path, "a") as f:
-                    f.write(json.dumps({
-                        "location": "processing.py:translate_file_to_memory",
-                        "message": "Memory suggestions retrieved",
-                        "data": {
-                            "paragraph_idx": idx,
-                            "skip_memory": skip_memory,
-                            "suggestions_count": len(memory_suggestions),
-                            "threshold_used": 80.0
-                        },
-                        "timestamp": int(time.time() * 1000),
-                        "sessionId": "debug-session",
-                        "runId": "run1",
-                        "hypothesisId": "E"
-                    }) + "\n")
-            except Exception:
-                pass
-            logger.info(f"[DEBUG] Paragraph {idx}: Memory suggestions - skip_memory={skip_memory}, suggestions_count={len(memory_suggestions)}, threshold=80.0")
-            # #endregion
             
             # Split if too long
             chunks = _split_into_chunks(text, MAX_PARAGRAPH_LENGTH, CHUNK_OVERLAP)
@@ -300,10 +233,7 @@ def _translate_paragraphs(
                     translated_chunks.append(chunk_translated)
                     stats.model_calls += 1
                     if not skip_memory:
-                        logger.info(f"[DEBUG] Paragraph {idx} chunk {chunk_idx}: Calling memory.record() - skip_memory={skip_memory}")
                         memory.record(chunk, chunk_translated, source_lang, target_lang)
-                    else:
-                        logger.info(f"[DEBUG] Paragraph {idx} chunk {chunk_idx}: SKIPPING memory.record() - skip_memory={skip_memory}")
                 
                 # Combine chunks (simple join, overlap handled by translator)
                 translated_text = " ".join(translated_chunks)
@@ -318,10 +248,7 @@ def _translate_paragraphs(
                 )
                 stats.model_calls += 1
                 if not skip_memory:
-                    logger.info(f"[DEBUG] Paragraph {idx}: Calling memory.record() - skip_memory={skip_memory}")
                     memory.record(text, translated_text, source_lang, target_lang)
-                else:
-                    logger.info(f"[DEBUG] Paragraph {idx}: SKIPPING memory.record() - skip_memory={skip_memory}")
             
             paragraph_log["model_called"] = True
             logger.info(f"Paragraph {idx}: complete ({len(translated_text)} chars)")
@@ -769,11 +696,8 @@ def translate_file_to_memory(
                 # Ensure memory never contains <para> tags
                 import re as re_module  # Ensure re module is available
                 cleaned_translated_text = re_module.sub(r'</?para>', '', translated_text, flags=re_module.IGNORECASE)
-                logger.info(f"[DEBUG] translate_file_to_memory: Calling memory.record() for full document - skip_memory={skip_memory}")
                 if not skip_memory:
                     memory.record(document_text, cleaned_translated_text, source_lang, target_lang)
-                else:
-                    logger.info(f"[DEBUG] translate_file_to_memory: SKIPPING memory.record() - skip_memory={skip_memory}")
                 logger.info(f"[translate_file_to_memory] ✅ STEP 3 RESULT: Translation stored in memory successfully")
                 logger.info(f"[translate_file_to_memory] Memory file: {memory.path}")
                 logger.info(f"[translate_file_to_memory] Total records in memory: {len(memory._records)}")
