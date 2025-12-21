@@ -16,9 +16,11 @@ RUN apt-get update && apt-get install -y \
 COPY pyproject.toml README.md ./
 
 # Copy prompt.md (custom translation prompt)
+# Note: prompt.md is now committed to repository (removed from .gitignore)
+# If prompt.md doesn't exist, app uses default prompt from claude_client.py
 COPY prompt.md ./
 
-# Copy source directory structure
+# Copy source directory structure  
 COPY src/ ./src/
 
 # Install Python dependencies (after copying src directory)
