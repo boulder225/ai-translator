@@ -36,17 +36,18 @@ services:
         scope: RUN_TIME
         value: "8080"
 
-static_sites:
   - name: frontend
     github:
-      repo: your-username/your-repo-name  # CHANGE THIS
+      repo: boulder225/ai-translator
       branch: main
-    source_dir: /frontend
-    build_command: npm install && npm run build
-    output_dir: dist
+    dockerfile_path: frontend/Dockerfile
+    docker_context: /frontend
+    http_port: 80
+    instance_count: 1
+    instance_size_slug: basic-xxs
     routes:
       - path: /
     envs:
       - key: VITE_API_URL
         scope: BUILD_TIME
-        value: https://backend-${_APP_NAME}.ondigitalocean.app
+        value: https://orca-app-kmn9o.ondigitalocean.app
