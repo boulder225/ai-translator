@@ -15,6 +15,7 @@ services:
     instance_size_slug: basic-xxs
     routes:
       - path: /api
+        preserve_path_prefix: true
     envs:
       # IMPORTANT: Set ANTHROPIC_API_KEY in DigitalOcean dashboard as a SECRET
       # Go to: App → Settings → Environment Variables → Add Variable

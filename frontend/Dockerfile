@@ -17,6 +17,9 @@ COPY . .
 
 # Build the application
 # VITE_API_URL will be set at build time by App Platform
+# Note: Vite only exposes env vars prefixed with VITE_ to the client
+ARG VITE_API_URL
+ENV VITE_API_URL=${VITE_API_URL}
 RUN npm run build
 
 # Production stage with Nginx
