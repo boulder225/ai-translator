@@ -1,19 +1,18 @@
 # Frontend Dockerfile for DigitalOcean App Platform
-# This is used if you want to deploy frontend as a container
-# Alternative: Use static site deployment (recommended for React/Vite)
+# Build context is repository root, so we need to copy from frontend/ directory
 
 FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Copy package files
-COPY package*.json ./
+# Copy package files from frontend directory
+COPY frontend/package*.json ./
 
 # Install dependencies
 RUN npm ci --only=production=false
 
-# Copy source files
-COPY . .
+# Copy source files from frontend directory
+COPY frontend/ .
 
 # Build the application
 # VITE_API_URL will be set at build time by App Platform
@@ -29,7 +28,7 @@ FROM nginx:alpine
 COPY --from=builder /app/dist /usr/share/nginx/html
 
 # Copy custom Nginx configuration for API proxying
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY frontend/nginx.conf /etc/nginx/conf.d/default.conf
 
 # Expose port 80
 EXPOSE 80
