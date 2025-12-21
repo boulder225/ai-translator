@@ -430,6 +430,8 @@ def _run_translation(job_id: str) -> None:
             # Use shared translation memory (persisted across jobs)
             settings = get_settings()
             memory_file = settings.data_root / "memory.json"
+            import os
+            logger.info(f"[DEBUG] Job {job_id}: Memory file path check - path={memory_file}, absolute={memory_file.resolve()}, data_root={settings.data_root}, data_root_exists={settings.data_root.exists()}, data_root_writable={os.access(settings.data_root, os.W_OK) if settings.data_root.exists() else False}")
             # #region agent log
             try:
                 log_path.parent.mkdir(parents=True, exist_ok=True)
@@ -450,6 +452,7 @@ def _run_translation(job_id: str) -> None:
                     }) + "\n")
             except Exception:
                 pass
+            logger.info(f"[DEBUG] Job {job_id}: Loading translation memory: file={memory_file}, exists={memory_file.exists()}, skip_memory={skip_memory}")
             # #endregion
             memory = TranslationMemory(memory_file)
             # #region agent log
@@ -470,6 +473,7 @@ def _run_translation(job_id: str) -> None:
                     }) + "\n")
             except Exception:
                 pass
+            logger.info(f"[DEBUG] Job {job_id}: Translation memory loaded: records={len(memory)}, skip_memory={skip_memory}")
             # #endregion
             logger.info(f"Job {job_id}: Using shared translation memory from {memory_file}")
             logger.info(f"Job {job_id}: Memory contains {len(memory)} existing records")
@@ -1131,3 +1135,34 @@ async def get_translated_text(job_id: str):
             "Content-Disposition": f'attachment; filename="translated_{job_id[:8]}.txt"',
         }
     )
+
+
+@app.get("/api/memory/export")
+async def export_memory():
+    """
+    Export translation memory as JSON file.
+    
+    IMPORTANT: DigitalOcean App Platform uses ephemeral storage.
+    Runtime memory is LOST on redeploy. Export this file before redeploying
+    and merge it back into glossary/memory.json if you want to preserve it.
+    """
+    settings = get_settings()
+    memory_file = settings.data_root / "memory.json"
+    
+    if not memory_file.exists():
+        raise HTTPException(status_code=404, detail="Memory file not found")
+    
+    try:
+        memory = TranslationMemory(memory_file)
+        return FileResponse(
+            path=str(memory_file),
+            filename="memory.json",
+            media_type="application/json",
+            headers={
+                "Content-Disposition": "attachment; filename=memory.json",
+                "X-Memory-Records": str(len(memory)),
+            }
+        )
+    except Exception as e:
+        logger.error(f"Error exporting memory: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=f"Failed to export memory: {str(e)}")

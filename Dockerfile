@@ -31,6 +31,9 @@ RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -e .
 
 # Create data directory for file uploads and translation memory
+# NOTE: Do NOT copy memory.json here - let the app initialize it at runtime
+# This allows the app to merge seed data from glossary/memory.json with
+# any existing runtime data, preventing conflicts on redeploy
 RUN mkdir -p /app/data && \
     chmod 755 /app/data
 
