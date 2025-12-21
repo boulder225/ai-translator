@@ -229,8 +229,9 @@ def find_glossary_files() -> list[Path]:
                         "runId": "run1",
                         "hypothesisId": "A,B,C"
                     }) + "\n")
-        except Exception:
-            pass
+            logger.info(f"[DEBUG] Checking dir_path={dir_path}, exists={dir_path.exists()}, absolute={dir_path.resolve()}")
+        except Exception as e:
+            logger.warning(f"[DEBUG] Failed to log directory check: {e}")
         # #endregion
         if dir_path.exists():
             found = list(dir_path.glob("*.csv"))
@@ -271,8 +272,9 @@ def find_glossary_files() -> list[Path]:
                     "runId": "run1",
                     "hypothesisId": "A,B,C"
                 }) + "\n")
-    except Exception:
-        pass
+            logger.info(f"[DEBUG] Returning {len(result)} glossary files: {[str(f) for f in result]}")
+    except Exception as e:
+        logger.warning(f"[DEBUG] Failed to log return: {e}")
     # #endregion
     return result
 
@@ -634,8 +636,9 @@ async def get_glossary_content(glossary_name: str):
                     "runId": "run1",
                     "hypothesisId": "D"
                 }) + "\n")
-    except Exception:
-        pass
+            logger.info(f"[DEBUG] get_glossary_content: glossary_name={glossary_name}, cwd={Path.cwd()}")
+    except Exception as e:
+        logger.warning(f"[DEBUG] Failed to log request: {e}")
     # #endregion
     
     # Find the glossary file
@@ -683,8 +686,9 @@ async def get_glossary_content(glossary_name: str):
                         "runId": "run1",
                         "hypothesisId": "D"
                     }) + "\n")
-        except Exception:
-            pass
+                logger.info(f"[DEBUG] Matching: glossary_name={glossary_name}, file={g}, stem={g.stem}, name={g.name}, stem_match={g.stem == glossary_name}, name_match={g.name == glossary_name}")
+        except Exception as e:
+            logger.warning(f"[DEBUG] Failed to log match: {e}")
         # #endregion
         if g.stem == glossary_name or g.name == glossary_name:
             glossary_path = g
@@ -707,12 +711,14 @@ async def get_glossary_content(glossary_name: str):
                     "sessionId": "debug-session",
                     "runId": "run1",
                     "hypothesisId": "D"
-                }) + "\n")
-    except Exception:
-        pass
+                    }) + "\n")
+            logger.info(f"[DEBUG] Glossary path resolution: glossary_name={glossary_name}, glossary_path={glossary_path}, exists={glossary_path.exists() if glossary_path else False}")
+    except Exception as e:
+        logger.warning(f"[DEBUG] Failed to log path resolution: {e}")
     # #endregion
     
     if not glossary_path or not glossary_path.exists():
+        logger.error(f"[DEBUG] Glossary '{glossary_name}' not found. Found files: {[str(g) for g in glossary_files]}")
         raise HTTPException(status_code=404, detail=f"Glossary '{glossary_name}' not found")
     
     # Read and return glossary content
