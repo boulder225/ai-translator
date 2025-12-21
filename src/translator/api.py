@@ -187,11 +187,94 @@ def _load_glossary(glossary_path: Path | None, source_lang: str, target_lang: st
 
 
 def find_glossary_files() -> list[Path]:
+    # #region agent log
+    import json
+    import os
+    log_path = Path("/Users/enrico/workspace/translator/.cursor/debug.log")
+    try:
+        if log_path.parent.exists() or os.getenv("DEBUG_ENABLED", "false").lower() == "true":
+            log_path.parent.mkdir(parents=True, exist_ok=True)
+            with open(log_path, "a") as f:
+                f.write(json.dumps({
+                    "location": "api.py:find_glossary_files",
+                    "message": "Finding glossary files",
+                    "data": {
+                        "cwd": str(Path.cwd()),
+                        "search_dirs": ["glossary", "tests/docs"]
+                    },
+                    "timestamp": int(time.time() * 1000),
+                    "sessionId": "debug-session",
+                    "runId": "run1",
+                    "hypothesisId": "A,B,C"
+                }) + "\n")
+    except Exception as e:
+        pass
+    # #endregion
     glossaries = []
     for dir_path in [Path("glossary"), Path("tests/docs")]:
+        # #region agent log
+        try:
+            if log_path.parent.exists() or os.getenv("DEBUG_ENABLED", "false").lower() == "true":
+                with open(log_path, "a") as f:
+                    f.write(json.dumps({
+                        "location": "api.py:find_glossary_files",
+                        "message": "Checking directory",
+                        "data": {
+                            "dir_path": str(dir_path),
+                            "exists": dir_path.exists(),
+                            "absolute": str(dir_path.resolve())
+                        },
+                        "timestamp": int(time.time() * 1000),
+                        "sessionId": "debug-session",
+                        "runId": "run1",
+                        "hypothesisId": "A,B,C"
+                    }) + "\n")
+        except Exception:
+            pass
+        # #endregion
         if dir_path.exists():
-            glossaries.extend(dir_path.glob("*.csv"))
-    return sorted(set(glossaries))
+            found = list(dir_path.glob("*.csv"))
+            # #region agent log
+            try:
+                if log_path.parent.exists() or os.getenv("DEBUG_ENABLED", "false").lower() == "true":
+                    with open(log_path, "a") as f:
+                        f.write(json.dumps({
+                            "location": "api.py:find_glossary_files",
+                            "message": "Found CSV files in directory",
+                            "data": {
+                                "dir_path": str(dir_path),
+                                "found_files": [str(f) for f in found]
+                            },
+                            "timestamp": int(time.time() * 1000),
+                            "sessionId": "debug-session",
+                            "runId": "run1",
+                            "hypothesisId": "A,B,C"
+                        }) + "\n")
+            except Exception:
+                pass
+            # #endregion
+            glossaries.extend(found)
+    result = sorted(set(glossaries))
+    # #region agent log
+    try:
+        if log_path.parent.exists() or os.getenv("DEBUG_ENABLED", "false").lower() == "true":
+            with open(log_path, "a") as f:
+                f.write(json.dumps({
+                    "location": "api.py:find_glossary_files",
+                    "message": "Returning glossary files",
+                    "data": {
+                        "total_found": len(result),
+                        "files": [str(f) for f in result]
+                    },
+                    "timestamp": int(time.time() * 1000),
+                    "sessionId": "debug-session",
+                    "runId": "run1",
+                    "hypothesisId": "A,B,C"
+                }) + "\n")
+    except Exception:
+        pass
+    # #endregion
+    return result
 
 
 def detect_language_from_file(file_path: Path) -> str:
@@ -531,13 +614,103 @@ async def get_glossary_content(glossary_name: str):
     """Get the content of a glossary file."""
     import csv
     
+    # #region agent log
+    import json
+    import os
+    log_path = Path("/Users/enrico/workspace/translator/.cursor/debug.log")
+    try:
+        if log_path.parent.exists() or os.getenv("DEBUG_ENABLED", "false").lower() == "true":
+            log_path.parent.mkdir(parents=True, exist_ok=True)
+            with open(log_path, "a") as f:
+                f.write(json.dumps({
+                    "location": "api.py:get_glossary_content",
+                    "message": "Request received",
+                    "data": {
+                        "glossary_name": glossary_name,
+                        "cwd": str(Path.cwd())
+                    },
+                    "timestamp": int(time.time() * 1000),
+                    "sessionId": "debug-session",
+                    "runId": "run1",
+                    "hypothesisId": "D"
+                }) + "\n")
+    except Exception:
+        pass
+    # #endregion
+    
     # Find the glossary file
     glossary_files = find_glossary_files()
+    # #region agent log
+    try:
+        if log_path.parent.exists() or os.getenv("DEBUG_ENABLED", "false").lower() == "true":
+            with open(log_path, "a") as f:
+                f.write(json.dumps({
+                    "location": "api.py:get_glossary_content",
+                    "message": "Found glossary files",
+                    "data": {
+                        "glossary_name": glossary_name,
+                        "found_files": [str(g) for g in glossary_files],
+                        "file_stems": [g.stem for g in glossary_files],
+                        "file_names": [g.name for g in glossary_files]
+                    },
+                    "timestamp": int(time.time() * 1000),
+                    "sessionId": "debug-session",
+                    "runId": "run1",
+                    "hypothesisId": "D"
+                }) + "\n")
+    except Exception:
+        pass
+    # #endregion
     glossary_path = None
     for g in glossary_files:
+        # #region agent log
+        try:
+            if log_path.parent.exists() or os.getenv("DEBUG_ENABLED", "false").lower() == "true":
+                with open(log_path, "a") as f:
+                    f.write(json.dumps({
+                        "location": "api.py:get_glossary_content",
+                        "message": "Matching glossary file",
+                        "data": {
+                            "glossary_name": glossary_name,
+                            "file_path": str(g),
+                            "file_stem": g.stem,
+                            "file_name": g.name,
+                            "stem_match": g.stem == glossary_name,
+                            "name_match": g.name == glossary_name
+                        },
+                        "timestamp": int(time.time() * 1000),
+                        "sessionId": "debug-session",
+                        "runId": "run1",
+                        "hypothesisId": "D"
+                    }) + "\n")
+        except Exception:
+            pass
+        # #endregion
         if g.stem == glossary_name or g.name == glossary_name:
             glossary_path = g
             break
+    
+    # #region agent log
+    try:
+        if log_path.parent.exists() or os.getenv("DEBUG_ENABLED", "false").lower() == "true":
+            with open(log_path, "a") as f:
+                f.write(json.dumps({
+                    "location": "api.py:get_glossary_content",
+                    "message": "Glossary path resolution",
+                    "data": {
+                        "glossary_name": glossary_name,
+                        "glossary_path": str(glossary_path) if glossary_path else None,
+                        "path_exists": glossary_path.exists() if glossary_path else False,
+                        "path_absolute": str(glossary_path.resolve()) if glossary_path else None
+                    },
+                    "timestamp": int(time.time() * 1000),
+                    "sessionId": "debug-session",
+                    "runId": "run1",
+                    "hypothesisId": "D"
+                }) + "\n")
+    except Exception:
+        pass
+    # #endregion
     
     if not glossary_path or not glossary_path.exists():
         raise HTTPException(status_code=404, detail=f"Glossary '{glossary_name}' not found")
