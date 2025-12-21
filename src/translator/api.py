@@ -30,8 +30,8 @@ def setup_logging():
     # Create formatter
     formatter = logging.Formatter(
         '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-        datefmt='%Y-%m-%d %H:%M:%S'
-    )
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
     
     # Get root logger
     root_logger = logging.getLogger()
@@ -60,6 +60,91 @@ logger = logging.getLogger(__name__)
 logger.info(f"Logging initialized. Log file: {log_file_path}")
 
 app = FastAPI(title="Legal Translator API", version="0.1.0")
+
+# Add middleware to log all requests and catch exceptions
+@app.middleware("http")
+async def log_requests_and_errors(request, call_next):
+    # #region agent log
+    import json
+    import os
+    request_start_time = time.time()
+    # Use environment variable for log directory, fallback to /tmp in production
+    log_dir = Path(os.getenv("DEBUG_LOG_DIR", "/tmp"))
+    if log_dir.exists() or os.getenv("DEBUG_ENABLED", "false").lower() == "true":
+        try:
+            log_dir.mkdir(parents=True, exist_ok=True)
+            log_data = {
+                "location": "api.py:middleware",
+                "message": "Request received",
+                "data": {
+                    "method": request.method,
+                    "url": str(request.url),
+                    "path": request.url.path,
+                    "client": str(request.client) if request.client else None,
+                },
+                "timestamp": int(time.time() * 1000),
+                "sessionId": "debug-session",
+                "runId": "run1",
+                "hypothesisId": "A,B,C"
+            }
+            with open(log_dir / "debug.log", "a") as f:
+                f.write(json.dumps(log_data) + "\n")
+        except Exception as e:
+            logger.warning(f"Failed to write request log: {e}")
+    # #endregion
+    
+    try:
+        response = await call_next(request)
+        # #region agent log
+        if log_dir.exists() or os.getenv("DEBUG_ENABLED", "false").lower() == "true":
+            try:
+                duration = time.time() - request_start_time
+                log_data = {
+                    "location": "api.py:middleware",
+                    "message": "Request completed",
+                    "data": {
+                        "method": request.method,
+                        "path": request.url.path,
+                        "status_code": response.status_code,
+                        "duration_seconds": duration,
+                    },
+                    "timestamp": int(time.time() * 1000),
+                    "sessionId": "debug-session",
+                    "runId": "run1",
+                    "hypothesisId": "A,B,C"
+                }
+                with open(log_dir / "debug.log", "a") as f:
+                    f.write(json.dumps(log_data) + "\n")
+            except Exception as e:
+                logger.warning(f"Failed to write completion log: {e}")
+        # #endregion
+        return response
+    except Exception as e:
+        # #region agent log
+        if log_dir.exists() or os.getenv("DEBUG_ENABLED", "false").lower() == "true":
+            try:
+                log_data = {
+                    "location": "api.py:middleware",
+                    "message": "Request exception",
+                    "data": {
+                        "method": request.method,
+                        "path": request.url.path,
+                        "error": str(e),
+                        "error_type": type(e).__name__,
+                        "traceback": str(e.__traceback__) if hasattr(e, '__traceback__') else None,
+                    },
+                    "timestamp": int(time.time() * 1000),
+                    "sessionId": "debug-session",
+                    "runId": "run1",
+                    "hypothesisId": "B,C"
+                }
+                with open(log_dir / "debug.log", "a") as f:
+                    f.write(json.dumps(log_data) + "\n")
+            except Exception as log_err:
+                logger.error(f"Failed to write error log: {log_err}")
+        # #endregion
+        logger.error(f"Unhandled exception in request: {e}", exc_info=True)
+        raise
 
 app.add_middleware(
     CORSMiddleware,
@@ -488,9 +573,13 @@ async def get_glossary_content(glossary_name: str):
 @app.get("/api/prompt")
 async def get_prompt():
     """Get the current translation prompt template."""
-    from .claude_client import _load_prompt_template
-    prompt = _load_prompt_template()
-    return {"prompt": prompt}
+    try:
+        from .claude_client import _load_prompt_template
+        prompt = _load_prompt_template()
+        return {"prompt": prompt}
+    except Exception as e:
+        logger.error(f"Error in get_prompt: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=f"Failed to load prompt: {str(e)}")
 
 
 @app.post("/api/detect-language")

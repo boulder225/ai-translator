@@ -1,0 +1,52 @@
+name: lexdeep-translator
+region: nyc
+
+# IMPORTANT: Update the repo URL below with your actual GitHub repository
+# This config uses Dockerfile (auto-detected) instead of buildpacks
+services:
+  - name: backend
+    github:
+      repo: boulder225/ai-translator
+      branch: main
+    dockerfile_path: Dockerfile
+    docker_context: /
+    http_port: 8080
+    instance_count: 1
+    instance_size_slug: basic-xxs
+    routes:
+      - path: /api
+    envs:
+      # IMPORTANT: Set ANTHROPIC_API_KEY in DigitalOcean dashboard as a SECRET
+      # Go to: App → Settings → Environment Variables → Add Variable
+      # Mark it as "Encrypt" or "Secret" type
+      - key: ANTHROPIC_API_KEY
+        scope: RUN_TIME
+        type: SECRET
+        value: ${ANTHROPIC_API_KEY}  # Set this in dashboard, not here
+      - key: DATA_ROOT
+        scope: RUN_TIME
+        value: /app/data
+      - key: DEFAULT_SOURCE_LANG
+        scope: RUN_TIME
+        value: fr
+      - key: DEFAULT_TARGET_LANG
+        scope: RUN_TIME
+        value: it
+      - key: PORT
+        scope: RUN_TIME
+        value: "8080"
+
+static_sites:
+  - name: frontend
+    github:
+      repo: your-username/your-repo-name  # CHANGE THIS
+      branch: main
+    source_dir: /frontend
+    build_command: npm install && npm run build
+    output_dir: dist
+    routes:
+      - path: /
+    envs:
+      - key: VITE_API_URL
+        scope: BUILD_TIME
+        value: https://backend-${_APP_NAME}.ondigitalocean.app
