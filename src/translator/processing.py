@@ -767,7 +767,8 @@ def translate_file_to_memory(
             try:
                 # CRITICAL FIX: Remove ReportLab XML tags before storing in memory
                 # Ensure memory never contains <para> tags
-                cleaned_translated_text = re.sub(r'</?para>', '', translated_text, flags=re.IGNORECASE)
+                import re as re_module  # Ensure re module is available
+                cleaned_translated_text = re_module.sub(r'</?para>', '', translated_text, flags=re_module.IGNORECASE)
                 logger.info(f"[DEBUG] translate_file_to_memory: Calling memory.record() for full document - skip_memory={skip_memory}")
                 if not skip_memory:
                     memory.record(document_text, cleaned_translated_text, source_lang, target_lang)
