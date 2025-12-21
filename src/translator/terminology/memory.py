@@ -59,6 +59,33 @@ class TranslationMemory:
         self.path.write_text(json.dumps(serializable, ensure_ascii=False, indent=2), encoding="utf-8")
 
     def record(self, source_text: str, translated_text: str, source_lang: str, target_lang: str) -> TranslationRecord:
+        # #region agent log
+        import json
+        import os
+        import time
+        log_path = Path("/Users/enrico/workspace/translator/.cursor/debug.log")
+        try:
+            log_path.parent.mkdir(parents=True, exist_ok=True)
+            with open(log_path, "a") as f:
+                f.write(json.dumps({
+                    "location": "memory.py:record",
+                    "message": "Saving translation to memory",
+                    "data": {
+                        "source_text_preview": source_text[:100],
+                        "translated_text_preview": translated_text[:100],
+                        "source_lang": source_lang,
+                        "target_lang": target_lang,
+                        "memory_file": str(self.path),
+                        "records_before": len(self._records)
+                    },
+                    "timestamp": int(time.time() * 1000),
+                    "sessionId": "debug-session",
+                    "runId": "run1",
+                    "hypothesisId": "F"
+                }) + "\n")
+        except Exception:
+            pass
+        # #endregion
         record = TranslationRecord(
             source_text=source_text,
             translated_text=translated_text,
@@ -67,33 +94,162 @@ class TranslationMemory:
         )
         self._records[record.key] = record
         self.save()
+        # #region agent log
+        try:
+            with open(log_path, "a") as f:
+                f.write(json.dumps({
+                    "location": "memory.py:record",
+                    "message": "Translation saved to memory",
+                    "data": {
+                        "key": record.key,
+                        "records_after": len(self._records),
+                        "memory_file": str(self.path),
+                        "file_exists_after": self.path.exists()
+                    },
+                    "timestamp": int(time.time() * 1000),
+                    "sessionId": "debug-session",
+                    "runId": "run1",
+                    "hypothesisId": "F"
+                }) + "\n")
+        except Exception:
+            pass
+        # #endregion
         return record
 
     def get(self, source_text: str, source_lang: str, target_lang: str) -> TranslationRecord | None:
-        key = TranslationRecord(
-            source_text=source_text,
-            translated_text="",
-            source_lang=source_lang,
-            target_lang=target_lang,
-        ).key
-        return self._records.get(key)
+        # #region agent log
+        import json
+        import os
+        import time
+        log_path = Path("/Users/enrico/workspace/translator/.cursor/debug.log")
+        try:
+            log_path.parent.mkdir(parents=True, exist_ok=True)
+            key = TranslationRecord(
+                source_text=source_text,
+                translated_text="",
+                source_lang=source_lang,
+                target_lang=target_lang,
+            ).key
+            result = self._records.get(key)
+            with open(log_path, "a") as f:
+                f.write(json.dumps({
+                    "location": "memory.py:get",
+                    "message": "Memory exact match lookup",
+                    "data": {
+                        "source_text_preview": source_text[:100],
+                        "source_lang": source_lang,
+                        "target_lang": target_lang,
+                        "key": key,
+                        "found": result is not None,
+                        "total_records": len(self._records)
+                    },
+                    "timestamp": int(time.time() * 1000),
+                    "sessionId": "debug-session",
+                    "runId": "run1",
+                    "hypothesisId": "C"
+                }) + "\n")
+        except Exception:
+            key = TranslationRecord(
+                source_text=source_text,
+                translated_text="",
+                source_lang=source_lang,
+                target_lang=target_lang,
+            ).key
+            result = self._records.get(key)
+        # #endregion
+        return result
 
     def similar(self, source_text: str, source_lang: str, target_lang: str, *, limit: int = 5, threshold: float = 80.0) -> list[TranslationRecord]:
+        # #region agent log
+        import json
+        import os
+        import time
+        log_path = Path("/Users/enrico/workspace/translator/.cursor/debug.log")
+        try:
+            log_path.parent.mkdir(parents=True, exist_ok=True)
+            with open(log_path, "a") as f:
+                f.write(json.dumps({
+                    "location": "memory.py:similar",
+                    "message": "Memory similarity search started",
+                    "data": {
+                        "source_text_preview": source_text[:100],
+                        "source_lang": source_lang,
+                        "target_lang": target_lang,
+                        "threshold": threshold,
+                        "limit": limit,
+                        "total_records": len(self._records)
+                    },
+                    "timestamp": int(time.time() * 1000),
+                    "sessionId": "debug-session",
+                    "runId": "run1",
+                    "hypothesisId": "D"
+                }) + "\n")
+        except Exception:
+            pass
+        # #endregion
         candidates: list[tuple[float, TranslationRecord]] = []
+        checked_count = 0
         for record in self._records.values():
             if record.source_lang != source_lang or record.target_lang != target_lang:
                 continue
+            checked_count += 1
             score = fuzz.token_set_ratio(source_text, record.source_text)
+            # #region agent log
+            try:
+                with open(log_path, "a") as f:
+                    f.write(json.dumps({
+                        "location": "memory.py:similar",
+                        "message": "Similarity score calculated",
+                        "data": {
+                            "source_text_preview": source_text[:100],
+                            "record_source_preview": record.source_text[:100],
+                            "score": score,
+                            "threshold": threshold,
+                            "above_threshold": score >= threshold,
+                            "source_lang_match": record.source_lang == source_lang,
+                            "target_lang_match": record.target_lang == target_lang
+                        },
+                        "timestamp": int(time.time() * 1000),
+                        "sessionId": "debug-session",
+                        "runId": "run1",
+                        "hypothesisId": "D"
+                    }) + "\n")
+            except Exception:
+                pass
+            # #endregion
             if score >= threshold:
                 candidates.append((score, record))
         candidates.sort(key=lambda pair: pair[0], reverse=True)
-        return [record for _, record in candidates[:limit]]
+        result = [record for _, record in candidates[:limit]]
+        # #region agent log
+        try:
+            with open(log_path, "a") as f:
+                f.write(json.dumps({
+                    "location": "memory.py:similar",
+                    "message": "Memory similarity search completed",
+                    "data": {
+                        "source_text_preview": source_text[:100],
+                        "checked_records": checked_count,
+                        "candidates_found": len(candidates),
+                        "results_returned": len(result),
+                        "top_scores": [score for score, _ in candidates[:3]] if candidates else []
+                    },
+                    "timestamp": int(time.time() * 1000),
+                    "sessionId": "debug-session",
+                    "runId": "run1",
+                    "hypothesisId": "D"
+                }) + "\n")
+        except Exception:
+            pass
+        # #endregion
+        return result
 
     def __len__(self) -> int:
         return len(self._records)
 
     def __iter__(self) -> Iterable[TranslationRecord]:
         return iter(self._records.values())
+
 
 
 

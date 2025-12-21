@@ -430,9 +430,50 @@ def _run_translation(job_id: str) -> None:
             # Use shared translation memory (persisted across jobs)
             settings = get_settings()
             memory_file = settings.data_root / "memory.json"
+            # #region agent log
+            try:
+                log_path.parent.mkdir(parents=True, exist_ok=True)
+                with open(log_path, "a") as f:
+                    f.write(json.dumps({
+                        "location": "api.py:translate_job",
+                        "message": "Loading translation memory",
+                        "data": {
+                            "memory_file": str(memory_file),
+                            "memory_file_exists": memory_file.exists(),
+                            "data_root": str(settings.data_root),
+                            "skip_memory": skip_memory
+                        },
+                        "timestamp": int(time.time() * 1000),
+                        "sessionId": "debug-session",
+                        "runId": "run1",
+                        "hypothesisId": "B"
+                    }) + "\n")
+            except Exception:
+                pass
+            # #endregion
             memory = TranslationMemory(memory_file)
+            # #region agent log
+            try:
+                with open(log_path, "a") as f:
+                    f.write(json.dumps({
+                        "location": "api.py:translate_job",
+                        "message": "Translation memory loaded",
+                        "data": {
+                            "memory_file": str(memory_file),
+                            "records_count": len(memory),
+                            "skip_memory": skip_memory
+                        },
+                        "timestamp": int(time.time() * 1000),
+                        "sessionId": "debug-session",
+                        "runId": "run1",
+                        "hypothesisId": "B"
+                    }) + "\n")
+            except Exception:
+                pass
+            # #endregion
             logger.info(f"Job {job_id}: Using shared translation memory from {memory_file}")
             logger.info(f"Job {job_id}: Memory contains {len(memory)} existing records")
+            logger.info(f"[DEBUG] Job {job_id}: skip_memory={skip_memory}, memory_records={len(memory)}")
             
             # Extract translation pairs from reference document if provided
             reference_doc_pairs = {}
@@ -825,6 +866,32 @@ async def start_translation(
     logger.info(f"[REQUEST {request_id}] File hash: {file_hash}")
     logger.info(f"[REQUEST {request_id}] First 200 bytes: {file_content[:200]}")
     logger.info(f"[REQUEST {request_id}] Use glossary: {use_glossary}")
+    # #region agent log
+    import json
+    import os
+    log_path = Path("/Users/enrico/workspace/translator/.cursor/debug.log")
+    try:
+        log_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(log_path, "a") as f:
+            f.write(json.dumps({
+                "location": "api.py:start_translation",
+                "message": "skip_memory parameter received",
+                "data": {
+                    "skip_memory": skip_memory,
+                    "skip_memory_type": type(skip_memory).__name__,
+                    "source_lang": source_lang,
+                    "target_lang": target_lang
+                },
+                "timestamp": int(time.time() * 1000),
+                "sessionId": "debug-session",
+                "runId": "run1",
+                "hypothesisId": "A"
+            }) + "\n")
+        logger.info(f"[DEBUG] skip_memory={skip_memory} (type={type(skip_memory).__name__})")
+    except Exception as e:
+        logger.warning(f"[DEBUG] Failed to log skip_memory: {e}")
+    # #endregion
+    logger.info(f"[REQUEST {request_id}] Skip memory: {skip_memory}")
     
     # Determine glossary path - use default if enabled
     glossary_path = None
