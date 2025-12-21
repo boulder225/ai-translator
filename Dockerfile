@@ -15,6 +15,9 @@ RUN apt-get update && apt-get install -y \
 # Copy dependency files and README (needed for pyproject.toml)
 COPY pyproject.toml README.md ./
 
+# Copy prompt.md (custom translation prompt)
+COPY prompt.md ./
+
 # Copy source directory structure
 COPY src/ ./src/
 

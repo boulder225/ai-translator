@@ -52,6 +52,7 @@ test_*.py
 *_test.py
 
 # Documentation (keep README.md for pyproject.toml)
+# Keep prompt.md - it's needed for custom translation prompts
 docs/
 LANDING_PAGE.md
 DEPLOYMENT_DIGITALOCEAN.md
