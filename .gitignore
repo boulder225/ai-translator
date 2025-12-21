@@ -19,7 +19,7 @@ logs/
 
 # Streamlit
 .streamlit/
-prompt.md
+# prompt.md - Removed from gitignore to include in Docker builds
 glossary/
 
 
