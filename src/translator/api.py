@@ -170,8 +170,8 @@ async def startup_event():
     environment = os.getenv("ENVIRONMENT", "production")
     
     # Load users from environment variables (this triggers the loading)
+    from .auth import _load_users, _users
     _load_users()
-    from .auth import _users
     logger.info("=" * 80)
     logger.info("🚀 LEGAL TRANSLATOR API STARTED - GRAFANA TEST MARKER")
     logger.info(f"Environment: {environment}")
