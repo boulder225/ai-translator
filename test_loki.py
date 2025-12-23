@@ -130,6 +130,8 @@ def test_loki_logging():
         print(f"   Check your Grafana Cloud dashboard:")
         print(f"   Query: {{application=\"legal-translator\"}}")
         print(f"   Or: {{application=\"legal-translator\", environment=\"test\"}}")
+        print(f"\n💡 Note: Loki rejects logs older than a few hours.")
+        print(f"   Make sure your system clock is correct if you see 'timestamp too old' errors.")
     else:
         print("\n💡 To test with Loki:")
         print("   1. Get your Loki URL from Grafana Cloud")

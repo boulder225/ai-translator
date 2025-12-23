@@ -53,11 +53,24 @@ LOKI_PASSWORD=glc_your-token-from-access-policy
 
 ## Step 5: Test Your Credentials
 
+**Important:** Use current timestamp (Loki rejects logs older than a few hours)
+
 ```bash
+# Get current timestamp in nanoseconds
+TIMESTAMP=$(date +%s)000000000
+
+# Test with current timestamp
 curl -u 'YOUR_USERNAME:YOUR_TOKEN' \
   -X POST 'https://logs-prod-039.grafana.net/loki/api/v1/push' \
   -H 'Content-Type: application/json' \
-  -d '{"streams": [{"stream": {"job": "test"}, "values": [["1627580800000000000", "test log"]]}]}'
+  -d "{\"streams\": [{\"stream\": {\"job\": \"test\"}, \"values\": [[\"${TIMESTAMP}\", \"test log from curl\"]]}]}"
+```
+
+Or use Python to generate the timestamp:
+```python
+import time
+timestamp = int(time.time() * 1_000_000_000)  # nanoseconds
+print(f"Current timestamp: {timestamp}")
 ```
 
 **Expected results:**
