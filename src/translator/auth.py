@@ -88,6 +88,7 @@ class User:
 
 # In-memory user storage (loaded from env vars)
 _users: dict[str, User] = {}
+_users_loaded: bool = False
 
 
 def load_users_from_env() -> dict[str, User]:
@@ -155,6 +156,7 @@ def load_users_from_env() -> dict[str, User]:
 
 def get_user(username: str) -> Optional[User]:
     """Get user by username. Loads users from env if not already loaded."""
+    global _users_loaded
     if not _users_loaded:
         _load_users()
     return _users.get(username)
