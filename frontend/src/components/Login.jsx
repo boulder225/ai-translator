@@ -23,8 +23,14 @@ function Login({ onLogin }) {
       });
 
       if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.detail || 'Login failed');
+        let errorMessage = 'Login failed';
+        try {
+          const data = await response.json();
+          errorMessage = data.detail || `HTTP ${response.status}: ${response.statusText}`;
+        } catch (e) {
+          errorMessage = `HTTP ${response.status}: ${response.statusText}`;
+        }
+        throw new Error(errorMessage);
       }
 
       const data = await response.json();
