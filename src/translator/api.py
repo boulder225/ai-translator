@@ -7,18 +7,29 @@ import tempfile
 import threading
 import time
 import uuid
+from datetime import timedelta
 from pathlib import Path
 from typing import Optional
 
 from dotenv import load_dotenv
-from fastapi import FastAPI, File, Form, HTTPException, UploadFile, status
+from fastapi import Depends, FastAPI, File, Form, HTTPException, UploadFile, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel
 
 # Load environment variables from .env file BEFORE anything else
 load_dotenv()
 
+from .auth import (
+    ROLES,
+    User,
+    authenticate_user,
+    create_access_token,
+    decode_access_token,
+    get_user,
+    load_users_from_env,
+)
 from .claude_client import ClaudeTranslator
 from .processing import PDF_SUFFIX, translate_file_to_memory
 from .settings import get_settings
@@ -149,14 +160,23 @@ logger.info(f"Logging initialized. Log file: {log_file_path}")
 
 app = FastAPI(title="Legal Translator API", version="0.1.0")
 
+# Security scheme for JWT tokens
+security = HTTPBearer()
+
 @app.on_event("startup")
 async def startup_event():
     """Log a distinctive test message on startup for Grafana tracking."""
     import os
     environment = os.getenv("ENVIRONMENT", "production")
+    
+    # Reload users from environment variables
+    users = load_users_from_env()
     logger.info("=" * 80)
     logger.info("🚀 LEGAL TRANSLATOR API STARTED - GRAFANA TEST MARKER")
     logger.info(f"Environment: {environment}")
+    logger.info(f"Loaded {len(users)} users from environment variables")
+    for username, user in users.items():
+        logger.info(f"  User: {username}, Roles: {', '.join(sorted(user.roles))}")
     logger.info("=" * 80)
     logger.info("To find this log in Grafana, use query: {application=\"legal-translator\"} |= \"GRAFANA TEST MARKER\"")
 
@@ -546,6 +566,112 @@ def _run_translation(job_id: str) -> None:
 async def root():
     logger.info("[INTERACTION] GET / - API health check")
     return {"message": "Legal Translator API", "version": "0.1.0"}
+
+
+# Authentication endpoints
+class LoginRequest(BaseModel):
+    username: str
+    password: str
+
+
+class LoginResponse(BaseModel):
+    access_token: str
+    token_type: str
+    user: dict
+
+
+@app.post("/api/auth/login", response_model=LoginResponse)
+async def login(login_data: LoginRequest):
+    """Authenticate user and return JWT token."""
+    user = authenticate_user(login_data.username, login_data.password)
+    if not user:
+        logger.info(f"[INTERACTION] POST /api/auth/login - Failed login attempt for: {login_data.username}")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect username or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    
+    # Create access token
+    access_token_expires = timedelta(minutes=1440)  # 24 hours
+    access_token = create_access_token(
+        data={"sub": user.username, "roles": list(user.roles)},
+        expires_delta=access_token_expires,
+    )
+    
+    logger.info(f"[INTERACTION] POST /api/auth/login - Successful login: {user.username}, Roles: {', '.join(sorted(user.roles))}")
+    
+    return LoginResponse(
+        access_token=access_token,
+        token_type="bearer",
+        user=user.to_dict(),
+    )
+
+
+@app.get("/api/auth/me")
+async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    """Get current authenticated user information."""
+    token = credentials.credentials
+    payload = decode_access_token(token)
+    if payload is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid authentication credentials",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    
+    username: str = payload.get("sub")
+    if username is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid authentication credentials",
+        )
+    
+    user = get_user(username)
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="User not found",
+        )
+    
+    logger.info(f"[INTERACTION] GET /api/auth/me - User: {username}")
+    return user.to_dict()
+
+
+@app.get("/api/auth/roles")
+async def get_available_roles():
+    """Get list of available roles and their descriptions."""
+    logger.info("[INTERACTION] GET /api/auth/roles - Roles list requested")
+    return {"roles": ROLES}
+
+
+# Dependency to get current user from JWT token
+async def get_current_user_dependency(credentials: HTTPAuthorizationCredentials = Depends(security)) -> User:
+    """Dependency to extract and validate current user from JWT token."""
+    token = credentials.credentials
+    payload = decode_access_token(token)
+    if payload is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid authentication credentials",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    
+    username: str = payload.get("sub")
+    if username is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid authentication credentials",
+        )
+    
+    user = get_user(username)
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="User not found",
+        )
+    
+    return user
 
 
 @app.get("/api/glossaries")
