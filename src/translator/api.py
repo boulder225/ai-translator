@@ -93,17 +93,20 @@ def setup_logging():
                         # Only log error details occasionally to avoid spam
                         if self.error_count == 1:
                             logger = logging.getLogger(__name__)
-                            if "401" in str(e) or "Unauthorized" in str(e):
+                            if "401" in str(e) or "Unauthorized" in str(e) or "invalid scope" in str(e).lower():
                                 logger.error("=" * 60)
-                                logger.error("Loki authentication failed (401 Unauthorized)")
+                                logger.error("Loki authentication failed (401/invalid scope)")
                                 logger.error("Common causes:")
-                                logger.error("  1. API token doesn't have 'logs:write' permission")
-                                logger.error("     → Go to Grafana Cloud → Access Policies → Edit token → Add 'logs:write'")
-                                logger.error("  2. Wrong username (should be your user ID number, not email)")
-                                logger.error("     → Check: Grafana Cloud → Profile → User ID")
+                                logger.error("  1. API token doesn't have 'logs:write' scope")
+                                logger.error("     → Go to: Grafana Cloud → Access Policies")
+                                logger.error("     → Create Access Policy with 'logs:write' scope")
+                                logger.error("     → Generate token from that policy")
+                                logger.error("  2. Wrong username (try Loki instance ID instead of user ID)")
+                                logger.error("     → Check: Grafana Cloud → Loki → Details → Instance ID")
+                                logger.error("     → Or use your user ID: Grafana Cloud → Profile → User ID")
                                 logger.error("  3. Wrong API token or URL format")
                                 logger.error("     → URL should end with: /loki/api/v1/push")
-                                logger.error("     → Generate new token: Grafana Cloud → API Keys")
+                                logger.error("     → Token should start with 'glc_'")
                                 logger.error("=" * 60)
                             else:
                                 logger.warning(f"Loki handler error (will retry silently): {type(e).__name__}: {e}")
