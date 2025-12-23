@@ -149,6 +149,17 @@ logger.info(f"Logging initialized. Log file: {log_file_path}")
 
 app = FastAPI(title="Legal Translator API", version="0.1.0")
 
+@app.on_event("startup")
+async def startup_event():
+    """Log a distinctive test message on startup for Grafana tracking."""
+    import os
+    environment = os.getenv("ENVIRONMENT", "production")
+    logger.info("=" * 80)
+    logger.info("🚀 LEGAL TRANSLATOR API STARTED - GRAFANA TEST MARKER")
+    logger.info(f"Environment: {environment}")
+    logger.info("=" * 80)
+    logger.info("To find this log in Grafana, use query: {application=\"legal-translator\"} |= \"GRAFANA TEST MARKER\"")
+
 # Add middleware to log all requests and catch exceptions
 @app.middleware("http")
 async def log_requests_and_errors(request, call_next):
