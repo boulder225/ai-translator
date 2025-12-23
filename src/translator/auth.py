@@ -79,6 +79,7 @@ class User:
 
 # In-memory user storage (loaded from env vars)
 _users: dict[str, User] = {}
+_users_loaded: bool = False
 
 
 def load_users_from_env() -> dict[str, User]:
@@ -125,8 +126,10 @@ def load_users_from_env() -> dict[str, User]:
         # If no roles specified, default to empty (user can still login but has no permissions)
         # Admin role can be explicitly added
         
-        # Hash password
-        password_hash = pwd_context.hash(password)
+        # Hash password (bcrypt has 72-byte limit, truncate if necessary)
+        # Note: This is just for hashing - the original password is still checked during login
+        password_to_hash = password[:72] if len(password.encode('utf-8')) > 72 else password
+        password_hash = pwd_context.hash(password_to_hash)
         
         # Create user
         user = User(username=username, password_hash=password_hash, roles=roles)
@@ -200,5 +203,4 @@ def decode_access_token(token: str) -> Optional[dict]:
         return None
 
 
-# Initialize users on module import
-_users = load_users_from_env()
+# Users will be loaded lazily on first access or explicitly via _load_users()
