@@ -9,6 +9,7 @@ src/legal_translator.egg-info/top_level.txt
 src/translator/__init__.py
 src/translator/admin_ch_search.py
 src/translator/api.py
+src/translator/auth.py
 src/translator/batch_runner.py
 src/translator/claude_client.py
 src/translator/cli.py
