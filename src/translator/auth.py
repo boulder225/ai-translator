@@ -26,15 +26,17 @@ from typing import Optional
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 
-# Password hashing context
-# Use bcrypt with fallback to avoid version compatibility issues
-try:
-    pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-except Exception:
-    # Fallback if bcrypt has issues
-    import warnings
-    warnings.warn("bcrypt initialization failed, using default context")
-    pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# Password hashing context (lazy initialization to avoid bcrypt import issues)
+_pwd_context: Optional[CryptContext] = None
+
+def _get_pwd_context() -> CryptContext:
+    """Get password hashing context, initializing lazily."""
+    global _pwd_context
+    if _pwd_context is None:
+        # Initialize bcrypt context lazily to avoid import-time errors
+        # The bcrypt version check in passlib can fail during import
+        _pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+    return _pwd_context
 
 # JWT settings
 SECRET_KEY = os.getenv("JWT_SECRET_KEY", secrets.token_urlsafe(32))
@@ -133,14 +135,14 @@ def load_users_from_env() -> dict[str, User]:
         # Admin role can be explicitly added
         
         # Hash password (bcrypt has 72-byte limit, truncate if necessary)
-        # Note: We truncate to 72 bytes for hashing, but store original length info
+        # Note: We truncate to 72 bytes for hashing
         password_bytes = password.encode('utf-8')
         if len(password_bytes) > 72:
-            # Truncate to 72 bytes, but we'll verify against truncated version
+            # Truncate to 72 bytes for bcrypt compatibility
             password_to_hash = password_bytes[:72].decode('utf-8', errors='ignore')
         else:
             password_to_hash = password
-        password_hash = pwd_context.hash(password_to_hash)
+        password_hash = _get_pwd_context().hash(password_to_hash)
         
         # Create user
         user = User(username=username, password_hash=password_hash, roles=roles)
@@ -235,5 +237,4 @@ def decode_access_token(token: str) -> Optional[dict]:
         return None
 
 
-# Initialize users on module import
-_users = load_users_from_env()
+# Users will be loaded lazily on first access or explicitly via _load_users()
