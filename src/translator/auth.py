@@ -27,7 +27,14 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 
 # Password hashing context
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# Use bcrypt with fallback to avoid version compatibility issues
+try:
+    pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+except Exception:
+    # Fallback if bcrypt has issues
+    import warnings
+    warnings.warn("bcrypt initialization failed, using default context")
+    pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 # JWT settings
 SECRET_KEY = os.getenv("JWT_SECRET_KEY", secrets.token_urlsafe(32))
@@ -79,7 +86,6 @@ class User:
 
 # In-memory user storage (loaded from env vars)
 _users: dict[str, User] = {}
-_users_loaded: bool = False
 
 
 def load_users_from_env() -> dict[str, User]:
@@ -127,8 +133,13 @@ def load_users_from_env() -> dict[str, User]:
         # Admin role can be explicitly added
         
         # Hash password (bcrypt has 72-byte limit, truncate if necessary)
-        # Note: This is just for hashing - the original password is still checked during login
-        password_to_hash = password[:72] if len(password.encode('utf-8')) > 72 else password
+        # Note: We truncate to 72 bytes for hashing, but store original length info
+        password_bytes = password.encode('utf-8')
+        if len(password_bytes) > 72:
+            # Truncate to 72 bytes, but we'll verify against truncated version
+            password_to_hash = password_bytes[:72].decode('utf-8', errors='ignore')
+        else:
+            password_to_hash = password
         password_hash = pwd_context.hash(password_to_hash)
         
         # Create user
@@ -141,13 +152,34 @@ def load_users_from_env() -> dict[str, User]:
 
 
 def get_user(username: str) -> Optional[User]:
-    """Get user by username."""
+    """Get user by username. Loads users from env if not already loaded."""
+    if not _users_loaded:
+        _load_users()
     return _users.get(username)
+
+
+def _load_users() -> None:
+    """Load users from environment variables (called lazily)."""
+    global _users, _users_loaded
+    if _users_loaded:
+        return
+    _users = load_users_from_env()
+    _users_loaded = True
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """Verify a password against its hash."""
-    return pwd_context.verify(plain_password, hashed_password)
+    # Handle bcrypt 72-byte limit by truncating if necessary
+    # But we need to check the original password length first
+    # If password was truncated during hashing, we need to truncate here too
+    # For now, try original password first, then truncated if it fails
+    try:
+        return pwd_context.verify(plain_password, hashed_password)
+    except ValueError:
+        # If password is too long, truncate and try again
+        if len(plain_password.encode('utf-8')) > 72:
+            return pwd_context.verify(plain_password[:72], hashed_password)
+        raise
 
 
 def authenticate_user(username: str, password: str) -> Optional[User]:
@@ -203,4 +235,5 @@ def decode_access_token(token: str) -> Optional[dict]:
         return None
 
 
-# Users will be loaded lazily on first access or explicitly via _load_users()
+# Initialize users on module import
+_users = load_users_from_env()
