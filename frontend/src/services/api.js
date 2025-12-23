@@ -23,14 +23,29 @@ api.interceptors.request.use(
   }
 );
 
-// Handle 401 errors (unauthorized) - redirect to login
+// Log token validation failures for debugging
 api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
+      console.log('[AUTH] 401 Unauthorized - token invalid or expired');
+      console.log('[AUTH] Error detail:', error.response?.data?.detail);
+    }
+    return Promise.reject(error);
+  }
+);
+
+// Handle 401/403 errors (unauthorized/forbidden) - redirect to login
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401 || error.response?.status === 403) {
       localStorage.removeItem('auth_token');
       localStorage.removeItem('user');
-      window.location.reload();
+      // Only reload if we're not already on the login page
+      if (!window.location.pathname.includes('login')) {
+        window.location.reload();
+      }
     }
     return Promise.reject(error);
   }

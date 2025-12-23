@@ -661,16 +661,32 @@ async def get_available_roles():
 async def get_current_user_dependency(credentials: HTTPAuthorizationCredentials = Depends(security)) -> User:
     """Dependency to extract and validate current user from JWT token."""
     token = credentials.credentials
+    # #region agent log
+    import json
+    debug_log_path = "/Users/enrico/workspace/translator/.cursor/debug.log"
+    try:
+        with open(debug_log_path, "a") as f:
+            f.write(json.dumps({"location":"api.py:649","message":"get_current_user_dependency called","data":{"token_preview":token[:20] + "..." if len(token) > 20 else token},"timestamp":1735000000000,"sessionId":"debug-session","runId":"run1","hypothesisId":"C"})+"\n")
+    except: pass
+    # #endregion
     payload = decode_access_token(token)
+    # #region agent log
+    try:
+        with open(debug_log_path, "a") as f:
+            f.write(json.dumps({"location":"api.py:655","message":"decode_access_token result","data":{"payload_is_none":payload is None,"has_username":payload.get("sub") if payload else None},"timestamp":1735000000000,"sessionId":"debug-session","runId":"run1","hypothesisId":"C"})+"\n")
+    except: pass
+    # #endregion
     if payload is None:
+        logger.info("[INTERACTION] Token validation failed - invalid or expired token")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid authentication credentials",
+            detail="Invalid or expired authentication token. Please log in again.",
             headers={"WWW-Authenticate": "Bearer"},
         )
     
     username: str = payload.get("sub")
     if username is None:
+        logger.info("[INTERACTION] Token missing username")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid authentication credentials",
@@ -678,6 +694,7 @@ async def get_current_user_dependency(credentials: HTTPAuthorizationCredentials 
     
     user = get_user(username)
     if user is None:
+        logger.info(f"[INTERACTION] User not found: {username}")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="User not found",

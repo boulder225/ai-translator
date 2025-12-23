@@ -1,6 +1,0 @@
-{"location": "auth.py:104", "message": "load_users_from_env started", "data": {}, "timestamp": 1735000000000, "sessionId": "debug-session", "runId": "run1", "hypothesisId": "D"}
-{"location": "auth.py:172", "message": "load_users_from_env returning", "data": {"users_count": 4, "usernames": ["admin", "translator1", "reviewer1", "multirole"]}, "timestamp": 1735000000000, "sessionId": "debug-session", "runId": "run1", "hypothesisId": "D"}
-{"location": "auth.py:104", "message": "load_users_from_env started", "data": {}, "timestamp": 1735000000000, "sessionId": "debug-session", "runId": "run1", "hypothesisId": "D"}
-{"location": "auth.py:172", "message": "load_users_from_env returning", "data": {"users_count": 4, "usernames": ["admin", "translator1", "reviewer1", "multirole"]}, "timestamp": 1735000000000, "sessionId": "debug-session", "runId": "run1", "hypothesisId": "D"}
-{"location": "auth.py:104", "message": "load_users_from_env started", "data": {}, "timestamp": 1735000000000, "sessionId": "debug-session", "runId": "run1", "hypothesisId": "D"}
-{"location": "auth.py:172", "message": "load_users_from_env returning", "data": {"users_count": 4, "usernames": ["admin", "translator1", "reviewer1", "multirole"]}, "timestamp": 1735000000000, "sessionId": "debug-session", "runId": "run1", "hypothesisId": "D"}

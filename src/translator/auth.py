@@ -53,6 +53,16 @@ SECRET_KEY = os.getenv("JWT_SECRET_KEY", secrets.token_urlsafe(32))
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("JWT_EXPIRE_MINUTES", "1440"))  # 24 hours default
 
+# Server instance ID - changes on each restart, invalidating all existing tokens
+_SERVER_INSTANCE_ID: Optional[str] = None
+
+def get_server_instance_id() -> str:
+    """Get or generate server instance ID. Changes on each restart."""
+    global _SERVER_INSTANCE_ID
+    if _SERVER_INSTANCE_ID is None:
+        _SERVER_INSTANCE_ID = secrets.token_urlsafe(16)
+    return _SERVER_INSTANCE_ID
+
 # Available roles
 ROLES = {
     "admin": "Full system access",
@@ -243,11 +253,7 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -
     else:
         expire = datetime.now(timezone.utc) + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     
-    # Include server instance ID to invalidate tokens on server restart
-    to_encode.update({
-        "exp": expire,
-        "server_instance": get_server_instance_id(),
-    })
+    to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
@@ -261,8 +267,35 @@ def decode_access_token(token: str) -> Optional[dict]:
     """
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        # Check if token was issued by current server instance
+        # If server restarted, instance ID changed and token is invalid
+        token_instance = payload.get("server_instance")
+        current_instance = get_server_instance_id()
+        # #region agent log
+        import json
+        debug_log_path = "/Users/enrico/workspace/translator/.cursor/debug.log"
+        try:
+            with open(debug_log_path, "a") as f:
+                f.write(json.dumps({"location":"auth.py:265","message":"Token validation check","data":{"token_instance":token_instance,"current_instance":current_instance,"match":token_instance == current_instance},"timestamp":1735000000000,"sessionId":"debug-session","runId":"run1","hypothesisId":"A"})+"\n")
+        except: pass
+        # #endregion
+        if token_instance != current_instance:
+            # Token was issued before server restart - invalid
+            # #region agent log
+            try:
+                with open(debug_log_path, "a") as f:
+                    f.write(json.dumps({"location":"auth.py:270","message":"Token instance mismatch - token invalid","data":{"token_instance":token_instance,"current_instance":current_instance},"timestamp":1735000000000,"sessionId":"debug-session","runId":"run1","hypothesisId":"A"})+"\n")
+            except: pass
+            # #endregion
+            return None
         return payload
-    except JWTError:
+    except JWTError as e:
+        # #region agent log
+        try:
+            with open(debug_log_path, "a") as f:
+                f.write(json.dumps({"location":"auth.py:277","message":"JWT decode error","data":{"error":str(e)},"timestamp":1735000000000,"sessionId":"debug-session","runId":"run1","hypothesisId":"B"})+"\n")
+        except: pass
+        # #endregion
         return None
 
 

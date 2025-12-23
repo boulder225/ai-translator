@@ -25,6 +25,30 @@ function App() {
         setIsAuthenticated(true);
         // Update API service with token
         updateApiToken(token);
+        
+        // Verify token is still valid by calling /api/auth/me
+        // This will fail if server restarted (token invalidated)
+        fetch('/api/auth/me', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        }).then(response => {
+          if (!response.ok) {
+            // Token invalid - clear auth and show login
+            console.log('[AUTH] Token validation failed on mount, redirecting to login');
+            localStorage.removeItem('auth_token');
+            localStorage.removeItem('user');
+            setUser(null);
+            setIsAuthenticated(false);
+          }
+        }).catch(err => {
+          console.error('[AUTH] Error validating token:', err);
+          // On error, assume token is invalid
+          localStorage.removeItem('auth_token');
+          localStorage.removeItem('user');
+          setUser(null);
+          setIsAuthenticated(false);
+        });
       } catch (err) {
         console.error('Failed to parse user data:', err);
         localStorage.removeItem('auth_token');
