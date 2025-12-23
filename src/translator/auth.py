@@ -115,14 +115,6 @@ def load_users_from_env() -> dict[str, User]:
     
     Returns dict mapping username -> User object.
     """
-    # #region agent log
-    import json
-    debug_log_path = "/Users/enrico/workspace/translator/.cursor/debug.log"
-    try:
-        with open(debug_log_path, "a") as f:
-            f.write(json.dumps({"location":"auth.py:104","message":"load_users_from_env started","data":{},"timestamp":1735000000000,"sessionId":"debug-session","runId":"run1","hypothesisId":"D"})+"\n")
-    except: pass
-    # #endregion
     users = {}
     user_index = 1
     
@@ -177,12 +169,6 @@ def load_users_from_env() -> dict[str, User]:
         
         user_index += 1
     
-    # #region agent log
-    try:
-        with open(debug_log_path, "a") as f:
-            f.write(json.dumps({"location":"auth.py:172","message":"load_users_from_env returning","data":{"users_count":len(users),"usernames":list(users.keys())},"timestamp":1735000000000,"sessionId":"debug-session","runId":"run1","hypothesisId":"D"})+"\n")
-    except: pass
-    # #endregion
     return users
 
 
