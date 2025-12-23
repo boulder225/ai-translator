@@ -27,9 +27,9 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 
 # Password hashing context (lazy initialization to avoid bcrypt import issues)
-_pwd_context: Optional[CryptContext] = None
+_pwd_context: Optional[CryptContextType] = None
 
-def _get_pwd_context() -> CryptContext:
+def _get_pwd_context() -> CryptContextType:
     """Get password hashing context, initializing lazily."""
     global _pwd_context
     if _pwd_context is None:
@@ -172,16 +172,13 @@ def _load_users() -> None:
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """Verify a password against its hash."""
     # Handle bcrypt 72-byte limit by truncating if necessary
-    # But we need to check the original password length first
-    # If password was truncated during hashing, we need to truncate here too
-    # For now, try original password first, then truncated if it fails
-    try:
-        return pwd_context.verify(plain_password, hashed_password)
-    except ValueError:
-        # If password is too long, truncate and try again
-        if len(plain_password.encode('utf-8')) > 72:
-            return pwd_context.verify(plain_password[:72], hashed_password)
-        raise
+    password_bytes = plain_password.encode('utf-8')
+    if len(password_bytes) > 72:
+        # Truncate to 72 bytes to match how it was hashed
+        password_to_verify = password_bytes[:72].decode('utf-8', errors='ignore')
+    else:
+        password_to_verify = plain_password
+    return _get_pwd_context().verify(password_to_verify, hashed_password)
 
 
 def authenticate_user(username: str, password: str) -> Optional[User]:
