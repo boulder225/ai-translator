@@ -67,6 +67,13 @@ def setup_logging():
         try:
             import logging_loki
             
+            # Validate URL format
+            if not loki_url.endswith("/loki/api/v1/push"):
+                logger = logging.getLogger(__name__)
+                logger.warning(f"LOKI_URL should end with '/loki/api/v1/push', got: {loki_url}")
+                logger.warning("Loki handler not enabled. Fix LOKI_URL to enable.")
+                return log_file
+            
             loki_handler = logging_loki.LokiHandler(
                 url=loki_url,
                 tags={
@@ -78,9 +85,35 @@ def setup_logging():
             )
             loki_handler.setLevel(logging.INFO)
             loki_handler.setFormatter(formatter)
+            
+            # Test the handler with a test log before adding it
+            # This will catch 401 errors early
+            test_logger = logging.getLogger("loki_test")
+            test_logger.addHandler(loki_handler)
+            try:
+                test_logger.info("Loki connection test")
+                test_logger.removeHandler(loki_handler)
+            except Exception as auth_error:
+                logger = logging.getLogger(__name__)
+                if "401" in str(auth_error) or "Unauthorized" in str(auth_error):
+                    logger.error("=" * 60)
+                    logger.error("Loki authentication failed (401 Unauthorized)")
+                    logger.error("Common causes:")
+                    logger.error("  1. API token doesn't have 'logs:write' permission")
+                    logger.error("     → Go to Grafana Cloud → Access Policies → Edit token → Add 'logs:write'")
+                    logger.error("  2. Wrong username (should be your user ID number, not email)")
+                    logger.error("     → Check: Grafana Cloud → Profile → User ID")
+                    logger.error("  3. Wrong API token")
+                    logger.error("     → Generate new token: Grafana Cloud → API Keys")
+                    logger.error("=" * 60)
+                else:
+                    logger.warning(f"Loki handler test failed: {auth_error}")
+                return log_file
+            
+            # Add handler if test passed
             root_logger.addHandler(loki_handler)
             logger = logging.getLogger(__name__)
-            logger.info("Loki logging handler enabled")
+            logger.info("Loki logging handler enabled and tested successfully")
         except ImportError:
             logger = logging.getLogger(__name__)
             logger.warning("python-logging-loki-v2 not installed, skipping Loki handler")
