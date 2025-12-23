@@ -115,6 +115,14 @@ def load_users_from_env() -> dict[str, User]:
     
     Returns dict mapping username -> User object.
     """
+    # #region agent log
+    import json
+    debug_log_path = "/Users/enrico/workspace/translator/.cursor/debug.log"
+    try:
+        with open(debug_log_path, "a") as f:
+            f.write(json.dumps({"location":"auth.py:104","message":"load_users_from_env started","data":{},"timestamp":1735000000000,"sessionId":"debug-session","runId":"run1","hypothesisId":"D"})+"\n")
+    except: pass
+    # #endregion
     users = {}
     user_index = 1
     
@@ -147,13 +155,21 @@ def load_users_from_env() -> dict[str, User]:
         
         # Hash password (bcrypt has 72-byte limit, truncate if necessary)
         # Note: We truncate to 72 bytes for hashing
-        password_bytes = password.encode('utf-8')
-        if len(password_bytes) > 72:
-            # Truncate to 72 bytes for bcrypt compatibility
-            password_to_hash = password_bytes[:72].decode('utf-8', errors='ignore')
-        else:
-            password_to_hash = password
-        password_hash = _get_pwd_context().hash(password_to_hash)
+        try:
+            password_bytes = password.encode('utf-8')
+            if len(password_bytes) > 72:
+                # Truncate to 72 bytes for bcrypt compatibility
+                password_to_hash = password_bytes[:72].decode('utf-8', errors='ignore')
+            else:
+                password_to_hash = password
+            password_hash = _get_pwd_context().hash(password_to_hash)
+        except Exception as e:
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.error(f"Failed to hash password for user {username}: {e}")
+            # Skip this user if password hashing fails
+            user_index += 1
+            continue
         
         # Create user
         user = User(username=username, password_hash=password_hash, roles=roles)
@@ -161,6 +177,12 @@ def load_users_from_env() -> dict[str, User]:
         
         user_index += 1
     
+    # #region agent log
+    try:
+        with open(debug_log_path, "a") as f:
+            f.write(json.dumps({"location":"auth.py:172","message":"load_users_from_env returning","data":{"users_count":len(users),"usernames":list(users.keys())},"timestamp":1735000000000,"sessionId":"debug-session","runId":"run1","hypothesisId":"D"})+"\n")
+    except: pass
+    # #endregion
     return users
 
 
@@ -177,8 +199,15 @@ def _load_users() -> None:
     global _users, _users_loaded
     if _users_loaded:
         return
-    _users = load_users_from_env()
-    _users_loaded = True
+    try:
+        loaded = load_users_from_env()
+        _users.update(loaded)  # Update instead of replace to preserve any existing users
+        _users_loaded = True
+    except Exception as e:
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error(f"Failed to load users from environment: {e}", exc_info=True)
+        # Don't set _users_loaded = True so it can retry
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:

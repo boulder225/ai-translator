@@ -170,13 +170,17 @@ async def startup_event():
     environment = os.getenv("ENVIRONMENT", "production")
     
     # Load users from environment variables (this triggers the loading)
-    from .auth import _load_users, _users
+    from .auth import _load_users, _users as auth_users
     _load_users()
+    # Re-import to get the updated _users dict after loading
+    import importlib
+    auth_module = importlib.import_module('src.translator.auth')
+    loaded_users = auth_module._users
     logger.info("=" * 80)
     logger.info("🚀 LEGAL TRANSLATOR API STARTED - GRAFANA TEST MARKER")
     logger.info(f"Environment: {environment}")
-    logger.info(f"Loaded {len(_users)} users from environment variables")
-    for username, user in _users.items():
+    logger.info(f"Loaded {len(loaded_users)} users from environment variables")
+    for username, user in loaded_users.items():
         logger.info(f"  User: {username}, Roles: {', '.join(sorted(user.roles))}")
     logger.info("=" * 80)
     logger.info("To find this log in Grafana, use query: {application=\"legal-translator\"} |= \"GRAFANA TEST MARKER\"")
