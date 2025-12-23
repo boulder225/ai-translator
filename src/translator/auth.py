@@ -3,17 +3,17 @@ Role-based authentication system for Legal Translator.
 
 Roles:
 - admin: Full system access
-- traduttore: Translator (initial translation pass)
-- revisore: Reviewer (quality check and validation)
-- aderenza_controllo: Compliance Controller (legal compliance verification)
-- integratore: Integrator (consolidates multiple document translations)
+- translator: Translator (initial translation pass)
+- reviewer: Reviewer (quality check and validation)
+- compliance_controller: Compliance Controller (legal compliance verification)
+- integrator: Integrator (consolidates multiple document translations)
 
 Users are pre-loaded from environment variables.
 Format: USER_<N>_USERNAME, USER_<N>_PASSWORD, USER_<N>_ROLES
 Example:
   USER_1_USERNAME=john
   USER_1_PASSWORD=secret123
-  USER_1_ROLES=admin,traduttore
+  USER_1_ROLES=admin,translator
 """
 
 from __future__ import annotations
@@ -37,10 +37,10 @@ ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("JWT_EXPIRE_MINUTES", "1440"))  # 24
 # Available roles
 ROLES = {
     "admin": "Full system access",
-    "traduttore": "Translator - initial translation pass",
-    "revisore": "Reviewer - quality check and validation",
-    "aderenza_controllo": "Compliance Controller - legal compliance verification",
-    "integratore": "Integrator - consolidates multiple document translations",
+    "translator": "Translator - initial translation pass",
+    "reviewer": "Reviewer - quality check and validation",
+    "compliance_controller": "Compliance Controller - legal compliance verification",
+    "integrator": "Integrator - consolidates multiple document translations",
 }
 
 
