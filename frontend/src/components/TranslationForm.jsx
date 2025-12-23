@@ -195,28 +195,30 @@ function TranslationForm({ onTranslationStart, user }) {
           </div>
         </div>
 
-        <div className="form-group">
-          <label htmlFor="custom_prompt">
-            Translation Prompt
-            {loadingPrompt && <span className="loading-indicator"> (Loading...)</span>}
-          </label>
-          <textarea
-            id="custom_prompt"
-            value={customPrompt}
-            onChange={(e) => setCustomPrompt(e.target.value)}
-            placeholder={loadingPrompt ? "Loading default prompt..." : "Enter custom prompt for translation..."}
-            disabled={loading || loadingPrompt}
-            rows={15}
-            style={{
-              fontFamily: 'monospace',
-              fontSize: '0.875rem',
-              lineHeight: '1.5',
-            }}
-          />
-          <p className="help-text">
-            Default prompt is preloaded. You can modify it to customize the translation behavior.
-          </p>
-        </div>
+        {user && user.roles && user.roles.includes('admin') && (
+          <div className="form-group">
+            <label htmlFor="custom_prompt">
+              Translation Prompt (Admin Only)
+              {loadingPrompt && <span className="loading-indicator"> (Loading...)</span>}
+            </label>
+            <textarea
+              id="custom_prompt"
+              value={customPrompt}
+              onChange={(e) => setCustomPrompt(e.target.value)}
+              placeholder={loadingPrompt ? "Loading default prompt..." : "Enter custom prompt for translation..."}
+              disabled={loading || loadingPrompt}
+              rows={15}
+              style={{
+                fontFamily: 'monospace',
+                fontSize: '0.875rem',
+                lineHeight: '1.5',
+              }}
+            />
+            <p className="help-text">
+              Default prompt is preloaded. You can modify it to customize the translation behavior.
+            </p>
+          </div>
+        )}
 
         <button
           type="submit"

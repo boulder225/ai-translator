@@ -736,12 +736,15 @@ async def get_glossary_content(glossary_name: str, user: User = Depends(get_curr
 
 
 @app.get("/api/prompt")
-async def get_prompt():
-    """Get the current translation prompt template."""
+async def get_prompt(user: User = Depends(get_current_user_dependency)):
+    """Get the current translation prompt template. Admin only."""
+    if not user.has_role("admin"):
+        logger.info(f"[INTERACTION] GET /api/prompt - Access denied for user: {user.username}")
+        raise HTTPException(status_code=403, detail="Only administrators can access the prompt")
     try:
         from .claude_client import _load_prompt_template
         prompt = _load_prompt_template()
-        logger.info(f"[INTERACTION] GET /api/prompt - Prompt loaded ({len(prompt)} chars)")
+        logger.info(f"[INTERACTION] GET /api/prompt - Prompt loaded ({len(prompt)} chars) (User: {user.username})")
         return {"prompt": prompt}
     except Exception as e:
         logger.error(f"[INTERACTION] GET /api/prompt - Error: {e}", exc_info=True)
