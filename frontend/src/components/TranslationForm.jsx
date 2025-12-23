@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { startTranslation, getPrompt, detectLanguage, getGlossaryContent } from '../services/api';
 import './TranslationForm.css';
 
-function TranslationForm({ onTranslationStart }) {
+function TranslationForm({ onTranslationStart, user }) {
   const [file, setFile] = useState(null);
   const [referenceDoc, setReferenceDoc] = useState(null);
   const [sourceLang, setSourceLang] = useState('fr');
@@ -92,7 +92,7 @@ function TranslationForm({ onTranslationStart }) {
         target_lang: targetLang,
         use_glossary: useGlossary,
         skip_memory: !useMemory,
-        custom_prompt: customPrompt || null,
+        custom_prompt: (user && user.roles && user.roles.includes('admin') && customPrompt) ? customPrompt : null,
         reference_doc: referenceDoc || null,
       });
 
