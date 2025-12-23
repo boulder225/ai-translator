@@ -170,11 +170,16 @@ async def startup_event():
     environment = os.getenv("ENVIRONMENT", "production")
     
     # Load users from environment variables (this triggers the loading)
-    from .auth import _load_users, _users
+    from .auth import _load_users, _users, get_server_instance_id
     _load_users()
+    
+    # Generate new server instance ID (invalidates all existing tokens)
+    server_instance_id = get_server_instance_id()
+    
     logger.info("=" * 80)
     logger.info("🚀 LEGAL TRANSLATOR API STARTED - GRAFANA TEST MARKER")
     logger.info(f"Environment: {environment}")
+    logger.info(f"Server Instance ID: {server_instance_id} (all existing tokens invalidated)")
     logger.info(f"Loaded {len(_users)} users from environment variables")
     for username, user in _users.items():
         logger.info(f"  User: {username}, Roles: {', '.join(sorted(user.roles))}")
