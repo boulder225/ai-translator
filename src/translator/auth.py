@@ -187,7 +187,8 @@ def _load_users() -> None:
         return
     try:
         loaded = load_users_from_env()
-        _users.update(loaded)  # Update instead of replace to preserve any existing users
+        _users.clear()  # Clear existing dict
+        _users.update(loaded)  # Update with loaded users
         _users_loaded = True
     except Exception as e:
         import logging
