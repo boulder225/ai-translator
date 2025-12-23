@@ -544,12 +544,15 @@ def _run_translation(job_id: str) -> None:
 
 @app.get("/")
 async def root():
+    logger.info("[INTERACTION] GET / - API health check")
     return {"message": "Legal Translator API", "version": "0.1.0"}
 
 
 @app.get("/api/glossaries")
 async def list_glossaries():
-    return {"glossaries": [str(g) for g in find_glossary_files()]}
+    glossaries = find_glossary_files()
+    logger.info(f"[INTERACTION] GET /api/glossaries - Found {len(glossaries)} glossaries")
+    return {"glossaries": [str(g) for g in glossaries]}
 
 
 @app.get("/api/glossary/{glossary_name}/content")
@@ -566,6 +569,7 @@ async def get_glossary_content(glossary_name: str):
             break
     
     if not glossary_path or not glossary_path.exists():
+        logger.error(f"[INTERACTION] GET /api/glossary/{glossary_name}/content - Not found")
         logger.error(f"Glossary '{glossary_name}' not found. Found files: {[str(g) for g in glossary_files]}")
         raise HTTPException(status_code=404, detail=f"Glossary '{glossary_name}' not found")
     
@@ -586,9 +590,10 @@ async def get_glossary_content(glossary_name: str):
                         "context": (row.get("context") or "").strip() or None
                     })
     except Exception as e:
-        logger.error(f"Error reading glossary {glossary_name}: {e}")
+        logger.error(f"[INTERACTION] GET /api/glossary/{glossary_name}/content - Error: {e}")
         raise HTTPException(status_code=500, detail=f"Error reading glossary: {str(e)}")
     
+    logger.info(f"[INTERACTION] GET /api/glossary/{glossary_name}/content - Returned {len(entries)} entries")
     return {
         "name": glossary_path.stem,
         "path": str(glossary_path),
@@ -603,9 +608,10 @@ async def get_prompt():
     try:
         from .claude_client import _load_prompt_template
         prompt = _load_prompt_template()
+        logger.info(f"[INTERACTION] GET /api/prompt - Prompt loaded ({len(prompt)} chars)")
         return {"prompt": prompt}
     except Exception as e:
-        logger.error(f"Error in get_prompt: {e}", exc_info=True)
+        logger.error(f"[INTERACTION] GET /api/prompt - Error: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=f"Failed to load prompt: {str(e)}")
 
 
@@ -654,6 +660,7 @@ async def start_translation(
     request_timestamp = time.time()
     request_id = str(uuid.uuid4())[:8]
     
+    logger.info(f"[INTERACTION] POST /api/translate - File: {file.filename}, {source_lang}→{target_lang}, glossary={use_glossary}, skip_memory={skip_memory}")
     logger.info("=" * 80)
     logger.info(f"[REQUEST {request_id}] ===== NEW TRANSLATION REQUEST =====")
     logger.info(f"[REQUEST {request_id}] Timestamp: {request_timestamp}")
@@ -809,12 +816,16 @@ async def start_translation(
 @app.get("/api/translate/{job_id}/status")
 async def get_translation_status(job_id: str):
     if job_id not in translation_jobs:
+        logger.info(f"[INTERACTION] GET /api/translate/{job_id}/status - Job not found")
         raise HTTPException(status_code=404, detail=JOB_NOT_FOUND)
     
     job = translation_jobs[job_id]
+    status_val = job["status"]
+    progress = job.get("progress", 0)
+    logger.info(f"[INTERACTION] GET /api/translate/{job_id}/status - Status: {status_val}, Progress: {progress:.1%}")
     return TranslationStatus(
         job_id=job_id,
-        status=job["status"],
+        status=status_val,
         progress=job.get("progress"),
         current_paragraph=job.get("current_paragraph"),
         total_paragraphs=job.get("total_paragraphs"),
@@ -831,18 +842,21 @@ async def download_translation(job_id: str):
     from fastapi.responses import Response
     
     if job_id not in translation_jobs:
+        logger.info(f"[INTERACTION] GET /api/translate/{job_id}/download - Job not found")
         raise HTTPException(status_code=404, detail=JOB_NOT_FOUND)
     
     job = translation_jobs[job_id]
     if job["status"] != "completed":
+        logger.info(f"[INTERACTION] GET /api/translate/{job_id}/download - Status: {job['status']} (not completed)")
         raise HTTPException(status_code=400, detail="Translation not completed")
     
     # Get PDF bytes from memory
     pdf_bytes = job.get("pdf_bytes")
     if not pdf_bytes:
+        logger.info(f"[INTERACTION] GET /api/translate/{job_id}/download - PDF not found")
         raise HTTPException(status_code=404, detail="PDF not found in memory")
     
-    logger.info(f"[DOWNLOAD {job_id}] Serving PDF from memory: {len(pdf_bytes):,} bytes")
+    logger.info(f"[INTERACTION] GET /api/translate/{job_id}/download - Serving PDF ({len(pdf_bytes):,} bytes)")
     
     # Generate filename
     source_lang = job.get("source_lang", "unknown")
@@ -863,13 +877,15 @@ async def download_translation(job_id: str):
 async def cancel_translation(job_id: str):
     """Cancel an ongoing translation job."""
     if job_id not in translation_jobs:
+        logger.info(f"[INTERACTION] POST /api/translate/{job_id}/cancel - Job not found")
         raise HTTPException(status_code=404, detail=JOB_NOT_FOUND)
     
     job = translation_jobs[job_id]
     if job["status"] not in ["pending", "in_progress"]:
+        logger.info(f"[INTERACTION] POST /api/translate/{job_id}/cancel - Status: {job['status']} (cannot cancel)")
         raise HTTPException(status_code=400, detail="Translation cannot be cancelled")
     
-    logger.info(f"Job {job_id}: Cancellation requested")
+    logger.info(f"[INTERACTION] POST /api/translate/{job_id}/cancel - Cancellation requested")
     job["cancelled"] = True
     
     return {"message": "Cancellation requested", "job_id": job_id}
@@ -878,12 +894,15 @@ async def cancel_translation(job_id: str):
 @app.get("/api/translate/{job_id}/report")
 async def get_translation_report(job_id: str):
     if job_id not in translation_jobs:
+        logger.info(f"[INTERACTION] GET /api/translate/{job_id}/report - Job not found")
         raise HTTPException(status_code=404, detail=JOB_NOT_FOUND)
     
     job = translation_jobs[job_id]
     if job["status"] != "completed":
+        logger.info(f"[INTERACTION] GET /api/translate/{job_id}/report - Status: {job['status']} (not completed)")
         raise HTTPException(status_code=400, detail="Translation not completed")
     
+    logger.info(f"[INTERACTION] GET /api/translate/{job_id}/report - Report retrieved")
     return job.get("report", {})
 
 
@@ -893,18 +912,22 @@ async def get_translated_text(job_id: str):
     from fastapi.responses import Response
     
     if job_id not in translation_jobs:
+        logger.info(f"[INTERACTION] GET /api/translate/{job_id}/text - Job not found")
         raise HTTPException(status_code=404, detail=JOB_NOT_FOUND)
     
     job = translation_jobs[job_id]
     if job["status"] != "completed":
+        logger.info(f"[INTERACTION] GET /api/translate/{job_id}/text - Status: {job['status']} (not completed)")
         raise HTTPException(status_code=400, detail="Translation not completed")
     
     translated_paragraphs = job.get("translated_text")
     if not translated_paragraphs:
+        logger.info(f"[INTERACTION] GET /api/translate/{job_id}/text - Text not found")
         raise HTTPException(status_code=404, detail="Translated text not found")
     
     # Join paragraphs with double newlines
     text_content = "\n\n".join(translated_paragraphs)
+    logger.info(f"[INTERACTION] GET /api/translate/{job_id}/text - Serving text ({len(text_content)} chars, {len(translated_paragraphs)} paragraphs)")
     
     return Response(
         content=text_content,
@@ -928,19 +951,22 @@ async def export_memory():
     memory_file = settings.data_root / "memory.json"
     
     if not memory_file.exists():
+        logger.info(f"[INTERACTION] GET /api/memory/export - Memory file not found")
         raise HTTPException(status_code=404, detail="Memory file not found")
     
     try:
         memory = TranslationMemory(memory_file)
+        record_count = len(memory)
+        logger.info(f"[INTERACTION] GET /api/memory/export - Exporting {record_count} memory records")
         return FileResponse(
             path=str(memory_file),
             filename="memory.json",
             media_type="application/json",
             headers={
                 "Content-Disposition": "attachment; filename=memory.json",
-                "X-Memory-Records": str(len(memory)),
+                "X-Memory-Records": str(record_count),
             }
         )
     except Exception as e:
-        logger.error(f"Error exporting memory: {e}", exc_info=True)
+        logger.error(f"[INTERACTION] GET /api/memory/export - Error: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=f"Failed to export memory: {str(e)}")
