@@ -9,6 +9,35 @@ const api = axios.create({
   },
 });
 
+// Add auth token to requests if available
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('auth_token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// Handle 401 errors (unauthorized) - redirect to login
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem('auth_token');
+      localStorage.removeItem('user');
+      window.location.reload();
+    }
+    return Promise.reject(error);
+  }
+);
+
+export default api;
+
 export const listGlossaries = async () => {
   const response = await api.get('/glossaries');
   return response.data;
@@ -54,10 +83,16 @@ export const startTranslation = async (file, options) => {
     formData.append('custom_prompt', options.custom_prompt);
   }
 
+  const token = localStorage.getItem('auth_token');
+  const headers = {
+    'Content-Type': 'multipart/form-data',
+  };
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+
   const response = await axios.post(`${API_BASE_URL}/translate`, formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
+    headers,
   });
   
   return response.data;

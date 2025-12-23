@@ -568,6 +568,12 @@ async def root():
     return {"message": "Legal Translator API", "version": "0.1.0"}
 
 
+@app.get("/api/health")
+async def health_check():
+    """Public health check endpoint (no authentication required)."""
+    return {"status": "ok"}
+
+
 # Authentication endpoints
 class LoginRequest(BaseModel):
     username: str
@@ -682,7 +688,7 @@ async def list_glossaries():
 
 
 @app.get("/api/glossary/{glossary_name}/content")
-async def get_glossary_content(glossary_name: str):
+async def get_glossary_content(glossary_name: str, user: User = Depends(get_current_user_dependency)):
     """Get the content of a glossary file."""
     import csv
     
@@ -742,7 +748,7 @@ async def get_prompt():
 
 
 @app.post("/api/detect-language")
-async def detect_language(file: UploadFile = File(...)):
+async def detect_language(file: UploadFile = File(...), user: User = Depends(get_current_user_dependency)):
     """Detect the language of an uploaded document."""
     import tempfile
     
@@ -758,6 +764,7 @@ async def detect_language(file: UploadFile = File(...)):
         
         try:
             detected_lang = detect_language_from_file(temp_path)
+            logger.info(f"[INTERACTION] POST /api/detect-language - File: {file.filename}, Detected: {detected_lang} (User: {user.username})")
             return {"detected_language": detected_lang}
         finally:
             # Clean up temp file
@@ -940,7 +947,7 @@ async def start_translation(
 
 
 @app.get("/api/translate/{job_id}/status")
-async def get_translation_status(job_id: str):
+async def get_translation_status(job_id: str, user: User = Depends(get_current_user_dependency)):
     if job_id not in translation_jobs:
         logger.info(f"[INTERACTION] GET /api/translate/{job_id}/status - Job not found")
         raise HTTPException(status_code=404, detail=JOB_NOT_FOUND)
@@ -1000,7 +1007,7 @@ async def download_translation(job_id: str):
 
 
 @app.post("/api/translate/{job_id}/cancel")
-async def cancel_translation(job_id: str):
+async def cancel_translation(job_id: str, user: User = Depends(get_current_user_dependency)):
     """Cancel an ongoing translation job."""
     if job_id not in translation_jobs:
         logger.info(f"[INTERACTION] POST /api/translate/{job_id}/cancel - Job not found")
@@ -1018,7 +1025,7 @@ async def cancel_translation(job_id: str):
 
 
 @app.get("/api/translate/{job_id}/report")
-async def get_translation_report(job_id: str):
+async def get_translation_report(job_id: str, user: User = Depends(get_current_user_dependency)):
     if job_id not in translation_jobs:
         logger.info(f"[INTERACTION] GET /api/translate/{job_id}/report - Job not found")
         raise HTTPException(status_code=404, detail=JOB_NOT_FOUND)
@@ -1033,7 +1040,7 @@ async def get_translation_report(job_id: str):
 
 
 @app.get("/api/translate/{job_id}/text")
-async def get_translated_text(job_id: str):
+async def get_translated_text(job_id: str, user: User = Depends(get_current_user_dependency)):
     """Get translated text as plain text."""
     from fastapi.responses import Response
     
@@ -1065,7 +1072,7 @@ async def get_translated_text(job_id: str):
 
 
 @app.get("/api/memory/export")
-async def export_memory():
+async def export_memory(user: User = Depends(get_current_user_dependency)):
     """
     Export translation memory as JSON file.
     

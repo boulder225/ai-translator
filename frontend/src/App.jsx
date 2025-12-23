@@ -1,14 +1,63 @@
 import { useState, useEffect } from 'react';
 import './App.css';
+import Login from './components/Login';
 import TranslationForm from './components/TranslationForm';
 import TranslationStatus from './components/TranslationStatus';
 import { getTranslationStatus } from './services/api';
 import logoLexDeep from './assets/logos/logo-lexdeep-transparent.png';
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState(null);
   const [currentJob, setCurrentJob] = useState(null);
   const [status, setStatus] = useState(null);
   const [report, setReport] = useState(null);
+
+  // Check for existing authentication on mount
+  useEffect(() => {
+    const token = localStorage.getItem('auth_token');
+    const userData = localStorage.getItem('user');
+    
+    if (token && userData) {
+      try {
+        const parsedUser = JSON.parse(userData);
+        setUser(parsedUser);
+        setIsAuthenticated(true);
+        // Update API service with token
+        updateApiToken(token);
+      } catch (err) {
+        console.error('Failed to parse user data:', err);
+        localStorage.removeItem('auth_token');
+        localStorage.removeItem('user');
+      }
+    }
+  }, []);
+
+  const updateApiToken = (token) => {
+    // Token is handled by axios interceptors in api.js
+    // No need to manually set headers here
+  };
+
+  const handleLogin = (userData, token) => {
+    setUser(userData);
+    setIsAuthenticated(true);
+    updateApiToken(token);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('auth_token');
+    localStorage.removeItem('user');
+    setUser(null);
+    setIsAuthenticated(false);
+    setCurrentJob(null);
+    setStatus(null);
+    setReport(null);
+    // Clear API token
+    const api = require('./services/api').default;
+    if (api && api.defaults) {
+      delete api.defaults.headers.common['Authorization'];
+    }
+  };
 
   useEffect(() => {
     if (currentJob) {
@@ -52,6 +101,11 @@ function App() {
   const handleReportUpdate = (reportData) => {
     setReport(reportData);
   };
+
+  // Show login page if not authenticated
+  if (!isAuthenticated) {
+    return <Login onLogin={handleLogin} />;
+  }
 
   return (
     <div className="App">
@@ -106,7 +160,18 @@ function App() {
             )}
           </div>
           <div className="nav-actions">
-            <button className="nav-button nav-button-secondary">Log in</button>
+            <div className="nav-user-info">
+              <span className="nav-username">{user?.username}</span>
+              {user?.roles && user.roles.length > 0 && (
+                <span className="nav-roles">{user.roles.join(', ')}</span>
+              )}
+            </div>
+            <button 
+              className="nav-button nav-button-secondary"
+              onClick={handleLogout}
+            >
+              Log out
+            </button>
             {!currentJob && (
               <button 
                 className="nav-button nav-button-secondary"
