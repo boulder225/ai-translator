@@ -35,7 +35,17 @@ def _get_pwd_context() -> CryptContextType:
     if _pwd_context is None:
         # Initialize bcrypt context lazily to avoid import-time errors
         # The bcrypt version check in passlib can fail during import
-        _pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+        # Wrap in try-except to handle passlib's bug detection gracefully
+        try:
+            _pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+            # Trigger initialization by hashing a short test password
+            # This avoids the bug detection using a long password
+            _pwd_context.hash("test")
+        except (ValueError, AttributeError) as e:
+            # If initialization fails due to bcrypt issues, try with pbkdf2 as fallback
+            import warnings
+            warnings.warn(f"bcrypt initialization failed ({e}), using pbkdf2_sha256 as fallback")
+            _pwd_context = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")
     return _pwd_context
 
 # JWT settings
