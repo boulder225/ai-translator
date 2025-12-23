@@ -10,10 +10,14 @@ import uuid
 from pathlib import Path
 from typing import Optional
 
+from dotenv import load_dotenv
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
+
+# Load environment variables from .env file BEFORE anything else
+load_dotenv()
 
 from .claude_client import ClaudeTranslator
 from .processing import PDF_SUFFIX, translate_file_to_memory
