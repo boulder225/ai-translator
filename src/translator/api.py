@@ -74,7 +74,43 @@ def setup_logging():
                 logger.warning("Loki handler not enabled. Fix LOKI_URL to enable.")
                 return log_file
             
-            loki_handler = logging_loki.LokiHandler(
+            # Create a wrapper handler that catches errors to prevent crashes
+            class SafeLokiHandler(logging.Handler):
+                """Wrapper around LokiHandler that catches errors to prevent app crashes."""
+                def __init__(self, loki_handler):
+                    super().__init__()
+                    self.loki_handler = loki_handler
+                    self.error_count = 0
+                    self.last_error = None
+                
+                def emit(self, record):
+                    try:
+                        self.loki_handler.emit(record)
+                        self.error_count = 0  # Reset on success
+                    except Exception as e:
+                        self.error_count += 1
+                        self.last_error = e
+                        # Only log error details occasionally to avoid spam
+                        if self.error_count == 1:
+                            logger = logging.getLogger(__name__)
+                            if "401" in str(e) or "Unauthorized" in str(e):
+                                logger.error("=" * 60)
+                                logger.error("Loki authentication failed (401 Unauthorized)")
+                                logger.error("Common causes:")
+                                logger.error("  1. API token doesn't have 'logs:write' permission")
+                                logger.error("     → Go to Grafana Cloud → Access Policies → Edit token → Add 'logs:write'")
+                                logger.error("  2. Wrong username (should be your user ID number, not email)")
+                                logger.error("     → Check: Grafana Cloud → Profile → User ID")
+                                logger.error("  3. Wrong API token or URL format")
+                                logger.error("     → URL should end with: /loki/api/v1/push")
+                                logger.error("     → Generate new token: Grafana Cloud → API Keys")
+                                logger.error("=" * 60)
+                            else:
+                                logger.warning(f"Loki handler error (will retry silently): {type(e).__name__}: {e}")
+                        # Silently ignore subsequent errors to avoid log spam
+                        # The app continues working, just without Loki logging
+            
+            base_loki_handler = logging_loki.LokiHandler(
                 url=loki_url,
                 tags={
                     "application": "legal-translator",
@@ -83,37 +119,17 @@ def setup_logging():
                 auth=(loki_username, loki_password),
                 version="1",
             )
+            base_loki_handler.setLevel(logging.INFO)
+            base_loki_handler.setFormatter(formatter)
+            
+            # Wrap in safe handler
+            loki_handler = SafeLokiHandler(base_loki_handler)
             loki_handler.setLevel(logging.INFO)
             loki_handler.setFormatter(formatter)
             
-            # Test the handler with a test log before adding it
-            # This will catch 401 errors early
-            test_logger = logging.getLogger("loki_test")
-            test_logger.addHandler(loki_handler)
-            try:
-                test_logger.info("Loki connection test")
-                test_logger.removeHandler(loki_handler)
-            except Exception as auth_error:
-                logger = logging.getLogger(__name__)
-                if "401" in str(auth_error) or "Unauthorized" in str(auth_error):
-                    logger.error("=" * 60)
-                    logger.error("Loki authentication failed (401 Unauthorized)")
-                    logger.error("Common causes:")
-                    logger.error("  1. API token doesn't have 'logs:write' permission")
-                    logger.error("     → Go to Grafana Cloud → Access Policies → Edit token → Add 'logs:write'")
-                    logger.error("  2. Wrong username (should be your user ID number, not email)")
-                    logger.error("     → Check: Grafana Cloud → Profile → User ID")
-                    logger.error("  3. Wrong API token")
-                    logger.error("     → Generate new token: Grafana Cloud → API Keys")
-                    logger.error("=" * 60)
-                else:
-                    logger.warning(f"Loki handler test failed: {auth_error}")
-                return log_file
-            
-            # Add handler if test passed
             root_logger.addHandler(loki_handler)
             logger = logging.getLogger(__name__)
-            logger.info("Loki logging handler enabled and tested successfully")
+            logger.info("Loki logging handler enabled (errors will be caught silently)")
         except ImportError:
             logger = logging.getLogger(__name__)
             logger.warning("python-logging-loki-v2 not installed, skipping Loki handler")
