@@ -3,7 +3,7 @@ import axios from 'axios';
 const API_BASE_URL = '/api';
 
 // Helper to get user role from localStorage
-const getUserRole = () => {
+const getUserRoleFromStorage = () => {
   return localStorage.getItem('userRole') || '';
 };
 
@@ -22,7 +22,7 @@ const api = axios.create({
 // Add request interceptor to include user role and username in headers
 api.interceptors.request.use(
   (config) => {
-    const userRole = getUserRole();
+    const userRole = getUserRoleFromStorage();
     const username = getUsername();
     
     if (userRole) {
@@ -49,9 +49,19 @@ export const getGlossaryContent = async (glossaryName) => {
   return response.data;
 };
 
+export const getUserRole = async (username) => {
+  // Create a temporary request without using the interceptor (to avoid circular dependency)
+  const response = await axios.get('/api/user-role', {
+    headers: {
+      'X-Username': username,
+    },
+  });
+  return response.data;
+};
+
 export const getPrompt = async () => {
   // Include user role headers for admin check
-  const userRole = getUserRole();
+  const userRole = getUserRoleFromStorage();
   const username = getUsername();
   
   const response = await api.get('/prompt', {

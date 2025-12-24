@@ -11,6 +11,8 @@ function App() {
   const [currentJob, setCurrentJob] = useState(null);
   const [status, setStatus] = useState(null);
   const [report, setReport] = useState(null);
+  const [username, setUsername] = useState('');
+  const [userRole, setUserRole] = useState('');
 
   // Check authentication status on mount
   useEffect(() => {
@@ -18,14 +20,18 @@ function App() {
     if (authStatus === 'true') {
       setIsAuthenticated(true);
       // Ensure userRole is set - if missing, set default based on username
-      const username = localStorage.getItem('username') || '';
-      const userRole = localStorage.getItem('userRole');
-      if (!userRole && username) {
+      const storedUsername = localStorage.getItem('username') || '';
+      const storedUserRole = localStorage.getItem('userRole');
+      if (!storedUserRole && storedUsername) {
         // Set role based on username pattern (for users who logged in before role system)
-        const usernameLower = username.toLowerCase();
+        const usernameLower = storedUsername.toLowerCase();
         const role = (usernameLower.includes('admin') || usernameLower.startsWith('admin_')) ? 'admin' : 'user';
         localStorage.setItem('userRole', role);
+        setUserRole(role);
+      } else {
+        setUserRole(storedUserRole || '');
       }
+      setUsername(storedUsername);
     }
   }, []);
 
@@ -74,6 +80,10 @@ function App() {
 
   const handleLogin = () => {
     setIsAuthenticated(true);
+    const storedUsername = localStorage.getItem('username') || '';
+    const storedUserRole = localStorage.getItem('userRole') || '';
+    setUsername(storedUsername);
+    setUserRole(storedUserRole);
   };
 
   const handleLogout = () => {
@@ -144,6 +154,10 @@ function App() {
             )}
           </div>
           <div className="nav-actions">
+            <div className="nav-user-info">
+              <span className="nav-username">{username}</span>
+              <span className="nav-user-role">{userRole}</span>
+            </div>
             <button 
               className="nav-button nav-button-secondary"
               onClick={handleLogout}

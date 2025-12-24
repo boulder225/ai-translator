@@ -104,6 +104,28 @@
   gap: 1rem;
 }
 
+.nav-user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-right: 0.5rem;
+}
+
+.nav-username {
+  font-weight: 600;
+  color: #000000;
+  font-size: 0.875rem;
+  line-height: 1.2;
+}
+
+.nav-user-role {
+  font-size: 0.75rem;
+  color: #666666;
+  text-transform: capitalize;
+  line-height: 1.2;
+  margin-top: 0.125rem;
+}
+
 .nav-button {
   padding: 0.5rem 1rem;
   border-radius: 6px;
@@ -152,6 +174,18 @@
   
   .nav-actions {
     gap: 0.5rem;
+  }
+  
+  .nav-user-info {
+    margin-right: 0.25rem;
+  }
+  
+  .nav-username {
+    font-size: 0.8125rem;
+  }
+  
+  .nav-user-role {
+    font-size: 0.6875rem;
   }
   
   .nav-button {

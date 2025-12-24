@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import './Login.css';
 import logoLexDeep from '../assets/logos/logo-lexdeep-transparent.png';
+import { getUserRole } from '../services/api';
 
 function Login({ onLogin }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
@@ -17,23 +18,32 @@ function Login({ onLogin }) {
       return;
     }
 
-    // Determine user role based on username
-    // For MVP: check if username contains "admin" or matches admin pattern
-    const usernameLower = username.trim().toLowerCase();
-    let userRole = 'user'; // default role
-    
-    // Check if username indicates admin (contains "admin" or matches admin pattern)
-    if (usernameLower.includes('admin') || usernameLower.startsWith('admin_')) {
-      userRole = 'admin';
-    }
+    try {
+      // Get user role from backend
+      const roleData = await getUserRole(username.trim());
+      const userRole = roleData.role || 'user';
 
-    // Store login state in localStorage
-    localStorage.setItem('isAuthenticated', 'true');
-    localStorage.setItem('username', username.trim());
-    localStorage.setItem('userRole', userRole);
-    
-    // Call the onLogin callback
-    onLogin();
+      // Store login state in localStorage
+      localStorage.setItem('isAuthenticated', 'true');
+      localStorage.setItem('username', username.trim());
+      localStorage.setItem('userRole', userRole);
+      
+      // Call the onLogin callback
+      onLogin();
+    } catch (err) {
+      console.error('Failed to get user role:', err);
+      // Fallback to default role determination
+      const usernameLower = username.trim().toLowerCase();
+      let userRole = 'user';
+      if (usernameLower.includes('admin') || usernameLower.startsWith('admin_')) {
+        userRole = 'admin';
+      }
+      
+      localStorage.setItem('isAuthenticated', 'true');
+      localStorage.setItem('username', username.trim());
+      localStorage.setItem('userRole', userRole);
+      onLogin();
+    }
   };
 
   return (

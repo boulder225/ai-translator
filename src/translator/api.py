@@ -486,6 +486,45 @@ async def get_glossary_content(glossary_name: str):
     }
 
 
+def _get_user_role(username: str) -> str:
+    """
+    Get the user's role from environment variables.
+    Checks USER_X_ROLES and USER_X_USERNAME environment variables.
+    Returns the first role found, or 'user' as default.
+    """
+    if not username:
+        return "user"
+    
+    username_lower = username.strip().lower()
+    
+    # Check USER_X_USERNAME and USER_X_ROLES pairs
+    for i in range(1, 100):  # Check up to USER_100
+        user_username_key = f"USER_{i}_USERNAME"
+        user_roles_key = f"USER_{i}_ROLES"
+        
+        # Check if username matches
+        user_username = os.getenv(user_username_key, "").strip().lower()
+        if user_username and user_username == username_lower:
+            roles = os.getenv(user_roles_key, "").strip()
+            if roles:
+                # Return the first role (roles can be comma-separated)
+                return roles.split(",")[0].strip()
+    
+    # Check ADMIN_USERS env var for admin role
+    admin_users_env = os.getenv("ADMIN_USERS", "").strip()
+    if admin_users_env:
+        admin_users = [u.strip().lower() for u in admin_users_env.split(",") if u.strip()]
+        if username_lower in admin_users:
+            return "admin"
+    
+    # Fallback: check if username contains "admin"
+    if "admin" in username_lower:
+        return "admin"
+    
+    # Default role
+    return "user"
+
+
 def _check_admin_role(request: Request) -> bool:
     """
     Check if the current user has admin role.
@@ -527,6 +566,23 @@ def _check_admin_role(request: Request) -> bool:
     # No admin role found - deny access (default deny)
     logger.debug(f"Access denied - user_role: '{user_role}', username: '{username}'")
     return False
+
+
+@app.get("/api/user-role")
+async def get_user_role(request: Request):
+    """
+    Get the user's role based on username.
+    Returns the actual role name (e.g., "translator", "reviewer", "admin") instead of just "user" or "admin".
+    """
+    username = (request.headers.get("X-Username") or request.headers.get("x-username") or "").strip()
+    if not username:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Username is required"
+        )
+    
+    role = _get_user_role(username)
+    return {"username": username, "role": role}
 
 
 @app.get("/api/prompt")
