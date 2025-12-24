@@ -1,1 +1,28 @@
+# Python
+__pycache__/
+*.pyc
+.python-version
 
+# Environments
+.env
+.venv/
+
+# Build artifacts
+dist/
+build/
+.ruff_cache/
+.mypy_cache/
+
+# App data
+data/
+logs/
+
+# Streamlit
+.streamlit/
+# prompt.md - Removed from gitignore to include in Docker builds
+# glossary/ - Only glossary.csv and memory.json are committed
+glossary/*.doc
+glossary/*.docx
+glossary/*.txt
+!glossary/glossary.csv
+!glossary/memory.json
