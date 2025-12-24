@@ -8,80 +8,26 @@ import logoLexDeep from './assets/logos/logo-lexdeep-transparent.png';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState(null);
   const [currentJob, setCurrentJob] = useState(null);
   const [status, setStatus] = useState(null);
   const [report, setReport] = useState(null);
 
-  // Check for existing authentication on mount
+  // Check authentication status on mount
   useEffect(() => {
-    const token = localStorage.getItem('auth_token');
-    const userData = localStorage.getItem('user');
-    
-    if (token && userData) {
-      try {
-        const parsedUser = JSON.parse(userData);
-        setUser(parsedUser);
-        setIsAuthenticated(true);
-        // Update API service with token
-        updateApiToken(token);
-        
-        // Verify token is still valid by calling /api/auth/me
-        // This will fail if server restarted (token invalidated)
-        fetch('/api/auth/me', {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        }).then(response => {
-          if (!response.ok) {
-            // Token invalid - clear auth and show login
-            console.log('[AUTH] Token validation failed on mount, redirecting to login');
-            localStorage.removeItem('auth_token');
-            localStorage.removeItem('user');
-            setUser(null);
-            setIsAuthenticated(false);
-          }
-        }).catch(err => {
-          console.error('[AUTH] Error validating token:', err);
-          // On error, assume token is invalid
-          localStorage.removeItem('auth_token');
-          localStorage.removeItem('user');
-          setUser(null);
-          setIsAuthenticated(false);
-        });
-      } catch (err) {
-        console.error('Failed to parse user data:', err);
-        localStorage.removeItem('auth_token');
-        localStorage.removeItem('user');
+    const authStatus = localStorage.getItem('isAuthenticated');
+    if (authStatus === 'true') {
+      setIsAuthenticated(true);
+      // Ensure userRole is set - if missing, set default based on username
+      const username = localStorage.getItem('username') || '';
+      const userRole = localStorage.getItem('userRole');
+      if (!userRole && username) {
+        // Set role based on username pattern (for users who logged in before role system)
+        const usernameLower = username.toLowerCase();
+        const role = (usernameLower.includes('admin') || usernameLower.startsWith('admin_')) ? 'admin' : 'user';
+        localStorage.setItem('userRole', role);
       }
     }
   }, []);
-
-  const updateApiToken = (token) => {
-    // Token is handled by axios interceptors in api.js
-    // No need to manually set headers here
-  };
-
-  const handleLogin = (userData, token) => {
-    setUser(userData);
-    setIsAuthenticated(true);
-    updateApiToken(token);
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem('auth_token');
-    localStorage.removeItem('user');
-    setUser(null);
-    setIsAuthenticated(false);
-    setCurrentJob(null);
-    setStatus(null);
-    setReport(null);
-    // Clear API token
-    const api = require('./services/api').default;
-    if (api && api.defaults) {
-      delete api.defaults.headers.common['Authorization'];
-    }
-  };
 
   useEffect(() => {
     if (currentJob) {
@@ -124,6 +70,20 @@ function App() {
 
   const handleReportUpdate = (reportData) => {
     setReport(reportData);
+  };
+
+  const handleLogin = () => {
+    setIsAuthenticated(true);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('isAuthenticated');
+    localStorage.removeItem('username');
+    localStorage.removeItem('userRole');
+    setIsAuthenticated(false);
+    setCurrentJob(null);
+    setStatus(null);
+    setReport(null);
   };
 
   // Show login page if not authenticated
@@ -184,12 +144,6 @@ function App() {
             )}
           </div>
           <div className="nav-actions">
-            <div className="nav-user-info">
-              <span className="nav-username">{user?.username}</span>
-              {user?.roles && user.roles.length > 0 && (
-                <span className="nav-roles">{user.roles.join(', ')}</span>
-              )}
-            </div>
             <button 
               className="nav-button nav-button-secondary"
               onClick={handleLogout}
@@ -223,7 +177,6 @@ function App() {
         {!currentJob ? (
           <TranslationForm
             onTranslationStart={handleTranslationStart}
-            user={user}
           />
         ) : (
           <TranslationStatus

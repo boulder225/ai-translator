@@ -21,6 +21,13 @@ trap cleanup SIGINT SIGTERM
 
 # Start backend API
 echo "1. Starting backend API on port 8000..."
+# Kill any existing process on port 8000
+EXISTING_PID=$(lsof -ti:8000 2>/dev/null)
+if [ ! -z "$EXISTING_PID" ]; then
+    echo "   Killing existing process on port 8000 (PID: $EXISTING_PID)..."
+    kill $EXISTING_PID 2>/dev/null
+    sleep 1
+fi
 mkdir -p logs
 source .venv/bin/activate
 uvicorn src.translator.api:app --host 0.0.0.0 --port 8000 --reload > logs/backend.log 2>&1 &

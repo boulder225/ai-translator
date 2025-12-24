@@ -97,3 +97,5 @@ Color palette inspired by DeepL's minimal, professional aesthetic.
 - **Pure black** (`#000000`) for all text to maintain DeepL's bold typography feel
 
 
+
+

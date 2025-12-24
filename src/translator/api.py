@@ -3,43 +3,27 @@ from __future__ import annotations
 import hashlib
 import json
 import logging
+import os
 import tempfile
 import threading
 import time
 import uuid
-from datetime import timedelta
 from pathlib import Path
 from typing import Optional
 
-from dotenv import load_dotenv
-from fastapi import Depends, FastAPI, File, Form, HTTPException, UploadFile, status
+from fastapi import FastAPI, File, Form, HTTPException, Request, UploadFile, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel
 
-# Load environment variables from .env file BEFORE anything else
-load_dotenv()
-
-from .auth import (
-    ROLES,
-    User,
-    authenticate_user,
-    create_access_token,
-    decode_access_token,
-    get_user,
-    load_users_from_env,
-)
 from .claude_client import ClaudeTranslator
 from .processing import PDF_SUFFIX, translate_file_to_memory
 from .settings import get_settings
 from .terminology import Glossary, TranslationMemory
 
-# Configure logging with both console, file, and optional Loki handlers
+# Configure logging with both console and file handlers
 def setup_logging():
-    """Configure logging to write to console, file, and optionally Grafana Cloud Loki."""
-    import os
-    
+    """Configure logging to write to both console and file."""
     log_dir = Path(__file__).parent.parent.parent / "logs"
     log_dir.mkdir(parents=True, exist_ok=True)
     log_file = log_dir / "backend.log"
@@ -47,8 +31,8 @@ def setup_logging():
     # Create formatter
     formatter = logging.Formatter(
         '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-        datefmt='%Y-%m-%d %H:%M:%S'
-    )
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
     
     # Get root logger
     root_logger = logging.getLogger()
@@ -69,88 +53,6 @@ def setup_logging():
     file_handler.setFormatter(formatter)
     root_logger.addHandler(file_handler)
     
-    # Loki handler (optional, if configured)
-    loki_url = os.getenv("LOKI_URL")
-    loki_username = os.getenv("LOKI_USERNAME")
-    loki_password = os.getenv("LOKI_PASSWORD")
-    
-    if loki_url and loki_username and loki_password:
-        try:
-            import logging_loki
-            
-            # Validate URL format
-            if not loki_url.endswith("/loki/api/v1/push"):
-                logger = logging.getLogger(__name__)
-                logger.warning(f"LOKI_URL should end with '/loki/api/v1/push', got: {loki_url}")
-                logger.warning("Loki handler not enabled. Fix LOKI_URL to enable.")
-                return log_file
-            
-            # Create a wrapper handler that catches errors to prevent crashes
-            class SafeLokiHandler(logging.Handler):
-                """Wrapper around LokiHandler that catches errors to prevent app crashes."""
-                def __init__(self, loki_handler):
-                    super().__init__()
-                    self.loki_handler = loki_handler
-                    self.error_count = 0
-                    self.last_error = None
-                
-                def emit(self, record):
-                    try:
-                        self.loki_handler.emit(record)
-                        self.error_count = 0  # Reset on success
-                    except Exception as e:
-                        self.error_count += 1
-                        self.last_error = e
-                        # Only log error details occasionally to avoid spam
-                        if self.error_count == 1:
-                            logger = logging.getLogger(__name__)
-                            if "401" in str(e) or "Unauthorized" in str(e) or "invalid scope" in str(e).lower():
-                                logger.error("=" * 60)
-                                logger.error("Loki authentication failed (401/invalid scope)")
-                                logger.error("Common causes:")
-                                logger.error("  1. API token doesn't have 'logs:write' scope")
-                                logger.error("     → Go to: Grafana Cloud → Access Policies")
-                                logger.error("     → Create Access Policy with 'logs:write' scope")
-                                logger.error("     → Generate token from that policy")
-                                logger.error("  2. Wrong username (try Loki instance ID instead of user ID)")
-                                logger.error("     → Check: Grafana Cloud → Loki → Details → Instance ID")
-                                logger.error("     → Or use your user ID: Grafana Cloud → Profile → User ID")
-                                logger.error("  3. Wrong API token or URL format")
-                                logger.error("     → URL should end with: /loki/api/v1/push")
-                                logger.error("     → Token should start with 'glc_'")
-                                logger.error("=" * 60)
-                            else:
-                                logger.warning(f"Loki handler error (will retry silently): {type(e).__name__}: {e}")
-                        # Silently ignore subsequent errors to avoid log spam
-                        # The app continues working, just without Loki logging
-            
-            base_loki_handler = logging_loki.LokiHandler(
-                url=loki_url,
-                tags={
-                    "application": "legal-translator",
-                    "environment": os.getenv("ENVIRONMENT", "production"),
-                },
-                auth=(loki_username, loki_password),
-                version="1",
-            )
-            base_loki_handler.setLevel(logging.INFO)
-            base_loki_handler.setFormatter(formatter)
-            
-            # Wrap in safe handler
-            loki_handler = SafeLokiHandler(base_loki_handler)
-            loki_handler.setLevel(logging.INFO)
-            loki_handler.setFormatter(formatter)
-            
-            root_logger.addHandler(loki_handler)
-            logger = logging.getLogger(__name__)
-            logger.info("Loki logging handler enabled (errors will be caught silently)")
-        except ImportError:
-            logger = logging.getLogger(__name__)
-            logger.warning("python-logging-loki-v2 not installed, skipping Loki handler")
-        except Exception as e:
-            logger = logging.getLogger(__name__)
-            logger.warning(f"Failed to setup Loki handler: {e}")
-    
     return log_file
 
 # Setup logging on module import
@@ -159,43 +61,6 @@ logger = logging.getLogger(__name__)
 logger.info(f"Logging initialized. Log file: {log_file_path}")
 
 app = FastAPI(title="Legal Translator API", version="0.1.0")
-
-# Security scheme for JWT tokens
-security = HTTPBearer()
-
-@app.on_event("startup")
-async def startup_event():
-    """Log a distinctive test message on startup for Grafana tracking."""
-    import os
-    environment = os.getenv("ENVIRONMENT", "production")
-    
-    # Load users from environment variables (this triggers the loading)
-    from .auth import _load_users, _users, get_server_instance_id
-    _load_users()
-    
-    # Generate new server instance ID (invalidates all existing tokens)
-    server_instance_id = get_server_instance_id()
-    
-    logger.info("=" * 80)
-    logger.info("🚀 LEGAL TRANSLATOR API STARTED - GRAFANA TEST MARKER")
-    logger.info(f"Environment: {environment}")
-    logger.info(f"Server Instance ID: {server_instance_id} (all existing tokens invalidated)")
-    logger.info(f"Loaded {len(_users)} users from environment variables")
-    for username, user in _users.items():
-        logger.info(f"  User: {username}, Roles: {', '.join(sorted(user.roles))}")
-    logger.info("=" * 80)
-    logger.info("To find this log in Grafana, use query: {application=\"legal-translator\"} |= \"GRAFANA TEST MARKER\"")
-
-# Add middleware to log all requests and catch exceptions
-@app.middleware("http")
-async def log_requests_and_errors(request, call_next):
-    request_start_time = time.time()
-    try:
-        response = await call_next(request)
-        return response
-    except Exception as e:
-        logger.error(f"Unhandled exception in request: {e}", exc_info=True)
-        raise
 
 app.add_middleware(
     CORSMiddleware,
@@ -241,8 +106,7 @@ def find_glossary_files() -> list[Path]:
     glossaries = []
     for dir_path in [Path("glossary"), Path("tests/docs")]:
         if dir_path.exists():
-            found = list(dir_path.glob("*.csv"))
-            glossaries.extend(found)
+            glossaries.extend(dir_path.glob("*.csv"))
     return sorted(set(glossaries))
 
 
@@ -345,7 +209,7 @@ def _run_translation(job_id: str) -> None:
         source_lang = job["source_lang"]
         target_lang = job["target_lang"]
         glossary_path_str = job.get("glossary_path")
-        skip_memory = job.get("skip_memory", False)  # Default to False: use memory by default
+        skip_memory = job.get("skip_memory", True)
         custom_prompt = job.get("custom_prompt")
         
         # Verify input file exists and hash matches
@@ -570,148 +434,16 @@ def _run_translation(job_id: str) -> None:
 
 @app.get("/")
 async def root():
-    logger.info("[INTERACTION] GET / - API health check")
     return {"message": "Legal Translator API", "version": "0.1.0"}
-
-
-@app.get("/api/health")
-async def health_check():
-    """Public health check endpoint (no authentication required)."""
-    return {"status": "ok"}
-
-
-# Authentication endpoints
-class LoginRequest(BaseModel):
-    username: str
-    password: str
-
-
-class LoginResponse(BaseModel):
-    access_token: str
-    token_type: str
-    user: dict
-
-
-@app.post("/api/auth/login", response_model=LoginResponse)
-async def login(login_data: LoginRequest):
-    """Authenticate user and return JWT token."""
-    user = authenticate_user(login_data.username, login_data.password)
-    if not user:
-        logger.info(f"[INTERACTION] POST /api/auth/login - Failed login attempt for: {login_data.username}")
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect username or password",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-    
-    # Create access token
-    access_token_expires = timedelta(minutes=1440)  # 24 hours
-    access_token = create_access_token(
-        data={"sub": user.username, "roles": list(user.roles)},
-        expires_delta=access_token_expires,
-    )
-    
-    logger.info(f"[INTERACTION] POST /api/auth/login - Successful login: {user.username}, Roles: {', '.join(sorted(user.roles))}")
-    
-    return LoginResponse(
-        access_token=access_token,
-        token_type="bearer",
-        user=user.to_dict(),
-    )
-
-
-@app.get("/api/auth/me")
-async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)):
-    """Get current authenticated user information."""
-    token = credentials.credentials
-    payload = decode_access_token(token)
-    if payload is None:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid authentication credentials",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-    
-    username: str = payload.get("sub")
-    if username is None:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid authentication credentials",
-        )
-    
-    user = get_user(username)
-    if user is None:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="User not found",
-        )
-    
-    logger.info(f"[INTERACTION] GET /api/auth/me - User: {username}")
-    return user.to_dict()
-
-
-@app.get("/api/auth/roles")
-async def get_available_roles():
-    """Get list of available roles and their descriptions."""
-    logger.info("[INTERACTION] GET /api/auth/roles - Roles list requested")
-    return {"roles": ROLES}
-
-
-# Dependency to get current user from JWT token
-async def get_current_user_dependency(credentials: HTTPAuthorizationCredentials = Depends(security)) -> User:
-    """Dependency to extract and validate current user from JWT token."""
-    token = credentials.credentials
-    # #region agent log
-    import json
-    debug_log_path = "/Users/enrico/workspace/translator/.cursor/debug.log"
-    try:
-        with open(debug_log_path, "a") as f:
-            f.write(json.dumps({"location":"api.py:649","message":"get_current_user_dependency called","data":{"token_preview":token[:20] + "..." if len(token) > 20 else token},"timestamp":1735000000000,"sessionId":"debug-session","runId":"run1","hypothesisId":"C"})+"\n")
-    except: pass
-    # #endregion
-    payload = decode_access_token(token)
-    # #region agent log
-    try:
-        with open(debug_log_path, "a") as f:
-            f.write(json.dumps({"location":"api.py:655","message":"decode_access_token result","data":{"payload_is_none":payload is None,"has_username":payload.get("sub") if payload else None},"timestamp":1735000000000,"sessionId":"debug-session","runId":"run1","hypothesisId":"C"})+"\n")
-    except: pass
-    # #endregion
-    if payload is None:
-        logger.info("[INTERACTION] Token validation failed - invalid or expired token")
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid or expired authentication token. Please log in again.",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-    
-    username: str = payload.get("sub")
-    if username is None:
-        logger.info("[INTERACTION] Token missing username")
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid authentication credentials",
-        )
-    
-    user = get_user(username)
-    if user is None:
-        logger.info(f"[INTERACTION] User not found: {username}")
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="User not found",
-        )
-    
-    return user
 
 
 @app.get("/api/glossaries")
 async def list_glossaries():
-    glossaries = find_glossary_files()
-    logger.info(f"[INTERACTION] GET /api/glossaries - Found {len(glossaries)} glossaries")
-    return {"glossaries": [str(g) for g in glossaries]}
+    return {"glossaries": [str(g) for g in find_glossary_files()]}
 
 
 @app.get("/api/glossary/{glossary_name}/content")
-async def get_glossary_content(glossary_name: str, user: User = Depends(get_current_user_dependency)):
+async def get_glossary_content(glossary_name: str):
     """Get the content of a glossary file."""
     import csv
     
@@ -724,8 +456,6 @@ async def get_glossary_content(glossary_name: str, user: User = Depends(get_curr
             break
     
     if not glossary_path or not glossary_path.exists():
-        logger.error(f"[INTERACTION] GET /api/glossary/{glossary_name}/content - Not found")
-        logger.error(f"Glossary '{glossary_name}' not found. Found files: {[str(g) for g in glossary_files]}")
         raise HTTPException(status_code=404, detail=f"Glossary '{glossary_name}' not found")
     
     # Read and return glossary content
@@ -745,10 +475,9 @@ async def get_glossary_content(glossary_name: str, user: User = Depends(get_curr
                         "context": (row.get("context") or "").strip() or None
                     })
     except Exception as e:
-        logger.error(f"[INTERACTION] GET /api/glossary/{glossary_name}/content - Error: {e}")
+        logger.error(f"Error reading glossary {glossary_name}: {e}")
         raise HTTPException(status_code=500, detail=f"Error reading glossary: {str(e)}")
     
-    logger.info(f"[INTERACTION] GET /api/glossary/{glossary_name}/content - Returned {len(entries)} entries")
     return {
         "name": glossary_path.stem,
         "path": str(glossary_path),
@@ -757,24 +486,83 @@ async def get_glossary_content(glossary_name: str, user: User = Depends(get_curr
     }
 
 
+def _check_admin_role(request: Request) -> bool:
+    """
+    Check if the current user has admin role.
+    For MVP: checks X-User-Role header or username-based role mapping.
+    Returns False by default (deny access) unless explicitly granted admin role.
+    """
+    # Check for role in header (set by frontend) - this is the primary check
+    # FastAPI headers are case-insensitive, try both cases
+    user_role = (request.headers.get("X-User-Role") or request.headers.get("x-user-role") or "").strip().lower()
+    
+    # Explicitly check for "admin" role - must be exact match
+    if user_role == "admin":
+        logger.debug(f"Admin access granted via X-User-Role header: {user_role}")
+        return True
+    
+    # If role header is present but not "admin", deny access immediately
+    if user_role and user_role != "admin":
+        logger.debug(f"Access denied - non-admin role specified: '{user_role}'")
+        return False
+    
+    # Fallback: check username from header (if provided and no role header was set)
+    # FastAPI headers are case-insensitive, try both cases
+    username = (request.headers.get("X-Username") or request.headers.get("x-username") or "").strip()
+    if username:
+        # Check against ADMIN_USERS env var first
+        admin_users_env = os.getenv("ADMIN_USERS", "").strip()
+        if admin_users_env:
+            admin_users = [u.strip().lower() for u in admin_users_env.split(",") if u.strip()]
+            if username.lower() in admin_users:
+                logger.debug(f"Admin access granted via ADMIN_USERS env var for user: {username}")
+                return True
+        
+        # Only check username pattern if no explicit admin users list
+        # This is a fallback for MVP - username must contain "admin"
+        if not admin_users_env and "admin" in username.lower():
+            logger.debug(f"Admin access granted via username pattern for user: {username}")
+            return True
+    
+    # No admin role found - deny access (default deny)
+    logger.debug(f"Access denied - user_role: '{user_role}', username: '{username}'")
+    return False
+
+
 @app.get("/api/prompt")
-async def get_prompt(user: User = Depends(get_current_user_dependency)):
-    """Get the current translation prompt template. Admin only."""
-    if not user.has_role("admin"):
-        logger.info(f"[INTERACTION] GET /api/prompt - Access denied for user: {user.username}")
-        raise HTTPException(status_code=403, detail="Only administrators can access the prompt")
-    try:
-        from .claude_client import _load_prompt_template
-        prompt = _load_prompt_template()
-        logger.info(f"[INTERACTION] GET /api/prompt - Prompt loaded ({len(prompt)} chars) (User: {user.username})")
-        return {"prompt": prompt}
-    except Exception as e:
-        logger.error(f"[INTERACTION] GET /api/prompt - Error: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail=f"Failed to load prompt: {str(e)}")
+async def get_prompt(request: Request):
+    """
+    Get the current translation prompt template.
+    Only accessible to users with admin role.
+    The prompt is loaded in the background (module-level) but not returned to non-admin users.
+    """
+    # Log received headers for debugging
+    user_role_header = request.headers.get("x-user-role", "NOT_SET")
+    username_header = request.headers.get("x-username", "NOT_SET")
+    logger.info(f"[PROMPT ACCESS] X-User-Role: {user_role_header}, X-Username: {username_header}")
+    
+    # Check if user has admin role
+    is_admin = _check_admin_role(request)
+    logger.info(f"[PROMPT ACCESS] Admin check result: {is_admin}")
+    
+    if not is_admin:
+        # Prompt is still loaded in background (module-level PROMPT_TEMPLATE)
+        # but we don't return it to non-admin users
+        logger.warning(f"[PROMPT ACCESS] Access denied for user: {username_header} (role: {user_role_header})")
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Access denied. Admin role required to view prompt template."
+        )
+    
+    # User is admin - return the prompt
+    logger.info(f"[PROMPT ACCESS] Access granted for admin user: {username_header}")
+    from .claude_client import _load_prompt_template
+    prompt = _load_prompt_template()
+    return {"prompt": prompt}
 
 
 @app.post("/api/detect-language")
-async def detect_language(file: UploadFile = File(...), user: User = Depends(get_current_user_dependency)):
+async def detect_language(file: UploadFile = File(...)):
     """Detect the language of an uploaded document."""
     import tempfile
     
@@ -790,7 +578,6 @@ async def detect_language(file: UploadFile = File(...), user: User = Depends(get
         
         try:
             detected_lang = detect_language_from_file(temp_path)
-            logger.info(f"[INTERACTION] POST /api/detect-language - File: {file.filename}, Detected: {detected_lang} (User: {user.username})")
             return {"detected_language": detected_lang}
         finally:
             # Clean up temp file
@@ -808,7 +595,7 @@ async def start_translation(
     source_lang: str = Form("fr"),
     target_lang: str = Form("it"),
     use_glossary: bool = Form(False),
-    skip_memory: bool = Form(False),  # Default to False: use memory by default
+    skip_memory: bool = Form(True),
     custom_prompt: Optional[str] = Form(None),
     reference_doc: Optional[UploadFile] = File(None),
 ):
@@ -819,7 +606,6 @@ async def start_translation(
     request_timestamp = time.time()
     request_id = str(uuid.uuid4())[:8]
     
-    logger.info(f"[INTERACTION] POST /api/translate - File: {file.filename}, {source_lang}→{target_lang}, glossary={use_glossary}, skip_memory={skip_memory}")
     logger.info("=" * 80)
     logger.info(f"[REQUEST {request_id}] ===== NEW TRANSLATION REQUEST =====")
     logger.info(f"[REQUEST {request_id}] Timestamp: {request_timestamp}")
@@ -839,7 +625,6 @@ async def start_translation(
     logger.info(f"[REQUEST {request_id}] File hash: {file_hash}")
     logger.info(f"[REQUEST {request_id}] First 200 bytes: {file_content[:200]}")
     logger.info(f"[REQUEST {request_id}] Use glossary: {use_glossary}")
-    logger.info(f"[REQUEST {request_id}] Skip memory: {skip_memory}")
     
     # Determine glossary path - use default if enabled
     glossary_path = None
@@ -973,18 +758,14 @@ async def start_translation(
 
 
 @app.get("/api/translate/{job_id}/status")
-async def get_translation_status(job_id: str, user: User = Depends(get_current_user_dependency)):
+async def get_translation_status(job_id: str):
     if job_id not in translation_jobs:
-        logger.info(f"[INTERACTION] GET /api/translate/{job_id}/status - Job not found")
         raise HTTPException(status_code=404, detail=JOB_NOT_FOUND)
     
     job = translation_jobs[job_id]
-    status_val = job["status"]
-    progress = job.get("progress", 0)
-    logger.info(f"[INTERACTION] GET /api/translate/{job_id}/status - Status: {status_val}, Progress: {progress:.1%}")
     return TranslationStatus(
         job_id=job_id,
-        status=status_val,
+        status=job["status"],
         progress=job.get("progress"),
         current_paragraph=job.get("current_paragraph"),
         total_paragraphs=job.get("total_paragraphs"),
@@ -1001,21 +782,18 @@ async def download_translation(job_id: str):
     from fastapi.responses import Response
     
     if job_id not in translation_jobs:
-        logger.info(f"[INTERACTION] GET /api/translate/{job_id}/download - Job not found")
         raise HTTPException(status_code=404, detail=JOB_NOT_FOUND)
     
     job = translation_jobs[job_id]
     if job["status"] != "completed":
-        logger.info(f"[INTERACTION] GET /api/translate/{job_id}/download - Status: {job['status']} (not completed)")
         raise HTTPException(status_code=400, detail="Translation not completed")
     
     # Get PDF bytes from memory
     pdf_bytes = job.get("pdf_bytes")
     if not pdf_bytes:
-        logger.info(f"[INTERACTION] GET /api/translate/{job_id}/download - PDF not found")
         raise HTTPException(status_code=404, detail="PDF not found in memory")
     
-    logger.info(f"[INTERACTION] GET /api/translate/{job_id}/download - Serving PDF ({len(pdf_bytes):,} bytes)")
+    logger.info(f"[DOWNLOAD {job_id}] Serving PDF from memory: {len(pdf_bytes):,} bytes")
     
     # Generate filename
     source_lang = job.get("source_lang", "unknown")
@@ -1033,60 +811,51 @@ async def download_translation(job_id: str):
 
 
 @app.post("/api/translate/{job_id}/cancel")
-async def cancel_translation(job_id: str, user: User = Depends(get_current_user_dependency)):
+async def cancel_translation(job_id: str):
     """Cancel an ongoing translation job."""
     if job_id not in translation_jobs:
-        logger.info(f"[INTERACTION] POST /api/translate/{job_id}/cancel - Job not found")
         raise HTTPException(status_code=404, detail=JOB_NOT_FOUND)
     
     job = translation_jobs[job_id]
     if job["status"] not in ["pending", "in_progress"]:
-        logger.info(f"[INTERACTION] POST /api/translate/{job_id}/cancel - Status: {job['status']} (cannot cancel)")
         raise HTTPException(status_code=400, detail="Translation cannot be cancelled")
     
-    logger.info(f"[INTERACTION] POST /api/translate/{job_id}/cancel - Cancellation requested")
+    logger.info(f"Job {job_id}: Cancellation requested")
     job["cancelled"] = True
     
     return {"message": "Cancellation requested", "job_id": job_id}
 
 
 @app.get("/api/translate/{job_id}/report")
-async def get_translation_report(job_id: str, user: User = Depends(get_current_user_dependency)):
+async def get_translation_report(job_id: str):
     if job_id not in translation_jobs:
-        logger.info(f"[INTERACTION] GET /api/translate/{job_id}/report - Job not found")
         raise HTTPException(status_code=404, detail=JOB_NOT_FOUND)
     
     job = translation_jobs[job_id]
     if job["status"] != "completed":
-        logger.info(f"[INTERACTION] GET /api/translate/{job_id}/report - Status: {job['status']} (not completed)")
         raise HTTPException(status_code=400, detail="Translation not completed")
     
-    logger.info(f"[INTERACTION] GET /api/translate/{job_id}/report - Report retrieved")
     return job.get("report", {})
 
 
 @app.get("/api/translate/{job_id}/text")
-async def get_translated_text(job_id: str, user: User = Depends(get_current_user_dependency)):
+async def get_translated_text(job_id: str):
     """Get translated text as plain text."""
     from fastapi.responses import Response
     
     if job_id not in translation_jobs:
-        logger.info(f"[INTERACTION] GET /api/translate/{job_id}/text - Job not found")
         raise HTTPException(status_code=404, detail=JOB_NOT_FOUND)
     
     job = translation_jobs[job_id]
     if job["status"] != "completed":
-        logger.info(f"[INTERACTION] GET /api/translate/{job_id}/text - Status: {job['status']} (not completed)")
         raise HTTPException(status_code=400, detail="Translation not completed")
     
     translated_paragraphs = job.get("translated_text")
     if not translated_paragraphs:
-        logger.info(f"[INTERACTION] GET /api/translate/{job_id}/text - Text not found")
         raise HTTPException(status_code=404, detail="Translated text not found")
     
     # Join paragraphs with double newlines
     text_content = "\n\n".join(translated_paragraphs)
-    logger.info(f"[INTERACTION] GET /api/translate/{job_id}/text - Serving text ({len(text_content)} chars, {len(translated_paragraphs)} paragraphs)")
     
     return Response(
         content=text_content,
@@ -1095,37 +864,3 @@ async def get_translated_text(job_id: str, user: User = Depends(get_current_user
             "Content-Disposition": f'attachment; filename="translated_{job_id[:8]}.txt"',
         }
     )
-
-
-@app.get("/api/memory/export")
-async def export_memory(user: User = Depends(get_current_user_dependency)):
-    """
-    Export translation memory as JSON file.
-    
-    IMPORTANT: DigitalOcean App Platform uses ephemeral storage.
-    Runtime memory is LOST on redeploy. Export this file before redeploying
-    and merge it back into glossary/memory.json if you want to preserve it.
-    """
-    settings = get_settings()
-    memory_file = settings.data_root / "memory.json"
-    
-    if not memory_file.exists():
-        logger.info(f"[INTERACTION] GET /api/memory/export - Memory file not found")
-        raise HTTPException(status_code=404, detail="Memory file not found")
-    
-    try:
-        memory = TranslationMemory(memory_file)
-        record_count = len(memory)
-        logger.info(f"[INTERACTION] GET /api/memory/export - Exporting {record_count} memory records")
-        return FileResponse(
-            path=str(memory_file),
-            filename="memory.json",
-            media_type="application/json",
-            headers={
-                "Content-Disposition": "attachment; filename=memory.json",
-                "X-Memory-Records": str(record_count),
-            }
-        )
-    except Exception as e:
-        logger.error(f"[INTERACTION] GET /api/memory/export - Error: {e}", exc_info=True)
-        raise HTTPException(status_code=500, detail=f"Failed to export memory: {str(e)}")

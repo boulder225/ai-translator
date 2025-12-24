@@ -488,12 +488,12 @@ def write_pdf_to_bytes(
             # Parse highlighting tags
             parsed_text = _parse_highlighting_tags(text)
             clean_text = parsed_text.replace("\n", "<br/>")
-        
+            
             # CRITICAL FIX: Always remove <para> tags before creating Paragraph (unconditional)
             clean_text = re.sub(r'</?para>', '', clean_text, flags=re.IGNORECASE)
-        
+            
             story.append(Paragraph(clean_text, styles["BodyText"]))
-            story.append(Spacer(1, 12))
+        story.append(Spacer(1, 12))
     
     doc.build(story)
     pdf_bytes = buffer.getvalue()

@@ -2,6 +2,16 @@ import axios from 'axios';
 
 const API_BASE_URL = '/api';
 
+// Helper to get user role from localStorage
+const getUserRole = () => {
+  return localStorage.getItem('userRole') || '';
+};
+
+// Helper to get username from localStorage
+const getUsername = () => {
+  return localStorage.getItem('username') || '';
+};
+
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
@@ -9,49 +19,25 @@ const api = axios.create({
   },
 });
 
-// Add auth token to requests if available
+// Add request interceptor to include user role and username in headers
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('auth_token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+    const userRole = getUserRole();
+    const username = getUsername();
+    
+    if (userRole) {
+      config.headers['X-User-Role'] = userRole;
     }
+    if (username) {
+      config.headers['X-Username'] = username;
+    }
+    
     return config;
   },
   (error) => {
     return Promise.reject(error);
   }
 );
-
-// Log token validation failures for debugging
-api.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response?.status === 401) {
-      console.log('[AUTH] 401 Unauthorized - token invalid or expired');
-      console.log('[AUTH] Error detail:', error.response?.data?.detail);
-    }
-    return Promise.reject(error);
-  }
-);
-
-// Handle 401/403 errors (unauthorized/forbidden) - redirect to login
-api.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response?.status === 401 || error.response?.status === 403) {
-      localStorage.removeItem('auth_token');
-      localStorage.removeItem('user');
-      // Only reload if we're not already on the login page
-      if (!window.location.pathname.includes('login')) {
-        window.location.reload();
-      }
-    }
-    return Promise.reject(error);
-  }
-);
-
-export default api;
 
 export const listGlossaries = async () => {
   const response = await api.get('/glossaries');
@@ -64,7 +50,16 @@ export const getGlossaryContent = async (glossaryName) => {
 };
 
 export const getPrompt = async () => {
-  const response = await api.get('/prompt');
+  // Include user role headers for admin check
+  const userRole = getUserRole();
+  const username = getUsername();
+  
+  const response = await api.get('/prompt', {
+    headers: {
+      'X-User-Role': userRole,
+      'X-Username': username,
+    },
+  });
   return response.data;
 };
 
@@ -98,16 +93,10 @@ export const startTranslation = async (file, options) => {
     formData.append('custom_prompt', options.custom_prompt);
   }
 
-  const token = localStorage.getItem('auth_token');
-  const headers = {
-    'Content-Type': 'multipart/form-data',
-  };
-  if (token) {
-    headers.Authorization = `Bearer ${token}`;
-  }
-
   const response = await axios.post(`${API_BASE_URL}/translate`, formData, {
-    headers,
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
   });
   
   return response.data;

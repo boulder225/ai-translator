@@ -6,94 +6,77 @@ function Login({ onLogin }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setError('');
-    setLoading(true);
 
-    try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password }),
-      });
-
-      if (!response.ok) {
-        let errorMessage = 'Login failed';
-        try {
-          const data = await response.json();
-          errorMessage = data.detail || `HTTP ${response.status}: ${response.statusText}`;
-        } catch (e) {
-          errorMessage = `HTTP ${response.status}: ${response.statusText}`;
-        }
-        throw new Error(errorMessage);
-      }
-
-      const data = await response.json();
-      localStorage.setItem('auth_token', data.access_token);
-      localStorage.setItem('user', JSON.stringify(data.user));
-      
-      onLogin(data.user, data.access_token);
-    } catch (err) {
-      setError(err.message || 'Login failed. Please check your credentials.');
-    } finally {
-      setLoading(false);
+    // Simple validation - for MVP, accept any non-empty credentials
+    if (!username.trim() || !password.trim()) {
+      setError('Please enter both username and password');
+      return;
     }
+
+    // Determine user role based on username
+    // For MVP: check if username contains "admin" or matches admin pattern
+    const usernameLower = username.trim().toLowerCase();
+    let userRole = 'user'; // default role
+    
+    // Check if username indicates admin (contains "admin" or matches admin pattern)
+    if (usernameLower.includes('admin') || usernameLower.startsWith('admin_')) {
+      userRole = 'admin';
+    }
+
+    // Store login state in localStorage
+    localStorage.setItem('isAuthenticated', 'true');
+    localStorage.setItem('username', username.trim());
+    localStorage.setItem('userRole', userRole);
+    
+    // Call the onLogin callback
+    onLogin();
   };
 
   return (
-    <div className="login-container">
-      <div className="login-card">
-        <div className="login-header">
-          <img src={logoLexDeep} alt="LexDeep" className="login-logo" />
-          <h1>Legal Translator</h1>
-          <p className="login-subtitle">Sign in to continue</p>
+    <div className="Login">
+      <div className="Login-container">
+        <div className="Login-header">
+          <img src={logoLexDeep} alt="LexDeep" className="Login-logo" />
+          <h1 className="Login-title">Welcome to LexDeep</h1>
+          <p className="Login-subtitle">Legal Document Translation Platform</p>
         </div>
-
-        <form onSubmit={handleSubmit} className="login-form">
+        
+        <form className="Login-form" onSubmit={handleSubmit}>
           {error && (
-            <div className="login-error">
+            <div className="Login-error">
               {error}
             </div>
           )}
-
-          <div className="login-field">
+          
+          <div className="Login-form-group">
             <label htmlFor="username">Username</label>
             <input
               id="username"
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              required
-              autoFocus
-              disabled={loading}
               placeholder="Enter your username"
+              autoFocus
             />
           </div>
-
-          <div className="login-field">
+          
+          <div className="Login-form-group">
             <label htmlFor="password">Password</label>
             <input
               id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              required
-              disabled={loading}
               placeholder="Enter your password"
             />
           </div>
-
-          <button
-            type="submit"
-            className="login-button"
-            disabled={loading || !username || !password}
-          >
-            {loading ? 'Signing in...' : 'Sign in'}
+          
+          <button type="submit" className="Login-button">
+            Log In
           </button>
         </form>
       </div>
@@ -102,3 +85,4 @@ function Login({ onLogin }) {
 }
 
 export default Login;
+

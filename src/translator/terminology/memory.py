@@ -181,14 +181,3 @@ class TranslationMemory:
 
     def __iter__(self) -> Iterable[TranslationRecord]:
         return iter(self._records.values())
-
-
-
-
-
-
-
-
-
-
-

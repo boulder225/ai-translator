@@ -73,3 +73,5 @@ Professional logo and wordmark designs following DeepL's visual identity.
 - Compatible with all modern browsers
 
 
+
+
