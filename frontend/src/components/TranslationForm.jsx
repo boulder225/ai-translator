@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { startTranslation, getPrompt, detectLanguage, getGlossaryContent } from '../services/api';
 import './TranslationForm.css';
 
-function TranslationForm({ onTranslationStart }) {
+function TranslationForm({ onTranslationStart, userRole }) {
   const [file, setFile] = useState(null);
   const [referenceDoc, setReferenceDoc] = useState(null);
   const [sourceLang, setSourceLang] = useState('fr');
@@ -46,11 +46,13 @@ function TranslationForm({ onTranslationStart }) {
     };
   }, [showToolbar]);
 
-  // Load default prompt on component mount
+  // Load default prompt on component mount (role-specific)
   useEffect(() => {
     const loadDefaultPrompt = async () => {
       try {
         setLoadingPrompt(true);
+        // GetPrompt will return role-specific prompt for admin users
+        // Non-admin users get 403 but prompt is loaded in background by backend
         const data = await getPrompt();
         if (data.prompt) {
           setCustomPrompt(data.prompt);
@@ -58,9 +60,10 @@ function TranslationForm({ onTranslationStart }) {
       } catch (err) {
         // If user is not admin (403), prompt is loaded in background but not shown
         // This is expected behavior - non-admin users can still use custom prompts
+        // The backend will use the role-specific prompt automatically
         if (err.response?.status === 403) {
-          console.log('Prompt access restricted to admin users. You can still enter a custom prompt.');
-          setCustomPrompt('');
+          console.log('Prompt access restricted to admin users. Role-specific prompt will be used automatically by backend.');
+          setCustomPrompt(''); // Clear for non-admin users
         } else {
           console.error('Failed to load default prompt:', err);
           setCustomPrompt('');
@@ -203,28 +206,30 @@ function TranslationForm({ onTranslationStart }) {
           </div>
         </div>
 
-        <div className="form-group">
-          <label htmlFor="custom_prompt">
-            Translation Prompt
-            {loadingPrompt && <span className="loading-indicator"> (Loading...)</span>}
-          </label>
-          <textarea
-            id="custom_prompt"
-            value={customPrompt}
-            onChange={(e) => setCustomPrompt(e.target.value)}
-            placeholder={loadingPrompt ? "Loading default prompt..." : "Enter custom prompt for translation..."}
-            disabled={loading || loadingPrompt}
-            rows={15}
-            style={{
-              fontFamily: 'monospace',
-              fontSize: '0.875rem',
-              lineHeight: '1.5',
-            }}
-          />
-          <p className="help-text">
-            Default prompt is preloaded. You can modify it to customize the translation behavior.
-          </p>
-        </div>
+        {userRole === 'admin' && (
+          <div className="form-group">
+            <label htmlFor="custom_prompt">
+              Translation Prompt
+              {loadingPrompt && <span className="loading-indicator"> (Loading...)</span>}
+            </label>
+            <textarea
+              id="custom_prompt"
+              value={customPrompt}
+              onChange={(e) => setCustomPrompt(e.target.value)}
+              placeholder={loadingPrompt ? "Loading default prompt..." : "Enter custom prompt for translation..."}
+              disabled={loading || loadingPrompt}
+              rows={15}
+              style={{
+                fontFamily: "'TX-02 Berkeley Mono', 'Berkeley Mono', monospace",
+                fontSize: '0.875rem',
+                lineHeight: '1.5',
+              }}
+            />
+            <p className="help-text">
+              Default prompt is preloaded. You can modify it to customize the translation behavior.
+            </p>
+          </div>
+        )}
 
         <button
           type="submit"

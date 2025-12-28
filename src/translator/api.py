@@ -211,6 +211,16 @@ def _run_translation(job_id: str) -> None:
         glossary_path_str = job.get("glossary_path")
         skip_memory = job.get("skip_memory", True)
         custom_prompt = job.get("custom_prompt")
+        user_role = job.get("user_role", "")
+        # #region agent log
+        import json
+        log_path = "/Users/enrico/workspace/translator/.cursor/debug.log"
+        try:
+            with open(log_path, "a") as f:
+                f.write(json.dumps({"sessionId": "debug-session", "runId": "run1", "hypothesisId": "role-check", "location": "api.py:214", "message": "User role from job storage", "data": {"job_id": job_id, "user_role": user_role, "user_role_length": len(user_role) if user_role else 0, "job_keys": list(job.keys())}, "timestamp": __import__("time").time() * 1000}) + "\n")
+        except Exception:
+            pass
+        # #endregion
         
         # Verify input file exists and hash matches
         if not input_file_path.exists():
@@ -288,11 +298,30 @@ def _run_translation(job_id: str) -> None:
                 else:
                     logger.warning(f"Job {job_id}: Reference doc path provided but file not found: {reference_doc_path_obj}")
             
+            # Determine prompt to use: custom_prompt if provided, otherwise role-specific prompt
+            from .claude_client import _load_prompt_template_for_role
+            # #region agent log
+            import json
+            log_path = "/Users/enrico/workspace/translator/.cursor/debug.log"
+            try:
+                with open(log_path, "a") as f:
+                    f.write(json.dumps({"sessionId": "debug-session", "runId": "run1", "hypothesisId": "role-check", "location": "api.py:305", "message": "Loading prompt for role", "data": {"job_id": job_id, "user_role": user_role, "user_role_repr": repr(user_role), "custom_prompt_provided": bool(custom_prompt)}, "timestamp": __import__("time").time() * 1000}) + "\n")
+            except Exception:
+                pass
+            # #endregion
+            prompt_to_use = custom_prompt
+            if not prompt_to_use:
+                # Use role-specific prompt if no custom prompt provided
+                prompt_to_use = _load_prompt_template_for_role(user_role)
+                logger.info(f"Job {job_id}: Using role-specific prompt for role: '{user_role}' (length: {len(user_role) if user_role else 0})")
+            else:
+                logger.info(f"Job {job_id}: Using custom prompt provided by user")
+            
             # Create translator
             translator = ClaudeTranslator(
                 api_key=settings.anthropic_api_key,
                 dry_run=False,
-                custom_prompt_template=custom_prompt,
+                custom_prompt_template=prompt_to_use,
             )
             
             # Progress callback
@@ -588,9 +617,9 @@ async def get_user_role(request: Request):
 @app.get("/api/prompt")
 async def get_prompt(request: Request):
     """
-    Get the current translation prompt template.
-    Only accessible to users with admin role.
-    The prompt is loaded in the background (module-level) but not returned to non-admin users.
+    Get the translation prompt template for the current user's role.
+    Only accessible to users with admin role for viewing.
+    Non-admin users have the prompt loaded in background but cannot view it.
     """
     # Log received headers for debugging
     user_role_header = request.headers.get("x-user-role", "NOT_SET")
@@ -602,7 +631,7 @@ async def get_prompt(request: Request):
     logger.info(f"[PROMPT ACCESS] Admin check result: {is_admin}")
     
     if not is_admin:
-        # Prompt is still loaded in background (module-level PROMPT_TEMPLATE)
+        # Prompt is still loaded in background (module-level) based on role
         # but we don't return it to non-admin users
         logger.warning(f"[PROMPT ACCESS] Access denied for user: {username_header} (role: {user_role_header})")
         raise HTTPException(
@@ -610,11 +639,13 @@ async def get_prompt(request: Request):
             detail="Access denied. Admin role required to view prompt template."
         )
     
-    # User is admin - return the prompt
+    # User is admin - return the role-specific prompt
     logger.info(f"[PROMPT ACCESS] Access granted for admin user: {username_header}")
-    from .claude_client import _load_prompt_template
-    prompt = _load_prompt_template()
-    return {"prompt": prompt}
+    from .claude_client import _load_prompt_template_for_role
+    # Get role from header to return appropriate prompt
+    role = user_role_header if user_role_header != "NOT_SET" else ""
+    prompt = _load_prompt_template_for_role(role)
+    return {"prompt": prompt, "role": role}
 
 
 @app.post("/api/detect-language")
@@ -647,6 +678,7 @@ async def detect_language(file: UploadFile = File(...)):
 
 @app.post("/api/translate", status_code=status.HTTP_202_ACCEPTED)
 async def start_translation(
+    request: Request,
     file: UploadFile = File(...),
     source_lang: str = Form("fr"),
     target_lang: str = Form("it"),
@@ -657,6 +689,18 @@ async def start_translation(
 ):
     """Start translation job. Each job is completely isolated."""
     import time
+    
+    # Get user role from headers for role-specific prompts
+    user_role = (request.headers.get("X-User-Role") or request.headers.get("x-user-role") or "").strip()
+    # #region agent log
+    import json
+    log_path = "/Users/enrico/workspace/translator/.cursor/debug.log"
+    try:
+        with open(log_path, "a") as f:
+            f.write(json.dumps({"sessionId": "debug-session", "runId": "run1", "hypothesisId": "role-check", "location": "api.py:677", "message": "User role from headers in start_translation", "data": {"user_role": user_role, "user_role_length": len(user_role) if user_role else 0, "x_user_role_header": request.headers.get("X-User-Role"), "x_user_role_lower_header": request.headers.get("x-user-role")}, "timestamp": __import__("time").time() * 1000}) + "\n")
+    except Exception:
+        pass
+    # #endregion
     
     # Track this request
     request_timestamp = time.time()
@@ -790,6 +834,7 @@ async def start_translation(
         "use_glossary": use_glossary,
         "skip_memory": skip_memory,
         "custom_prompt": custom_prompt,
+        "user_role": user_role,  # Store user role for role-specific prompts
         "reference_doc_path": str(reference_doc_path) if reference_doc_path else None,
         "progress": 0.0,
         "current_paragraph": 0,

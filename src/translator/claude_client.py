@@ -14,6 +14,8 @@ logger = logging.getLogger(__name__)
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 PROMPT_FILE = PROJECT_ROOT / "prompt.md"
+PROMPT_TRANSLATOR_FILE = PROJECT_ROOT / "prompt-translator.md"
+PROMPT_REVIEWER_FILE = PROJECT_ROOT / "prompt-reviewer.md"
 
 
 def _load_prompt_template() -> str:
@@ -28,6 +30,33 @@ def _load_prompt_template() -> str:
         "Always preserve numbering, respect capitalization, and never add commentary. "
         "Never refuse to translate - always provide a translation."
     )
+
+
+def _load_prompt_template_for_role(role: str) -> str:
+    """
+    Load prompt template based on user role.
+    - translator role: use default prompt.md
+    - reviewer role: use prompt-reviewer.md
+    - admin and other roles: use default prompt.md
+    Returns role-specific prompt if available, otherwise returns default prompt.
+    """
+    role_lower = role.strip().lower() if role else ""
+    
+    if role_lower == "reviewer":
+        if PROMPT_REVIEWER_FILE.exists():
+            template = PROMPT_REVIEWER_FILE.read_text(encoding="utf-8").strip()
+            print(f"[prompt] Loaded reviewer prompt template from {PROMPT_REVIEWER_FILE}")
+            return template
+        return (
+            "You are an expert reviewer specializing in translation quality assurance. "
+            "Review the translation for accuracy, completeness, quality, and consistency. "
+            "Provide a revised translation that addresses any issues found. "
+            "For legal, insurance, or administrative documents, use formal professional tone. "
+            "Always preserve numbering, respect capitalization, and never add commentary."
+        )
+    else:
+        # Default prompt for translator, admin, and other roles
+        return _load_prompt_template()
 
 
 PROMPT_TEMPLATE = _load_prompt_template()
@@ -84,8 +113,24 @@ class ClaudeTranslator:
     custom_prompt_template: str | None = None  # Optional custom prompt template
 
     def __post_init__(self) -> None:
+        # #region agent log
+        import json
+        log_path = "/Users/enrico/workspace/translator/.cursor/debug.log"
+        try:
+            with open(log_path, "a") as f:
+                f.write(json.dumps({"sessionId": "debug-session", "runId": "run1", "hypothesisId": "A,B,E", "location": "claude_client.py:115", "message": "ClaudeTranslator.__post_init__ entry", "data": {"api_key_exists": bool(self.api_key), "api_key_length": len(self.api_key) if self.api_key else 0, "api_key_first_3": self.api_key[:3] if self.api_key and len(self.api_key) >= 3 else "", "api_key_last_3": self.api_key[-3:] if self.api_key and len(self.api_key) >= 3 else "", "dry_run": self.dry_run}, "timestamp": __import__("time").time() * 1000}) + "\n")
+        except Exception:
+            pass
+        # #endregion
         if not self.dry_run and not self.api_key:
             raise RuntimeError("ANTHROPIC_API_KEY is required unless dry_run is enabled.")
+        # #region agent log
+        try:
+            with open(log_path, "a") as f:
+                f.write(json.dumps({"sessionId": "debug-session", "runId": "run1", "hypothesisId": "E", "location": "claude_client.py:117", "message": "Creating Anthropic client", "data": {"api_key_provided": bool(self.api_key), "api_key_length": len(self.api_key) if self.api_key else 0}, "timestamp": __import__("time").time() * 1000}) + "\n")
+        except Exception:
+            pass
+        # #endregion
         self._client = Anthropic(api_key=self.api_key) if not self.dry_run else None
         # Use custom prompt if provided, otherwise use default
         self._prompt_template = self.custom_prompt_template or PROMPT_TEMPLATE
@@ -190,6 +235,16 @@ class ClaudeTranslator:
         import time
         start_time = time.time()
         
+        # #region agent log
+        import json
+        log_path = "/Users/enrico/workspace/translator/.cursor/debug.log"
+        try:
+            with open(log_path, "a") as f:
+                f.write(json.dumps({"sessionId": "debug-session", "runId": "run1", "hypothesisId": "E", "location": "claude_client.py:238", "message": "Before API call", "data": {"client_exists": self._client is not None, "api_key_set": bool(self.api_key), "api_key_length": len(self.api_key) if self.api_key else 0, "model": self.model}, "timestamp": time.time() * 1000}) + "\n")
+        except Exception:
+            pass
+        # #endregion
+        
         try:
             response = self._client.messages.create(
                 model=self.model,
@@ -219,6 +274,31 @@ class ClaudeTranslator:
             return translated
         except Exception as e:
             elapsed_time = time.time() - start_time
+            # #region agent log
+            import json
+            log_path = "/Users/enrico/workspace/translator/.cursor/debug.log"
+            try:
+                error_details = {
+                    "error_type": type(e).__name__,
+                    "error_message": str(e),
+                    "elapsed_time": elapsed_time,
+                    "api_key_exists": bool(self.api_key),
+                    "api_key_length": len(self.api_key) if self.api_key else 0,
+                    "api_key_first_3": self.api_key[:3] if self.api_key and len(self.api_key) >= 3 else "",
+                    "api_key_last_3": self.api_key[-3:] if self.api_key and len(self.api_key) >= 3 else "",
+                }
+                # Check if it's an API error with more details
+                if hasattr(e, 'status_code'):
+                    error_details["status_code"] = e.status_code
+                if hasattr(e, 'response'):
+                    error_details["has_response"] = True
+                if hasattr(e, 'body'):
+                    error_details["body_preview"] = str(e.body)[:200] if e.body else None
+                with open(log_path, "a") as f:
+                    f.write(json.dumps({"sessionId": "debug-session", "runId": "run1", "hypothesisId": "A,B,C,D,E", "location": "claude_client.py:274", "message": "API call exception", "data": error_details, "timestamp": time.time() * 1000}) + "\n")
+            except Exception:
+                pass
+            # #endregion
             logger.error("=" * 80)
             logger.error("❌ CLAUDE API CALL FAILED")
             logger.error("=" * 80)
@@ -303,6 +383,16 @@ class ClaudeTranslator:
         import time
         start_time = time.time()
         
+        # #region agent log
+        import json
+        log_path = "/Users/enrico/workspace/translator/.cursor/debug.log"
+        try:
+            with open(log_path, "a") as f:
+                f.write(json.dumps({"sessionId": "debug-session", "runId": "run1", "hypothesisId": "E", "location": "claude_client.py:386", "message": "translate_document: Before API call", "data": {"client_exists": self._client is not None, "api_key_set": bool(self.api_key), "api_key_length": len(self.api_key) if self.api_key else 0, "api_key_first_10": self.api_key[:10] if self.api_key and len(self.api_key) >= 10 else "", "api_key_last_10": self.api_key[-10:] if self.api_key and len(self.api_key) >= 10 else "", "model": self.model}, "timestamp": time.time() * 1000}) + "\n")
+        except Exception:
+            pass
+        # #endregion
+        
         try:
             response = self._client.messages.create(
                 model=self.model,
@@ -331,6 +421,31 @@ class ClaudeTranslator:
             return translated
         except Exception as e:
             elapsed_time = time.time() - start_time
+            # #region agent log
+            import json
+            log_path = "/Users/enrico/workspace/translator/.cursor/debug.log"
+            try:
+                error_details = {
+                    "error_type": type(e).__name__,
+                    "error_message": str(e),
+                    "elapsed_time": elapsed_time,
+                    "api_key_exists": bool(self.api_key),
+                    "api_key_length": len(self.api_key) if self.api_key else 0,
+                    "api_key_first_10": self.api_key[:10] if self.api_key and len(self.api_key) >= 10 else "",
+                    "api_key_last_10": self.api_key[-10:] if self.api_key and len(self.api_key) >= 10 else "",
+                    "api_key_starts_with_sk_ant": self.api_key.startswith("sk-ant") if self.api_key else False,
+                }
+                if hasattr(e, 'status_code'):
+                    error_details["status_code"] = e.status_code
+                if hasattr(e, 'response'):
+                    error_details["has_response"] = True
+                if hasattr(e, 'body'):
+                    error_details["body_preview"] = str(e.body)[:200] if e.body else None
+                with open(log_path, "a") as f:
+                    f.write(json.dumps({"sessionId": "debug-session", "runId": "run1", "hypothesisId": "A,B,C,D,E", "location": "claude_client.py:411", "message": "translate_document: API call exception", "data": error_details, "timestamp": time.time() * 1000}) + "\n")
+            except Exception:
+                pass
+            # #endregion
             logger.error("=" * 80)
             logger.error("❌ CLAUDE API CALL FAILED")
             logger.error("=" * 80)

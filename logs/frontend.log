@@ -3,7 +3,22 @@
 > vite
 
 
-  VITE v5.4.21  ready in 229 ms
+  VITE v5.4.21  ready in 173 ms
 
   ➜  Local:   http://localhost:5173/
-  ➜  Network: http://192.168.1.6:5173/
+  ➜  Network: http://192.168.1.193:5173/
+7:31:13 PM [vite] http proxy error: /api/prompt
+Error: connect ETIMEDOUT 127.0.0.1:8000
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1555:16)
+7:31:18 PM [vite] http proxy error: /api/prompt
+Error: connect ETIMEDOUT 127.0.0.1:8000
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1555:16)
+7:31:18 PM [vite] http proxy error: /api/prompt
+Error: connect ETIMEDOUT 127.0.0.1:8000
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1555:16)
+7:31:33 PM [vite] http proxy error: /api/detect-language
+Error: connect ETIMEDOUT 127.0.0.1:8000
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1555:16)
+7:31:44 PM [vite] http proxy error: /api/user-role
+Error: connect ETIMEDOUT 127.0.0.1:8000
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1555:16)

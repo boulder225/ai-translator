@@ -191,6 +191,7 @@ function App() {
         {!currentJob ? (
           <TranslationForm
             onTranslationStart={handleTranslationStart}
+            userRole={userRole}
           />
         ) : (
           <TranslationStatus
