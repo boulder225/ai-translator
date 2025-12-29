@@ -4,7 +4,6 @@ import Login from './components/Login';
 import TranslationForm from './components/TranslationForm';
 import TranslationStatus from './components/TranslationStatus';
 import { getTranslationStatus } from './services/api';
-import logoLexDeep from './assets/logos/logo-lexdeep-transparent.png';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -13,6 +12,19 @@ function App() {
   const [report, setReport] = useState(null);
   const [username, setUsername] = useState('');
   const [userRole, setUserRole] = useState('');
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem('theme') || 'light';
+  });
+
+  // Apply theme to document
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'light' ? 'dark' : 'light');
+  };
 
   // Check authentication status on mount
   useEffect(() => {
@@ -105,9 +117,6 @@ function App() {
     <div className="App">
       <nav className="App-nav">
         <div className="nav-container">
-          <div className="nav-logo">
-            <img src={logoLexDeep} alt="LexDeep" className="nav-logo-image" />
-          </div>
           <div className="nav-menu">
             {report && report.stats ? (
               <div className="nav-stats">
@@ -149,15 +158,20 @@ function App() {
                   </>
                 )}
               </div>
-            ) : (
-              <p className="nav-tagline">Translate legal documents using controlled AI with glossary and memory support</p>
-            )}
+            ) : null}
           </div>
           <div className="nav-actions">
             <div className="nav-user-info">
               <span className="nav-username">{username}</span>
               <span className="nav-user-role">{userRole}</span>
             </div>
+            <button 
+              className="nav-button nav-button-secondary theme-toggle"
+              onClick={toggleTheme}
+              title={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
+            >
+              {theme === 'light' ? '🌙' : '☀️'}
+            </button>
             <button 
               className="nav-button nav-button-secondary"
               onClick={handleLogout}

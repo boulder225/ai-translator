@@ -226,28 +226,28 @@ def _run_translation(job_id: str) -> None:
         if not input_file_path.exists():
             raise FileNotFoundError(f"Input file not found: {input_file_path}")
         
-            # Read and verify file content
-            logger.info(f"Job {job_id}: [FILE VERIFICATION] Opening file: {input_file_path}")
-            logger.info(f"Job {job_id}: [FILE VERIFICATION] File absolute path: {input_file_path.resolve()}")
-            logger.info(f"Job {job_id}: [FILE VERIFICATION] File exists: {input_file_path.exists()}")
-            
-            with open(input_file_path, 'rb') as f:
-                file_content = f.read()
-                actual_hash = hashlib.md5(file_content).hexdigest()
-            
-            logger.info(f"Job {job_id}: [FILE VERIFICATION] Read {len(file_content):,} bytes from file")
-            logger.info(f"Job {job_id}: [FILE VERIFICATION] Expected hash: {expected_hash}")
-            logger.info(f"Job {job_id}: [FILE VERIFICATION] Actual hash: {actual_hash}")
-            logger.info(f"Job {job_id}: [FILE VERIFICATION] First 100 bytes: {file_content[:100]}")
-            
-            if actual_hash != expected_hash:
-                logger.error(f"Job {job_id}: [FILE VERIFICATION] HASH MISMATCH!")
-                logger.error(f"Job {job_id}: [FILE VERIFICATION] Expected: {expected_hash[:16]}...")
-                logger.error(f"Job {job_id}: [FILE VERIFICATION] Got: {actual_hash[:16]}...")
-                raise ValueError(f"File hash mismatch! Expected {expected_hash[:16]}..., got {actual_hash[:16]}...")
-            
-            logger.info(f"Job {job_id}: [FILE VERIFICATION] Hash verified successfully")
-            logger.info(f"Job {job_id}: [FILE VERIFICATION] File: {input_file_path.name}, Size: {len(file_content):,} bytes")
+        # Read and verify file content
+        logger.info(f"Job {job_id}: [FILE VERIFICATION] Opening file: {input_file_path}")
+        logger.info(f"Job {job_id}: [FILE VERIFICATION] File absolute path: {input_file_path.resolve()}")
+        logger.info(f"Job {job_id}: [FILE VERIFICATION] File exists: {input_file_path.exists()}")
+        
+        with open(input_file_path, 'rb') as f:
+            file_content = f.read()
+            actual_hash = hashlib.md5(file_content).hexdigest()
+        
+        logger.info(f"Job {job_id}: [FILE VERIFICATION] Read {len(file_content):,} bytes from file")
+        logger.info(f"Job {job_id}: [FILE VERIFICATION] Expected hash: {expected_hash}")
+        logger.info(f"Job {job_id}: [FILE VERIFICATION] Actual hash: {actual_hash}")
+        logger.info(f"Job {job_id}: [FILE VERIFICATION] First 100 bytes: {file_content[:100]}")
+        
+        if actual_hash != expected_hash:
+            logger.error(f"Job {job_id}: [FILE VERIFICATION] HASH MISMATCH!")
+            logger.error(f"Job {job_id}: [FILE VERIFICATION] Expected: {expected_hash[:16]}...")
+            logger.error(f"Job {job_id}: [FILE VERIFICATION] Got: {actual_hash[:16]}...")
+            raise ValueError(f"File hash mismatch! Expected {expected_hash[:16]}..., got {actual_hash[:16]}...")
+        
+        logger.info(f"Job {job_id}: [FILE VERIFICATION] Hash verified successfully")
+        logger.info(f"Job {job_id}: [FILE VERIFICATION] File: {input_file_path.name}, Size: {len(file_content):,} bytes")
         
         # Create completely isolated temporary directory for this job
         job_temp_dir = tempfile.mkdtemp(prefix=f"translation_{job_id}_")
@@ -332,7 +332,14 @@ def _run_translation(job_id: str) -> None:
                 
                 job["current_paragraph"] = idx
                 job["total_paragraphs"] = total
-                job["progress"] = idx / total if total > 0 else 0.0
+                # Don't set progress to 100% until all paragraphs are done AND post-processing is complete
+                # Reserve 10% for post-processing (PDF generation, report building, etc.)
+                if idx >= total:
+                    # All paragraphs translated, but still processing
+                    job["progress"] = 0.90  # 90% - still need to generate PDF and finalize
+                else:
+                    # Calculate progress as percentage of paragraph translation (90% of total work)
+                    job["progress"] = (idx / total) * 0.90 if total > 0 else 0.0
             
             # Run translation - verify file again before calling translate_file_to_memory
             logger.info(f"Job {job_id}: [PRE-TRANSLATE] About to call translate_file_to_memory")

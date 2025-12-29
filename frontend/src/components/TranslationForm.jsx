@@ -159,10 +159,10 @@ function TranslationForm({ onTranslationStart, userRole }) {
           {file && (
               <p className="file-info">
                 Selected: {file.name} ({(file.size / 1024).toFixed(2)} KB)
-                {detectingLanguage && <span style={{ marginLeft: '0.5rem', color: '#666' }}>Detecting language...</span>}
+                {detectingLanguage && <span className="detecting-language-text" style={{ marginLeft: '0.5rem' }}>Detecting language...</span>}
               </p>
           )}
-              <p className="help-text" style={{ marginTop: '0.25rem', fontSize: '0.875rem', color: '#666' }}>
+              <p className="help-text" style={{ marginTop: '0.25rem', fontSize: '0.875rem' }}>
                 Document to translate. Source language will be auto-detected.
               </p>
         </div>
@@ -171,16 +171,16 @@ function TranslationForm({ onTranslationStart, userRole }) {
           <div className="form-group">
             <label htmlFor="source_lang">Source Language</label>
             {detectingLanguage ? (
-              <div style={{ padding: '0.75rem', border: '1px solid #e5e5e5', borderRadius: '4px', backgroundColor: '#fafafa', color: '#666' }}>
+              <div className="language-display">
                 Detecting language...
               </div>
             ) : file ? (
-              <div style={{ padding: '0.75rem', border: '1px solid #e5e5e5', borderRadius: '4px', backgroundColor: '#fafafa' }}>
+              <div className="language-display">
                 {sourceLang === 'fr' ? 'French' : sourceLang === 'de' ? 'German' : sourceLang === 'it' ? 'Italian' : sourceLang === 'en' ? 'English' : sourceLang}
-                <span style={{ marginLeft: '0.5rem', fontSize: '0.875rem', color: '#666' }}>(Auto-detected)</span>
+                <span className="auto-detected-label">(Auto-detected)</span>
               </div>
             ) : (
-              <div style={{ padding: '0.75rem', border: '1px solid #e5e5e5', borderRadius: '4px', backgroundColor: '#fafafa', color: '#999' }}>
+              <div className="language-display language-display-placeholder">
                 Will be detected from document
               </div>
             )}
@@ -212,19 +212,22 @@ function TranslationForm({ onTranslationStart, userRole }) {
               Translation Prompt
               {loadingPrompt && <span className="loading-indicator"> (Loading...)</span>}
             </label>
-            <textarea
-              id="custom_prompt"
-              value={customPrompt}
-              onChange={(e) => setCustomPrompt(e.target.value)}
-              placeholder={loadingPrompt ? "Loading default prompt..." : "Enter custom prompt for translation..."}
-              disabled={loading || loadingPrompt}
-              rows={15}
-              style={{
-                fontFamily: "'TX-02 Berkeley Mono', 'Berkeley Mono', monospace",
-                fontSize: '0.875rem',
-                lineHeight: '1.5',
-              }}
-            />
+            <div className="textarea-wrapper">
+              <textarea
+                id="custom_prompt"
+                value={customPrompt}
+                onChange={(e) => setCustomPrompt(e.target.value)}
+                placeholder={loadingPrompt ? "Loading default prompt..." : "Enter custom prompt for translation..."}
+                disabled={loading || loadingPrompt}
+                rows={15}
+                className="prompt-textarea"
+                style={{
+                  fontFamily: "'TX-02 Berkeley Mono', 'Berkeley Mono', monospace",
+                  fontSize: '0.875rem',
+                  lineHeight: '1.5',
+                }}
+              />
+            </div>
             <p className="help-text">
               Default prompt is preloaded. You can modify it to customize the translation behavior.
             </p>

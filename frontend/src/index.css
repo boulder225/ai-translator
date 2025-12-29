@@ -4,16 +4,95 @@
   box-sizing: border-box;
 }
 
+:root {
+  /* Light theme colors - Terminal-inspired, clean and minimal */
+  --bg-primary: #fefefe;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #f8f8f8;
+  --bg-hover: #f0f0f0;
+  --text-primary: #0a0a0a;
+  --text-secondary: #1a1a1a;
+  --text-tertiary: #4a4a4a;
+  --text-muted: #8a8a8a;
+  --border-color: #d0d0d0;
+  --border-accent: #000000;
+  --shadow-sm: rgba(0, 0, 0, 0.04);
+  --shadow-md: rgba(0, 0, 0, 0.08);
+  --shadow-lg: rgba(0, 0, 0, 0.12);
+  --error-bg: #fff5f5;
+  --error-text: #cc0000;
+  --error-border: #ff9999;
+  --success-bg: #f0fdf4;
+  --success-text: #166534;
+  --info-bg: #eff6ff;
+  --info-text: #1e40af;
+  --accent-color: #000000;
+  --accent-hover: #333333;
+}
+
+[data-theme="dark"] {
+  /* Dark theme colors - Softer contrast like Aave */
+  --bg-primary: #1a1d29;
+  --bg-secondary: #252933;
+  --bg-tertiary: #2e3341;
+  --bg-hover: #363b4a;
+  --text-primary: #e4e9f0;
+  --text-secondary: #c9d1dd;
+  --text-tertiary: #8c96a6;
+  --text-muted: #6b7384;
+  --border-color: #3a3f4d;
+  --border-accent: #4a5060;
+  --shadow-sm: rgba(0, 0, 0, 0.3);
+  --shadow-md: rgba(0, 0, 0, 0.4);
+  --shadow-lg: rgba(0, 0, 0, 0.5);
+  --error-bg: #3a2a2a;
+  --error-text: #ff8888;
+  --error-border: #5a3a3a;
+  --success-bg: #2a3a2a;
+  --success-text: #88ff88;
+  --info-bg: #2a2a3a;
+  --info-text: #8888ff;
+  --accent-color: #e4e9f0;
+  --accent-hover: #c9d1dd;
+}
+
 body {
   font-family: 'TX-02 Berkeley Mono', 'Berkeley Mono', monospace;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #fafafa;
-  color: #000000;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+}
+
+/* Blinking cursor for textareas */
+textarea {
+  caret-color: var(--text-primary);
+}
+
+textarea:focus {
+  caret-color: var(--text-primary);
+  animation: none;
+}
+
+@keyframes cursor-blink {
+  0%, 49% {
+    opacity: 1;
+  }
+  50%, 100% {
+    opacity: 0;
+  }
 }
 
 code {
   font-family: 'TX-02 Berkeley Mono', 'Berkeley Mono', monospace;
+  font-size: 0.9em;
+  background: var(--bg-tertiary);
+  padding: 0.125rem 0.25rem;
+  border-radius: 2px;
+  border: 1px solid var(--border-color);
 }
 
 

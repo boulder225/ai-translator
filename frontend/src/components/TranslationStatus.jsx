@@ -129,9 +129,7 @@ function TranslationStatus({ jobId, status, onReset, onReportUpdate }) {
                 <div
                   className="progress-fill"
                   style={{ width: `${(status.progress || 0) * 100}%` }}
-                >
-                  {status.progress ? `${Math.round(status.progress * 100)}%` : ''}
-                </div>
+                />
               </div>
               <p className="progress-text">
                 Paragraph {status.current_paragraph || 0} of {status.total_paragraphs}
