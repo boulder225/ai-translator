@@ -468,6 +468,34 @@ textarea:hover {
   flex: 1;
 }
 
+.glossary-search-container {
+  margin-bottom: 1rem;
+}
+
+.glossary-search-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0;
+  font-family: inherit;
+  font-size: 0.875rem;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  transition: all 0.2s ease;
+}
+
+.glossary-search-input:focus {
+  outline: none;
+  border-color: var(--border-accent);
+  border-width: 2px;
+  box-shadow: 0 0 0 2px var(--shadow-sm);
+  background: var(--bg-primary);
+}
+
+.glossary-search-input::placeholder {
+  color: var(--text-tertiary);
+}
+
 .glossary-info {
   margin-bottom: 1rem;
   color: var(--text-tertiary);
@@ -531,6 +559,13 @@ textarea:hover {
 
 .glossary-error {
   color: var(--error-text);
+}
+
+.glossary-no-results {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-tertiary);
+  font-style: italic;
 }
 
 .toolbar-help-text {

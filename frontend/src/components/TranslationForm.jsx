@@ -19,6 +19,7 @@ function TranslationForm({ onTranslationStart, userRole }) {
   const [showGlossaryModal, setShowGlossaryModal] = useState(false);
   const [glossaryContent, setGlossaryContent] = useState(null);
   const [loadingGlossary, setLoadingGlossary] = useState(false);
+  const [glossarySearchQuery, setGlossarySearchQuery] = useState('');
   
   const handleToggleToolbar = () => {
     setShowToolbar(!showToolbar);
@@ -27,6 +28,7 @@ function TranslationForm({ onTranslationStart, userRole }) {
   const handleViewGlossary = async () => {
     setLoadingGlossary(true);
     setShowGlossaryModal(true);
+    setGlossarySearchQuery(''); // Reset search when opening modal
     try {
       const content = await getGlossaryContent('glossary');
       setGlossaryContent(content);
@@ -37,6 +39,19 @@ function TranslationForm({ onTranslationStart, userRole }) {
       setLoadingGlossary(false);
     }
   };
+
+  // Filter glossary entries based on search query (starting from first 3 characters)
+  const filteredGlossaryEntries = glossaryContent?.entries?.filter((entry) => {
+    if (!glossarySearchQuery || glossarySearchQuery.length < 3) {
+      return true; // Show all entries if search query is less than 3 characters
+    }
+    const query = glossarySearchQuery.toLowerCase();
+    return (
+      entry.term.toLowerCase().startsWith(query) ||
+      entry.translation.toLowerCase().startsWith(query) ||
+      (entry.context && entry.context.toLowerCase().startsWith(query))
+    );
+  }) || [];
   
   // Expose toggle function to parent via window object
   useEffect(() => {
@@ -360,8 +375,20 @@ function TranslationForm({ onTranslationStart, userRole }) {
                 <div className="glossary-error">Error: {glossaryContent.error}</div>
               ) : glossaryContent ? (
                 <>
+                  <div className="glossary-search-container">
+                    <input
+                      type="text"
+                      className="glossary-search-input"
+                      placeholder="Search glossary (min 3 characters)..."
+                      value={glossarySearchQuery}
+                      onChange={(e) => setGlossarySearchQuery(e.target.value)}
+                    />
+                  </div>
                   <div className="glossary-info">
-                    <p>{glossaryContent.total} entries</p>
+                    <p>
+                      {filteredGlossaryEntries.length} of {glossaryContent.total} entries
+                      {glossarySearchQuery.length >= 3 && ` (filtered)`}
+                    </p>
                   </div>
                   <div className="glossary-table-container">
                     <table className="glossary-table">
@@ -373,15 +400,23 @@ function TranslationForm({ onTranslationStart, userRole }) {
                         </tr>
                       </thead>
                       <tbody>
-                        {glossaryContent.entries.map((entry, index) => (
-                          <tr key={index}>
-                            <td className="glossary-term">{entry.term}</td>
-                            <td className="glossary-translation">{entry.translation}</td>
-                            {glossaryContent.entries.some(e => e.context) && (
-                              <td className="glossary-context">{entry.context || '-'}</td>
-                            )}
+                        {filteredGlossaryEntries.length > 0 ? (
+                          filteredGlossaryEntries.map((entry, index) => (
+                            <tr key={index}>
+                              <td className="glossary-term">{entry.term}</td>
+                              <td className="glossary-translation">{entry.translation}</td>
+                              {glossaryContent.entries.some(e => e.context) && (
+                                <td className="glossary-context">{entry.context || '-'}</td>
+                              )}
+                            </tr>
+                          ))
+                        ) : (
+                          <tr>
+                            <td colSpan={glossaryContent.entries.some(e => e.context) ? 3 : 2} className="glossary-no-results">
+                              No entries found matching "{glossarySearchQuery}"
+                            </td>
                           </tr>
-                        ))}
+                        )}
                       </tbody>
                     </table>
                   </div>
