@@ -3,9 +3,22 @@
 > vite
 
 
-  VITE v5.4.21  ready in 163 ms
+  VITE v5.4.21  ready in 162 ms
 
   ➜  Local:   http://localhost:5173/
   ➜  Network: http://192.168.1.10:5173/
-9:41:18 PM [vite] hmr update /src/components/TranslationForm.jsx
-9:41:28 PM [vite] hmr update /src/components/TranslationForm.jsx
+10:04:06 PM [vite] hmr update /src/components/TranslationForm.jsx
+10:04:11 PM [vite] hmr update /src/components/TranslationForm.jsx
+10:04:24 PM [vite] hmr update /src/components/TranslationForm.jsx
+10:04:36 PM [vite] hmr update /src/components/TranslationForm.jsx
+10:06:11 PM [vite] hmr update /src/components/TranslationForm.jsx
+10:06:15 PM [vite] hmr update /src/components/TranslationForm.jsx
+10:06:19 PM [vite] hmr update /src/components/TranslationForm.jsx
+10:06:23 PM [vite] hmr update /src/components/TranslationForm.jsx
+10:06:43 PM [vite] hmr update /src/components/TranslationForm.jsx
+10:08:33 PM [vite] hmr update /src/components/TranslationForm.jsx
+10:08:44 PM [vite] hmr update /src/components/TranslationForm.css
+10:08:55 PM [vite] hmr update /src/components/TranslationForm.jsx
+10:08:59 PM [vite] hmr update /src/components/TranslationForm.jsx
+10:09:21 PM [vite] hmr update /src/components/TranslationForm.jsx
+10:09:21 PM [vite] hmr update /src/components/TranslationForm.css

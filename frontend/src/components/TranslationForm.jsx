@@ -82,6 +82,22 @@ function TranslationForm({ onTranslationStart, userRole }) {
     setEditingGlossaryEntry(null);
   };
 
+  const handleAddGlossaryEntry = () => {
+    if (!editedGlossaryEntries) return;
+    
+    // Add a new empty entry at the beginning
+    const newEntry = { term: '', translation: '', context: '' };
+    setEditedGlossaryEntries([newEntry, ...editedGlossaryEntries]);
+  };
+
+  const handleDeleteGlossaryEntry = (index) => {
+    if (!editedGlossaryEntries) return;
+    
+    // Remove entry at the specified index
+    const updated = editedGlossaryEntries.filter((_, i) => i !== index);
+    setEditedGlossaryEntries(updated);
+  };
+
   // Filter glossary entries based on search query (starting from first 3 characters)
   const filteredGlossaryEntries = glossaryContent?.entries?.filter((entry) => {
     if (!glossarySearchQuery || glossarySearchQuery.length < 3) {
@@ -429,8 +445,22 @@ function TranslationForm({ onTranslationStart, userRole }) {
                   </div>
                   <div className="glossary-info">
                     <p>
-                      {filteredGlossaryEntries.length} of {glossaryContent.total} entries
-                      {glossarySearchQuery.length >= 3 && ` (filtered)`}
+                      {(() => {
+                        const entriesToCount = editedGlossaryEntries || glossaryContent.entries;
+                        const filteredCount = glossarySearchQuery.length >= 3 
+                          ? entriesToCount.filter((entry) => {
+                              const query = glossarySearchQuery.toLowerCase();
+                              return (
+                                (entry.term || '').toLowerCase().startsWith(query) ||
+                                (entry.translation || '').toLowerCase().startsWith(query) ||
+                                (entry.context && entry.context.toLowerCase().startsWith(query))
+                              );
+                            }).length
+                          : entriesToCount.length;
+                        const totalCount = entriesToCount.length;
+                        const originalTotal = glossaryContent.total;
+                        return `${filteredCount} of ${totalCount}${totalCount !== originalTotal ? ` (${totalCount - originalTotal > 0 ? '+' : ''}${totalCount - originalTotal} new)` : ''} entries${glossarySearchQuery.length >= 3 ? ' (filtered)' : ''}`;
+                      })()}
                     </p>
                     <div className="glossary-actions">
                       <button
@@ -443,6 +473,14 @@ function TranslationForm({ onTranslationStart, userRole }) {
                       </button>
                       {editingGlossaryEntry !== null && (
                         <>
+                          <button
+                            type="button"
+                            className="glossary-add-button"
+                            onClick={handleAddGlossaryEntry}
+                            disabled={savingGlossary}
+                          >
+                            Add Entry
+                          </button>
                           <button
                             type="button"
                             className="glossary-save-button"
@@ -470,24 +508,32 @@ function TranslationForm({ onTranslationStart, userRole }) {
                           <th>Term</th>
                           <th>Translation</th>
                           {glossaryContent.entries.some(e => e.context) && <th>Context</th>}
+                          {editingGlossaryEntry !== null && <th>Actions</th>}
                         </tr>
                       </thead>
                       <tbody>
                         {(() => {
                           const entriesToShow = editedGlossaryEntries || glossaryContent.entries;
                           const filtered = entriesToShow.filter((entry) => {
+                            // Don't filter out empty new entries when editing
+                            if (editingGlossaryEntry !== null && (!entry.term || !entry.translation)) {
+                              return true;
+                            }
                             if (!glossarySearchQuery || glossarySearchQuery.length < 3) {
                               return true;
                             }
                             const query = glossarySearchQuery.toLowerCase();
+                            const term = (entry.term || '').toLowerCase();
+                            const translation = (entry.translation || '').toLowerCase();
+                            const context = (entry.context || '').toLowerCase();
                             return (
-                              entry.term.toLowerCase().startsWith(query) ||
-                              entry.translation.toLowerCase().startsWith(query) ||
-                              (entry.context && entry.context.toLowerCase().startsWith(query))
+                              term.startsWith(query) ||
+                              translation.startsWith(query) ||
+                              (context && context.startsWith(query))
                             );
                           });
                           
-                          if (filtered.length === 0) {
+                          if (filtered.length === 0 && (!editingGlossaryEntry || glossarySearchQuery.length >= 3)) {
                             return (
                               <tr>
                                 <td colSpan={glossaryContent.entries.some(e => e.context) ? 3 : 2} className="glossary-no-results">
@@ -502,25 +548,32 @@ function TranslationForm({ onTranslationStart, userRole }) {
                           return filtered.map((entry, displayIndex) => {
                             // Find the actual index in editedGlossaryEntries
                             const actualIndex = editedGlossaryEntries 
-                              ? editedGlossaryEntries.findIndex(e => 
-                                  e.term === entry.term && 
-                                  e.translation === entry.translation &&
-                                  (e.context || '') === (entry.context || '')
-                                )
+                              ? editedGlossaryEntries.findIndex((e, idx) => {
+                                  // For new empty entries, match by index if term/translation are empty
+                                  if (!entry.term && !entry.translation && !e.term && !e.translation) {
+                                    return idx === displayIndex;
+                                  }
+                                  return e.term === entry.term && 
+                                         e.translation === entry.translation &&
+                                         (e.context || '') === (entry.context || '');
+                                })
                               : displayIndex;
                             
+                            const entryIndex = actualIndex >= 0 ? actualIndex : displayIndex;
+                            
                             return (
-                              <tr key={actualIndex >= 0 ? actualIndex : displayIndex}>
+                              <tr key={`entry-${entryIndex}`}>
                                 <td className="glossary-term">
                                   {isEditing ? (
                                     <input
                                       type="text"
                                       className="glossary-edit-input"
                                       value={entry.term || ''}
-                                      onChange={(e) => handleEditGlossaryEntry(actualIndex >= 0 ? actualIndex : displayIndex, 'term', e.target.value)}
+                                      onChange={(e) => handleEditGlossaryEntry(entryIndex, 'term', e.target.value)}
+                                      placeholder="Term"
                                     />
                                   ) : (
-                                    entry.term
+                                    entry.term || '-'
                                   )}
                                 </td>
                                 <td className="glossary-translation">
@@ -529,10 +582,11 @@ function TranslationForm({ onTranslationStart, userRole }) {
                                       type="text"
                                       className="glossary-edit-input"
                                       value={entry.translation || ''}
-                                      onChange={(e) => handleEditGlossaryEntry(actualIndex >= 0 ? actualIndex : displayIndex, 'translation', e.target.value)}
+                                      onChange={(e) => handleEditGlossaryEntry(entryIndex, 'translation', e.target.value)}
+                                      placeholder="Translation"
                                     />
                                   ) : (
-                                    entry.translation
+                                    entry.translation || '-'
                                   )}
                                 </td>
                                 {glossaryContent.entries.some(e => e.context) && (
@@ -542,11 +596,25 @@ function TranslationForm({ onTranslationStart, userRole }) {
                                         type="text"
                                         className="glossary-edit-input"
                                         value={entry.context || ''}
-                                        onChange={(e) => handleEditGlossaryEntry(actualIndex >= 0 ? actualIndex : displayIndex, 'context', e.target.value)}
+                                        onChange={(e) => handleEditGlossaryEntry(entryIndex, 'context', e.target.value)}
+                                        placeholder="Context (optional)"
                                       />
                                     ) : (
                                       entry.context || '-'
                                     )}
+                                  </td>
+                                )}
+                                {isEditing && (
+                                  <td className="glossary-actions-cell">
+                                    <button
+                                      type="button"
+                                      className="glossary-delete-button"
+                                      onClick={() => handleDeleteGlossaryEntry(entryIndex)}
+                                      disabled={savingGlossary}
+                                      aria-label="Delete entry"
+                                    >
+                                      ×
+                                    </button>
                                   </td>
                                 )}
                               </tr>

@@ -511,6 +511,7 @@ textarea:hover {
 }
 
 .glossary-edit-button,
+.glossary-add-button,
 .glossary-save-button,
 .glossary-cancel-button {
   padding: 0.5rem 1rem;
@@ -527,11 +528,16 @@ textarea:hover {
 }
 
 .glossary-edit-button:hover,
+.glossary-add-button:hover,
 .glossary-save-button:hover,
 .glossary-cancel-button:hover {
   background: var(--text-primary);
   color: var(--bg-secondary);
   border-color: var(--text-primary);
+}
+
+.glossary-add-button {
+  background: var(--bg-secondary);
 }
 
 .glossary-save-button {
@@ -559,6 +565,44 @@ textarea:hover {
   outline: none;
   border-color: var(--border-accent);
   border-width: 2px;
+}
+
+.glossary-edit-input::placeholder {
+  color: var(--text-tertiary);
+  opacity: 0.6;
+}
+
+.glossary-actions-cell {
+  text-align: center;
+  padding: 0.5rem;
+}
+
+.glossary-delete-button {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 0;
+  width: 28px;
+  height: 28px;
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.glossary-delete-button:hover {
+  background: var(--error-text);
+  color: var(--bg-secondary);
+  border-color: var(--error-text);
+}
+
+.glossary-delete-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .glossary-table-container {

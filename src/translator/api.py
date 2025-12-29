@@ -546,12 +546,19 @@ async def update_glossary_content(glossary_name: str, request: Request):
         if not isinstance(entries, list):
             raise HTTPException(status_code=400, detail="Invalid entries format")
         
-        # Validate entries
+        # Validate entries - skip empty entries (new entries that weren't filled in)
+        valid_entries = []
         for entry in entries:
             if not isinstance(entry, dict):
                 raise HTTPException(status_code=400, detail="Each entry must be an object")
-            if "term" not in entry or "translation" not in entry:
-                raise HTTPException(status_code=400, detail="Each entry must have 'term' and 'translation'")
+            term = (entry.get("term") or "").strip()
+            translation = (entry.get("translation") or "").strip()
+            # Skip empty entries (allow empty terms/translations in editing, but filter them out when saving)
+            if not term or not translation:
+                continue
+            valid_entries.append(entry)
+        
+        entries = valid_entries
         
         # Write updated entries to CSV file
         with glossary_path.open("w", encoding="utf-8-sig", newline="") as handle:
