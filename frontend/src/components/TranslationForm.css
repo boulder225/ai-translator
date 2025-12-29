@@ -500,6 +500,65 @@ textarea:hover {
   margin-bottom: 1rem;
   color: var(--text-tertiary);
   font-size: 0.875rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.glossary-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.glossary-edit-button,
+.glossary-save-button,
+.glossary-cancel-button {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.glossary-edit-button:hover,
+.glossary-save-button:hover,
+.glossary-cancel-button:hover {
+  background: var(--text-primary);
+  color: var(--bg-secondary);
+  border-color: var(--text-primary);
+}
+
+.glossary-save-button {
+  background: var(--bg-secondary);
+}
+
+.glossary-save-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.glossary-edit-input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0;
+  font-family: inherit;
+  font-size: 0.875rem;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  transition: all 0.2s ease;
+}
+
+.glossary-edit-input:focus {
+  outline: none;
+  border-color: var(--border-accent);
+  border-width: 2px;
 }
 
 .glossary-table-container {

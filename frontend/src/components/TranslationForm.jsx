@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { startTranslation, getPrompt, detectLanguage, getGlossaryContent } from '../services/api';
+import { startTranslation, getPrompt, detectLanguage, getGlossaryContent, updateGlossaryContent } from '../services/api';
 import './TranslationForm.css';
 
 function TranslationForm({ onTranslationStart, userRole }) {
@@ -20,6 +20,9 @@ function TranslationForm({ onTranslationStart, userRole }) {
   const [glossaryContent, setGlossaryContent] = useState(null);
   const [loadingGlossary, setLoadingGlossary] = useState(false);
   const [glossarySearchQuery, setGlossarySearchQuery] = useState('');
+  const [editingGlossaryEntry, setEditingGlossaryEntry] = useState(null);
+  const [editedGlossaryEntries, setEditedGlossaryEntries] = useState(null);
+  const [savingGlossary, setSavingGlossary] = useState(false);
   
   const handleToggleToolbar = () => {
     setShowToolbar(!showToolbar);
@@ -29,15 +32,54 @@ function TranslationForm({ onTranslationStart, userRole }) {
     setLoadingGlossary(true);
     setShowGlossaryModal(true);
     setGlossarySearchQuery(''); // Reset search when opening modal
+    setEditingGlossaryEntry(null);
+    setEditedGlossaryEntries(null);
     try {
       const content = await getGlossaryContent('glossary');
       setGlossaryContent(content);
+      // Initialize edited entries with a copy of original entries
+      setEditedGlossaryEntries(content.entries ? [...content.entries] : []);
     } catch (error) {
       console.error('Failed to load glossary:', error);
       setGlossaryContent({ error: error.message || 'Failed to load glossary' });
     } finally {
       setLoadingGlossary(false);
     }
+  };
+
+  const handleEditGlossaryEntry = (index, field, value) => {
+    if (!editedGlossaryEntries) return;
+    
+    const updated = [...editedGlossaryEntries];
+    updated[index] = {
+      ...updated[index],
+      [field]: value
+    };
+    setEditedGlossaryEntries(updated);
+  };
+
+  const handleSaveGlossary = async () => {
+    if (!editedGlossaryEntries || !glossaryContent) return;
+    
+    setSavingGlossary(true);
+    try {
+      const updated = await updateGlossaryContent(glossaryContent.name, editedGlossaryEntries);
+      setGlossaryContent(updated);
+      setEditingGlossaryEntry(null);
+    } catch (error) {
+      console.error('Failed to save glossary:', error);
+      alert(`Failed to save glossary: ${error.response?.data?.detail || error.message}`);
+    } finally {
+      setSavingGlossary(false);
+    }
+  };
+
+  const handleCancelEditGlossary = () => {
+    // Reset to original entries
+    if (glossaryContent?.entries) {
+      setEditedGlossaryEntries([...glossaryContent.entries]);
+    }
+    setEditingGlossaryEntry(null);
   };
 
   // Filter glossary entries based on search query (starting from first 3 characters)
@@ -382,6 +424,7 @@ function TranslationForm({ onTranslationStart, userRole }) {
                       placeholder="Search glossary (min 3 characters)..."
                       value={glossarySearchQuery}
                       onChange={(e) => setGlossarySearchQuery(e.target.value)}
+                      disabled={savingGlossary}
                     />
                   </div>
                   <div className="glossary-info">
@@ -389,6 +432,36 @@ function TranslationForm({ onTranslationStart, userRole }) {
                       {filteredGlossaryEntries.length} of {glossaryContent.total} entries
                       {glossarySearchQuery.length >= 3 && ` (filtered)`}
                     </p>
+                    <div className="glossary-actions">
+                      <button
+                        type="button"
+                        className="glossary-edit-button"
+                        onClick={() => setEditingGlossaryEntry({})}
+                        disabled={savingGlossary || editingGlossaryEntry !== null}
+                      >
+                        Edit
+                      </button>
+                      {editingGlossaryEntry !== null && (
+                        <>
+                          <button
+                            type="button"
+                            className="glossary-save-button"
+                            onClick={handleSaveGlossary}
+                            disabled={savingGlossary}
+                          >
+                            {savingGlossary ? 'Saving...' : 'Save'}
+                          </button>
+                          <button
+                            type="button"
+                            className="glossary-cancel-button"
+                            onClick={handleCancelEditGlossary}
+                            disabled={savingGlossary}
+                          >
+                            Cancel
+                          </button>
+                        </>
+                      )}
+                    </div>
                   </div>
                   <div className="glossary-table-container">
                     <table className="glossary-table">
@@ -400,23 +473,86 @@ function TranslationForm({ onTranslationStart, userRole }) {
                         </tr>
                       </thead>
                       <tbody>
-                        {filteredGlossaryEntries.length > 0 ? (
-                          filteredGlossaryEntries.map((entry, index) => (
-                            <tr key={index}>
-                              <td className="glossary-term">{entry.term}</td>
-                              <td className="glossary-translation">{entry.translation}</td>
-                              {glossaryContent.entries.some(e => e.context) && (
-                                <td className="glossary-context">{entry.context || '-'}</td>
-                              )}
-                            </tr>
-                          ))
-                        ) : (
-                          <tr>
-                            <td colSpan={glossaryContent.entries.some(e => e.context) ? 3 : 2} className="glossary-no-results">
-                              No entries found matching "{glossarySearchQuery}"
-                            </td>
-                          </tr>
-                        )}
+                        {(() => {
+                          const entriesToShow = editedGlossaryEntries || glossaryContent.entries;
+                          const filtered = entriesToShow.filter((entry) => {
+                            if (!glossarySearchQuery || glossarySearchQuery.length < 3) {
+                              return true;
+                            }
+                            const query = glossarySearchQuery.toLowerCase();
+                            return (
+                              entry.term.toLowerCase().startsWith(query) ||
+                              entry.translation.toLowerCase().startsWith(query) ||
+                              (entry.context && entry.context.toLowerCase().startsWith(query))
+                            );
+                          });
+                          
+                          if (filtered.length === 0) {
+                            return (
+                              <tr>
+                                <td colSpan={glossaryContent.entries.some(e => e.context) ? 3 : 2} className="glossary-no-results">
+                                  No entries found matching "{glossarySearchQuery}"
+                                </td>
+                              </tr>
+                            );
+                          }
+                          
+                          const isEditing = editingGlossaryEntry !== null;
+                          
+                          return filtered.map((entry, displayIndex) => {
+                            // Find the actual index in editedGlossaryEntries
+                            const actualIndex = editedGlossaryEntries 
+                              ? editedGlossaryEntries.findIndex(e => 
+                                  e.term === entry.term && 
+                                  e.translation === entry.translation &&
+                                  (e.context || '') === (entry.context || '')
+                                )
+                              : displayIndex;
+                            
+                            return (
+                              <tr key={actualIndex >= 0 ? actualIndex : displayIndex}>
+                                <td className="glossary-term">
+                                  {isEditing ? (
+                                    <input
+                                      type="text"
+                                      className="glossary-edit-input"
+                                      value={entry.term || ''}
+                                      onChange={(e) => handleEditGlossaryEntry(actualIndex >= 0 ? actualIndex : displayIndex, 'term', e.target.value)}
+                                    />
+                                  ) : (
+                                    entry.term
+                                  )}
+                                </td>
+                                <td className="glossary-translation">
+                                  {isEditing ? (
+                                    <input
+                                      type="text"
+                                      className="glossary-edit-input"
+                                      value={entry.translation || ''}
+                                      onChange={(e) => handleEditGlossaryEntry(actualIndex >= 0 ? actualIndex : displayIndex, 'translation', e.target.value)}
+                                    />
+                                  ) : (
+                                    entry.translation
+                                  )}
+                                </td>
+                                {glossaryContent.entries.some(e => e.context) && (
+                                  <td className="glossary-context">
+                                    {isEditing ? (
+                                      <input
+                                        type="text"
+                                        className="glossary-edit-input"
+                                        value={entry.context || ''}
+                                        onChange={(e) => handleEditGlossaryEntry(actualIndex >= 0 ? actualIndex : displayIndex, 'context', e.target.value)}
+                                      />
+                                    ) : (
+                                      entry.context || '-'
+                                    )}
+                                  </td>
+                                )}
+                              </tr>
+                            );
+                          });
+                        })()}
                       </tbody>
                     </table>
                   </div>

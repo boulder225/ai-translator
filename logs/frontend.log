@@ -3,85 +3,9 @@
 > vite
 
 
-  VITE v5.4.21  ready in 187 ms
+  VITE v5.4.21  ready in 163 ms
 
   ➜  Local:   http://localhost:5173/
   ➜  Network: http://192.168.1.10:5173/
-8:41:15 PM [vite] hmr update /src/components/TranslationForm.jsx
-8:41:20 PM [vite] hmr update /src/components/TranslationForm.css
-8:41:39 PM [vite] hmr update /src/components/TranslationForm.jsx
-8:41:43 PM [vite] hmr update /src/components/TranslationForm.css
-8:42:20 PM [vite] hmr update /src/components/TranslationForm.jsx
-8:42:20 PM [vite] hmr update /src/components/TranslationForm.css
-8:44:51 PM [vite] hmr update /src/index.css
-8:44:56 PM [vite] hmr update /src/index.css
-8:45:00 PM [vite] hmr update /src/App.css
-8:45:08 PM [vite] hmr update /src/App.css
-8:45:16 PM [vite] hmr update /src/App.css
-8:45:24 PM [vite] hmr update /src/App.css
-8:45:32 PM [vite] hmr update /src/App.css
-8:45:40 PM [vite] hmr update /src/App.css
-8:46:00 PM [vite] hmr update /src/App.css
-8:46:02 PM [vite] hmr update /src/components/Login.css
-8:46:05 PM [vite] hmr update /src/components/Login.css
-8:46:23 PM [vite] hmr update /src/components/TranslationForm.css
-8:46:26 PM [vite] hmr update /src/components/TranslationForm.css
-8:46:30 PM [vite] hmr update /src/components/TranslationStatus.css
-8:46:41 PM [vite] hmr update /src/App.css
-8:46:45 PM [vite] hmr update /src/components/TranslationForm.css
-8:46:48 PM [vite] hmr update /src/components/TranslationForm.css
-8:48:16 PM [vite] hmr update /src/components/TranslationForm.css
-8:48:20 PM [vite] hmr update /src/components/TranslationForm.css
-8:48:27 PM [vite] hmr update /src/App.css
-8:48:30 PM [vite] hmr update /src/App.css
-8:48:41 PM [vite] hmr update /src/App.css
-8:48:44 PM [vite] hmr update /src/components/TranslationStatus.css
-8:48:48 PM [vite] hmr update /src/components/TranslationStatus.css
-8:49:02 PM [vite] hmr update /src/index.css
-8:49:02 PM [vite] hmr update /src/App.css
-8:49:02 PM [vite] hmr update /src/components/TranslationStatus.css
-8:49:02 PM [vite] hmr update /src/components/TranslationForm.css
-8:49:02 PM [vite] hmr update /src/components/Login.css
-8:55:25 PM [vite] hmr update /src/App.jsx
-8:55:31 PM [vite] hmr update /src/App.jsx
-8:57:02 PM [vite] hmr update /src/App.jsx
-8:57:04 PM [vite] hmr update /src/App.jsx
-8:57:11 PM [vite] hmr update /src/App.jsx
-9:01:13 PM [vite] hmr update /src/components/TranslationForm.css
-9:01:19 PM [vite] hmr update /src/App.css
-9:01:23 PM [vite] hmr update /src/App.css
-9:01:26 PM [vite] hmr update /src/App.css
-9:01:31 PM [vite] hmr update /src/App.css
-9:01:53 PM [vite] hmr update /src/components/TranslationForm.css
-9:02:06 PM [vite] hmr update /src/components/TranslationForm.css
-9:02:17 PM [vite] hmr update /src/components/TranslationForm.css
-9:02:34 PM [vite] hmr update /src/components/TranslationForm.css
-9:02:37 PM [vite] hmr update /src/components/TranslationForm.css
-9:02:57 PM [vite] hmr update /src/App.css
-9:03:01 PM [vite] hmr update /src/components/TranslationStatus.jsx
-9:03:12 PM [vite] hmr update /src/App.css
-9:03:12 PM [vite] hmr update /src/components/TranslationForm.css
-9:03:12 PM [vite] hmr update /src/components/TranslationStatus.jsx
-9:05:17 PM [vite] hmr update /src/components/Login.css
-9:05:25 PM [vite] hmr update /src/components/Login.css
-9:06:45 PM [vite] hmr update /src/components/TranslationForm.jsx
-9:06:50 PM [vite] hmr update /src/components/TranslationForm.css
-9:06:54 PM [vite] hmr update /src/index.css
-9:07:19 PM [vite] hmr update /src/components/TranslationForm.css
-9:07:32 PM [vite] hmr update /src/components/TranslationForm.css
-9:07:32 PM [vite] hmr update /src/index.css
-9:07:32 PM [vite] hmr update /src/components/TranslationForm.jsx
-9:07:32 PM [vite] hmr update /src/components/TranslationForm.jsx
-9:07:32 PM [vite] hmr update /src/index.css
-9:07:32 PM [vite] hmr update /src/components/TranslationForm.css
-9:11:54 PM [vite] hmr update /src/components/Login.css
-9:12:17 PM [vite] hmr update /src/index.css
-9:12:36 PM [vite] hmr update /src/components/Login.css
-9:12:36 PM [vite] hmr update /src/index.css
-9:27:54 PM [vite] hmr update /src/components/TranslationForm.jsx
-9:27:59 PM [vite] hmr update /src/components/TranslationForm.jsx
-9:28:09 PM [vite] hmr update /src/components/TranslationForm.jsx
-9:28:25 PM [vite] hmr update /src/components/TranslationForm.css
-9:28:36 PM [vite] hmr update /src/components/TranslationForm.css
-9:28:47 PM [vite] hmr update /src/components/TranslationForm.css
-9:28:47 PM [vite] hmr update /src/components/TranslationForm.jsx
+9:41:18 PM [vite] hmr update /src/components/TranslationForm.jsx
+9:41:28 PM [vite] hmr update /src/components/TranslationForm.jsx

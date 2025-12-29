@@ -49,6 +49,13 @@ export const getGlossaryContent = async (glossaryName) => {
   return response.data;
 };
 
+export const updateGlossaryContent = async (glossaryName, entries) => {
+  const response = await api.put(`/glossary/${glossaryName}/content`, {
+    entries: entries
+  });
+  return response.data;
+};
+
 export const getUserRole = async (username) => {
   // Create a temporary request without using the interceptor (to avoid circular dependency)
   const response = await axios.get('/api/user-role', {

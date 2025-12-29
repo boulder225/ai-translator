@@ -522,6 +522,67 @@ async def get_glossary_content(glossary_name: str):
     }
 
 
+@app.put("/api/glossary/{glossary_name}/content")
+async def update_glossary_content(glossary_name: str, request: Request):
+    """Update the content of a glossary file."""
+    import csv
+    
+    # Find the glossary file
+    glossary_files = find_glossary_files()
+    glossary_path = None
+    for g in glossary_files:
+        if g.stem == glossary_name or g.name == glossary_name:
+            glossary_path = g
+            break
+    
+    if not glossary_path or not glossary_path.exists():
+        raise HTTPException(status_code=404, detail=f"Glossary '{glossary_name}' not found")
+    
+    # Get updated entries from request body
+    try:
+        body = await request.json()
+        entries = body.get("entries", [])
+        
+        if not isinstance(entries, list):
+            raise HTTPException(status_code=400, detail="Invalid entries format")
+        
+        # Validate entries
+        for entry in entries:
+            if not isinstance(entry, dict):
+                raise HTTPException(status_code=400, detail="Each entry must be an object")
+            if "term" not in entry or "translation" not in entry:
+                raise HTTPException(status_code=400, detail="Each entry must have 'term' and 'translation'")
+        
+        # Write updated entries to CSV file
+        with glossary_path.open("w", encoding="utf-8-sig", newline="") as handle:
+            fieldnames = ["term", "translation", "context"]
+            writer = csv.DictWriter(handle, fieldnames=fieldnames)
+            writer.writeheader()
+            
+            for entry in entries:
+                writer.writerow({
+                    "term": (entry.get("term") or "").strip(),
+                    "translation": (entry.get("translation") or "").strip(),
+                    "context": (entry.get("context") or "").strip() or ""
+                })
+        
+        logger.info(f"Updated glossary {glossary_name} with {len(entries)} entries")
+        
+        return {
+            "name": glossary_path.stem,
+            "path": str(glossary_path),
+            "entries": entries,
+            "total": len(entries),
+            "message": "Glossary updated successfully"
+        }
+        
+    except json.JSONDecodeError:
+        raise HTTPException(status_code=400, detail="Invalid JSON in request body")
+    except Exception as e:
+        logger.error(f"Error updating glossary {glossary_name}: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=f"Error updating glossary: {str(e)}")
+
+
 def _get_user_role(username: str) -> str:
     """
     Get the user's role from environment variables.
