@@ -530,4 +530,243 @@ INFO:     127.0.0.1:63196 - "GET /api/prompt HTTP/1.1" 200 OK
 INFO:     127.0.0.1:63343 - "GET /api/glossary/glossary/content HTTP/1.1" 200 OK
 2025-12-29 22:11:07 - src.translator.api - INFO - Updated glossary glossary with 1352 entries
 INFO:     127.0.0.1:63360 - "PUT /api/glossary/glossary/content HTTP/1.1" 200 OK
-1352 entries
+INFO:     127.0.0.1:63615 - "GET /api/glossary/glossary/content HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'src/translator/api.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [2302]
+2025-12-29 22:22:59 - src.translator.api - INFO - Logging initialized. Log file: /Users/enrico/workspace/translator/logs/backend.log
+INFO:     Started server process [4096]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+2025-12-29 22:23:02 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
+2025-12-29 22:23:02 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
+2025-12-29 22:23:02 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
+[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
+[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
+INFO:     127.0.0.1:63841 - "GET /api/prompt HTTP/1.1" 200 OK
+2025-12-29 22:23:14 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
+2025-12-29 22:23:14 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
+2025-12-29 22:23:14 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
+[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
+INFO:     127.0.0.1:63870 - "GET /api/prompt HTTP/1.1" 200 OK
+2025-12-29 22:23:20 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
+2025-12-29 22:23:20 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
+2025-12-29 22:23:20 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
+[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
+INFO:     127.0.0.1:63879 - "GET /api/prompt HTTP/1.1" 200 OK
+2025-12-29 22:23:20 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
+2025-12-29 22:23:20 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
+2025-12-29 22:23:20 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
+[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
+INFO:     127.0.0.1:63881 - "GET /api/prompt HTTP/1.1" 200 OK
+2025-12-29 22:23:25 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
+2025-12-29 22:23:25 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
+2025-12-29 22:23:25 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
+[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
+INFO:     127.0.0.1:63887 - "GET /api/prompt HTTP/1.1" 200 OK
+2025-12-29 22:23:30 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
+2025-12-29 22:23:30 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
+2025-12-29 22:23:30 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
+[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
+INFO:     127.0.0.1:63894 - "GET /api/prompt HTTP/1.1" 200 OK
+2025-12-29 22:23:55 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
+2025-12-29 22:23:55 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
+2025-12-29 22:23:55 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
+[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
+INFO:     127.0.0.1:63914 - "GET /api/prompt HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'src/translator/api.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [4096]
+2025-12-29 22:24:50 - src.translator.api - INFO - Logging initialized. Log file: /Users/enrico/workspace/translator/logs/backend.log
+INFO:     Started server process [4193]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+2025-12-29 22:24:50 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
+2025-12-29 22:24:50 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
+2025-12-29 22:24:50 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
+[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
+[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
+INFO:     127.0.0.1:63958 - "GET /api/prompt HTTP/1.1" 200 OK
+INFO:     127.0.0.1:63998 - "GET /api/memory/content HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'src/translator/api.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [4193]
+2025-12-29 22:26:50 - src.translator.api - INFO - Logging initialized. Log file: /Users/enrico/workspace/translator/logs/backend.log
+INFO:     Started server process [4257]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+2025-12-29 22:26:54 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
+2025-12-29 22:26:54 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
+2025-12-29 22:26:54 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
+[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
+[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
+INFO:     127.0.0.1:64047 - "GET /api/prompt HTTP/1.1" 200 OK
+2025-12-29 22:27:02 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
+2025-12-29 22:27:02 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
+2025-12-29 22:27:02 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
+[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
+INFO:     127.0.0.1:64061 - "GET /api/prompt HTTP/1.1" 200 OK
+2025-12-29 22:27:07 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
+2025-12-29 22:27:07 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
+2025-12-29 22:27:07 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
+[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
+INFO:     127.0.0.1:64064 - "GET /api/prompt HTTP/1.1" 200 OK
+2025-12-29 22:27:07 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
+2025-12-29 22:27:07 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
+2025-12-29 22:27:07 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
+[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
+INFO:     127.0.0.1:64066 - "GET /api/prompt HTTP/1.1" 200 OK
+2025-12-29 22:27:18 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
+2025-12-29 22:27:18 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
+2025-12-29 22:27:18 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
+[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
+INFO:     127.0.0.1:64075 - "GET /api/prompt HTTP/1.1" 200 OK
+2025-12-29 22:27:37 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
+2025-12-29 22:27:37 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
+2025-12-29 22:27:37 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
+[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
+INFO:     127.0.0.1:64084 - "GET /api/prompt HTTP/1.1" 200 OK
+2025-12-29 22:27:59 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
+2025-12-29 22:27:59 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
+2025-12-29 22:27:59 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
+[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
+INFO:     127.0.0.1:64103 - "GET /api/prompt HTTP/1.1" 200 OK
+2025-12-29 22:28:03 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
+2025-12-29 22:28:03 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
+2025-12-29 22:28:03 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
+[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
+INFO:     127.0.0.1:64107 - "GET /api/prompt HTTP/1.1" 200 OK
+2025-12-29 22:28:30 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
+2025-12-29 22:28:30 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
+2025-12-29 22:28:30 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
+[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
+INFO:     127.0.0.1:64150 - "GET /api/prompt HTTP/1.1" 200 OK
+2025-12-29 22:28:43 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
+2025-12-29 22:28:43 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
+2025-12-29 22:28:43 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
+[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
+INFO:     127.0.0.1:64162 - "GET /api/prompt HTTP/1.1" 200 OK
+2025-12-29 22:28:49 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
+2025-12-29 22:28:49 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
+2025-12-29 22:28:49 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
+[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
+INFO:     127.0.0.1:64173 - "GET /api/prompt HTTP/1.1" 200 OK
+2025-12-29 22:28:55 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
+2025-12-29 22:28:55 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
+2025-12-29 22:28:55 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
+[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
+INFO:     127.0.0.1:64181 - "GET /api/prompt HTTP/1.1" 200 OK
+2025-12-29 22:29:02 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
+2025-12-29 22:29:02 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
+2025-12-29 22:29:02 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
+[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
+INFO:     127.0.0.1:64201 - "GET /api/prompt HTTP/1.1" 200 OK
+2025-12-29 22:29:11 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
+2025-12-29 22:29:11 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
+2025-12-29 22:29:11 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
+[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
+INFO:     127.0.0.1:64217 - "GET /api/prompt HTTP/1.1" 200 OK
+2025-12-29 22:29:16 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
+2025-12-29 22:29:16 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
+2025-12-29 22:29:16 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
+[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
+INFO:     127.0.0.1:64225 - "GET /api/prompt HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'src/translator/api.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [4257]
+2025-12-29 22:29:38 - src.translator.api - INFO - Logging initialized. Log file: /Users/enrico/workspace/translator/logs/backend.log
+INFO:     Started server process [4773]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+2025-12-29 22:29:38 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
+2025-12-29 22:29:38 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
+2025-12-29 22:29:38 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
+[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
+[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
+INFO:     127.0.0.1:64259 - "GET /api/prompt HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64297 - "GET /api/memory/content HTTP/1.1" 200 OK
+2025-12-29 22:32:18 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
+2025-12-29 22:32:18 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
+2025-12-29 22:32:18 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
+[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
+INFO:     127.0.0.1:64392 - "GET /api/prompt HTTP/1.1" 200 OK
+2025-12-29 22:32:24 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
+2025-12-29 22:32:24 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
+2025-12-29 22:32:24 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
+[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
+INFO:     127.0.0.1:64402 - "GET /api/prompt HTTP/1.1" 200 OK
+2025-12-29 22:32:40 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
+2025-12-29 22:32:40 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
+2025-12-29 22:32:40 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
+[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
+INFO:     127.0.0.1:64419 - "GET /api/prompt HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64435 - "GET /api/memory/content HTTP/1.1" 200 OK
+2025-12-29 22:34:10 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
+2025-12-29 22:34:10 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
+2025-12-29 22:34:10 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
+[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
+INFO:     127.0.0.1:64483 - "GET /api/prompt HTTP/1.1" 200 OK
+2025-12-29 22:34:10 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
+2025-12-29 22:34:10 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
+2025-12-29 22:34:10 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
+[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
+INFO:     127.0.0.1:64485 - "GET /api/prompt HTTP/1.1" 200 OK
+2025-12-29 22:34:20 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
+2025-12-29 22:34:20 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
+2025-12-29 22:34:20 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
+[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
+INFO:     127.0.0.1:64494 - "GET /api/prompt HTTP/1.1" 200 OK
+2025-12-29 22:34:20 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
+2025-12-29 22:34:20 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
+2025-12-29 22:34:20 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
+[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
+INFO:     127.0.0.1:64496 - "GET /api/prompt HTTP/1.1" 200 OK
+2025-12-29 22:35:10 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
+2025-12-29 22:35:10 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
+2025-12-29 22:35:10 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
+[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
+INFO:     127.0.0.1:64552 - "GET /api/prompt HTTP/1.1" 200 OK
+2025-12-29 22:35:30 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
+2025-12-29 22:35:30 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
+2025-12-29 22:35:30 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
+[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
+INFO:     127.0.0.1:64597 - "GET /api/prompt HTTP/1.1" 200 OK
+2025-12-29 22:36:14 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
+2025-12-29 22:36:14 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
+2025-12-29 22:36:14 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
+[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
+INFO:     127.0.0.1:64669 - "GET /api/prompt HTTP/1.1" 200 OK
+2025-12-29 22:36:30 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
+2025-12-29 22:36:30 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
+2025-12-29 22:36:30 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
+[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
+INFO:     127.0.0.1:64683 - "GET /api/prompt HTTP/1.1" 200 OK
+2025-12-29 22:36:40 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
+2025-12-29 22:36:40 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
+2025-12-29 22:36:40 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
+[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
+INFO:     127.0.0.1:64693 - "GET /api/prompt HTTP/1.1" 200 OK
+2025-12-29 22:37:02 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
+2025-12-29 22:37:02 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
+2025-12-29 22:37:02 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
+[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
+INFO:     127.0.0.1:64725 - "GET /api/prompt HTTP/1.1" 200 OK
+2025-12-29 22:37:30 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
+2025-12-29 22:37:30 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
+2025-12-29 22:37:30 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
+[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
+INFO:     127.0.0.1:64748 - "GET /api/prompt HTTP/1.1" 200 OK
+2025-12-29 22:37:49 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
+2025-12-29 22:37:49 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
+2025-12-29 22:37:49 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
+[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
+INFO:     127.0.0.1:64767 - "GET /api/prompt HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64861 - "GET /api/memory/content HTTP/1.1" 200 OK

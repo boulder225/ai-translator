@@ -163,6 +163,16 @@ export const getTranslationReport = async (jobId) => {
   return response.data;
 };
 
+export const getMemoryContent = async () => {
+  const response = await api.get('/memory/content');
+  return response.data;
+};
+
+export const updateMemoryContent = async (entries) => {
+  const response = await api.put('/memory/content', { entries });
+  return response.data;
+};
+
 export const downloadTranslatedText = async (jobId) => {
   // Use api instance for consistency
   const response = await api.get(`/translate/${jobId}/text`, {

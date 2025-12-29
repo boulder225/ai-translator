@@ -514,12 +514,135 @@ async def get_glossary_content(glossary_name: str):
         logger.error(f"Error reading glossary {glossary_name}: {e}")
         raise HTTPException(status_code=500, detail=f"Error reading glossary: {str(e)}")
     
+        return {
+            "name": glossary_path.stem,
+            "path": str(glossary_path),
+            "entries": entries,
+            "total": len(entries)
+        }
+
+
+@app.get("/api/memory/content")
+async def get_memory_content():
+    """Get all translation memory entries."""
+    settings = get_settings()
+    memory_file = settings.data_root / "memory.json"
+    
+    if not memory_file.exists():
+        return {
+            "path": str(memory_file),
+            "entries": [],
+            "total": 0
+        }
+    
+    # Read and return memory content
+    entries = []
+    try:
+        raw = memory_file.read_text(encoding="utf-8")
+        data = json.loads(raw or "{}")
+        
+        for key, record in data.items():
+            if isinstance(record, dict) and "source_text" in record and "translated_text" in record:
+                entries.append({
+                    "key": key,
+                    "source_text": record.get("source_text", ""),
+                    "translated_text": record.get("translated_text", ""),
+                    "source_lang": record.get("source_lang", ""),
+                    "target_lang": record.get("target_lang", "")
+                })
+    except Exception as e:
+        logger.error(f"Error reading memory file: {e}")
+        raise HTTPException(status_code=500, detail=f"Error reading memory: {str(e)}")
+    
     return {
-        "name": glossary_path.stem,
-        "path": str(glossary_path),
+        "path": str(memory_file),
         "entries": entries,
         "total": len(entries)
     }
+
+
+@app.put("/api/memory/content")
+async def update_memory_content(request: Request):
+    """Update the content of the translation memory file."""
+    settings = get_settings()
+    memory_file = settings.data_root / "memory.json"
+    
+    # Ensure parent directory exists
+    memory_file.parent.mkdir(parents=True, exist_ok=True)
+    
+    # Get updated entries from request body
+    try:
+        body = await request.json()
+        entries = body.get("entries", [])
+        
+        if not isinstance(entries, list):
+            raise HTTPException(status_code=400, detail="Invalid entries format")
+        
+        # Validate entries - skip empty entries (new entries that weren't filled in)
+        valid_entries = []
+        for entry in entries:
+            if not isinstance(entry, dict):
+                raise HTTPException(status_code=400, detail="Each entry must be an object")
+            source_text = (entry.get("source_text") or "").strip()
+            translated_text = (entry.get("translated_text") or "").strip()
+            # Skip empty entries (allow empty fields in editing, but filter them out when saving)
+            if not source_text or not translated_text:
+                continue
+            valid_entries.append(entry)
+        
+        entries = valid_entries
+        
+        # Convert entries back to memory JSON format (with keys)
+        memory_data = {}
+        from .terminology.memory import TranslationRecord
+        from hashlib import sha1
+        
+        for entry in entries:
+            source_lang = (entry.get("source_lang") or "").strip()
+            target_lang = (entry.get("target_lang") or "").strip()
+            source_text = (entry.get("source_text") or "").strip()
+            translated_text = (entry.get("translated_text") or "").strip()
+            
+            # Generate key using same method as TranslationRecord
+            raw = f"{source_lang}:{target_lang}:{source_text.strip()}"
+            key = sha1(raw.encode("utf-8")).hexdigest()
+            
+            memory_data[key] = {
+                "source_text": source_text,
+                "translated_text": translated_text,
+                "source_lang": source_lang,
+                "target_lang": target_lang
+            }
+        
+        # Write updated entries to JSON file
+        memory_file.write_text(
+            json.dumps(memory_data, ensure_ascii=False, indent=2),
+            encoding="utf-8"
+        )
+        
+        logger.info(f"Updated memory with {len(entries)} entries")
+        
+        # Return updated entries in the same format as GET
+        return {
+            "path": str(memory_file),
+            "entries": [
+                {
+                    "key": key,
+                    "source_text": record["source_text"],
+                    "translated_text": record["translated_text"],
+                    "source_lang": record["source_lang"],
+                    "target_lang": record["target_lang"]
+                }
+                for key, record in memory_data.items()
+            ],
+            "total": len(memory_data)
+        }
+        
+    except json.JSONDecodeError:
+        raise HTTPException(status_code=400, detail="Invalid JSON in request body")
+    except Exception as e:
+        logger.error(f"Error updating memory: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=f"Error updating memory: {str(e)}")
 
 
 @app.put("/api/glossary/{glossary_name}/content")

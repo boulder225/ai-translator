@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { startTranslation, getPrompt, detectLanguage, getGlossaryContent, updateGlossaryContent } from '../services/api';
+import { startTranslation, getPrompt, detectLanguage, getGlossaryContent, updateGlossaryContent, getMemoryContent, updateMemoryContent } from '../services/api';
 import './TranslationForm.css';
 
 function TranslationForm({ onTranslationStart, userRole }) {
@@ -23,6 +23,14 @@ function TranslationForm({ onTranslationStart, userRole }) {
   const [editingGlossaryEntry, setEditingGlossaryEntry] = useState(null);
   const [editedGlossaryEntries, setEditedGlossaryEntries] = useState(null);
   const [savingGlossary, setSavingGlossary] = useState(false);
+  const [showMemoryModal, setShowMemoryModal] = useState(false);
+  const [memoryContent, setMemoryContent] = useState(null);
+  const [loadingMemory, setLoadingMemory] = useState(false);
+  const [memorySearchQuery, setMemorySearchQuery] = useState('');
+  const [editingMemoryEntry, setEditingMemoryEntry] = useState(null);
+  const [editedMemoryEntries, setEditedMemoryEntries] = useState(null);
+  const [savingMemory, setSavingMemory] = useState(false);
+  const [fullscreenText, setFullscreenText] = useState(null); // { entryIndex, field, value, isEditing }
   
   const handleToggleToolbar = () => {
     setShowToolbar(!showToolbar);
@@ -97,6 +105,140 @@ function TranslationForm({ onTranslationStart, userRole }) {
     const updated = editedGlossaryEntries.filter((_, i) => i !== index);
     setEditedGlossaryEntries(updated);
   };
+
+  const handleViewMemory = async () => {
+    setLoadingMemory(true);
+    setShowMemoryModal(true);
+    setMemorySearchQuery(''); // Reset search when opening modal
+    setEditingMemoryEntry(null);
+    setEditedMemoryEntries(null);
+    try {
+      const content = await getMemoryContent();
+      setMemoryContent(content);
+      // Initialize edited entries with a copy of original entries
+      setEditedMemoryEntries(content.entries ? [...content.entries] : []);
+    } catch (error) {
+      console.error('Failed to load memory:', error);
+      setMemoryContent({ error: error.message || 'Failed to load memory' });
+    } finally {
+      setLoadingMemory(false);
+    }
+  };
+
+  const handleEditMemoryEntry = (index, field, value) => {
+    if (!editedMemoryEntries) return;
+    
+    const updated = [...editedMemoryEntries];
+    updated[index] = {
+      ...updated[index],
+      [field]: value
+    };
+    setEditedMemoryEntries(updated);
+  };
+
+  const handleSaveMemory = async () => {
+    if (!editedMemoryEntries || !memoryContent) return;
+    
+    setSavingMemory(true);
+    try {
+      const updated = await updateMemoryContent(editedMemoryEntries);
+      setMemoryContent(updated);
+      setEditingMemoryEntry(null);
+    } catch (error) {
+      console.error('Failed to save memory:', error);
+      alert(`Failed to save memory: ${error.response?.data?.detail || error.message}`);
+    } finally {
+      setSavingMemory(false);
+    }
+  };
+
+  const handleCancelEditMemory = () => {
+    // Reset to original entries
+    if (memoryContent?.entries) {
+      setEditedMemoryEntries([...memoryContent.entries]);
+    }
+    setEditingMemoryEntry(null);
+  };
+
+  const handleAddMemoryEntry = () => {
+    if (!editedMemoryEntries) return;
+    
+    // Add a new empty entry at the beginning
+    const newEntry = { source_text: '', translated_text: '', source_lang: '', target_lang: '' };
+    setEditedMemoryEntries([newEntry, ...editedMemoryEntries]);
+  };
+
+  const handleDeleteMemoryEntry = (index) => {
+    if (!editedMemoryEntries) return;
+    
+    // Remove entry at the specified index
+    const updated = editedMemoryEntries.filter((_, i) => i !== index);
+    setEditedMemoryEntries(updated);
+  };
+
+  const handleOpenFullscreen = (entryIndex, field, isEditing) => {
+    if (!editedMemoryEntries && !memoryContent?.entries) return;
+    // When opening fullscreen, always allow editing if we're in edit mode
+    // Otherwise, allow viewing only
+    const entries = editedMemoryEntries || memoryContent.entries;
+    const entry = entries[entryIndex];
+    if (!entry) return;
+    
+    // Always allow editing in fullscreen (user can edit even in view mode)
+    setFullscreenText({
+      entryIndex,
+      field,
+      value: entry[field] || '',
+      isEditing: isEditing || editingMemoryEntry !== null
+    });
+  };
+
+  const handleCloseFullscreen = () => {
+    setFullscreenText(null);
+  };
+
+  const handleFullscreenTextChange = (value) => {
+    if (!fullscreenText) return;
+    setFullscreenText({
+      ...fullscreenText,
+      value
+    });
+  };
+
+  const handleSaveFullscreenText = () => {
+    if (!fullscreenText) return;
+    
+    // Get current entries (either edited or original)
+    const currentEntries = editedMemoryEntries || memoryContent?.entries || [];
+    
+    // Create updated entries array
+    const updated = [...currentEntries];
+    updated[fullscreenText.entryIndex] = {
+      ...updated[fullscreenText.entryIndex],
+      [fullscreenText.field]: fullscreenText.value
+    };
+    
+    // Update editedMemoryEntries (will be created if it doesn't exist)
+    setEditedMemoryEntries(updated);
+    
+    // If not already in edit mode, enter edit mode to reflect the change
+    if (editingMemoryEntry === null) {
+      setEditingMemoryEntry({});
+    }
+    
+    setFullscreenText(null);
+  };
+
+  // Close fullscreen on Escape key
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape' && fullscreenText) {
+        handleCloseFullscreen();
+      }
+    };
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
+  }, [fullscreenText]);
 
   // Filter glossary entries based on search query (starting from first 3 characters)
   const filteredGlossaryEntries = glossaryContent?.entries?.filter((entry) => {
@@ -405,6 +547,19 @@ function TranslationForm({ onTranslationStart, userRole }) {
               <p className="toolbar-help-text">
                 Uses approved translations from memory when available
               </p>
+              <button
+                type="button"
+                className="toolbar-view-button"
+                onClick={handleViewMemory}
+                disabled={loading}
+              >
+                <svg className="toolbar-view-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3 2h10v12H3V2zm1 1v10h8V3H4z" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+                  <path d="M5 5.5h6M5 7.5h4" stroke="currentColor" strokeWidth="1" strokeLinecap="round"/>
+                  <path d="M11 9l2-2m0 0l1 1m-1-1l-1 1" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+                </svg>
+                View memory
+              </button>
             </div>
           </div>
         </div>
@@ -627,6 +782,330 @@ function TranslationForm({ onTranslationStart, userRole }) {
                 </>
               ) : null}
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Memory Modal */}
+      {showMemoryModal && (
+        <div className="glossary-modal-overlay" onClick={() => setShowMemoryModal(false)}>
+          <div className="glossary-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="glossary-modal-header">
+              <h2 className="glossary-modal-title">Translation Memory</h2>
+              <button
+                type="button"
+                className="glossary-modal-close"
+                onClick={() => setShowMemoryModal(false)}
+                aria-label="Close memory"
+              >
+                ×
+              </button>
+            </div>
+            <div className="glossary-modal-content">
+              {loadingMemory ? (
+                <div className="glossary-loading">Loading memory...</div>
+              ) : memoryContent?.error ? (
+                <div className="glossary-error">Error: {memoryContent.error}</div>
+              ) : memoryContent ? (
+                <>
+                  <div className="glossary-search-container">
+                    <input
+                      type="text"
+                      className="glossary-search-input"
+                      placeholder="Search memory (min 3 characters)..."
+                      value={memorySearchQuery}
+                      onChange={(e) => setMemorySearchQuery(e.target.value)}
+                      disabled={savingMemory}
+                    />
+                  </div>
+                  <div className="glossary-info">
+                    <p>
+                      {(() => {
+                        const entriesToCount = editedMemoryEntries || memoryContent.entries;
+                        const filteredCount = memorySearchQuery.length >= 3 
+                          ? entriesToCount.filter((entry) => {
+                              const query = memorySearchQuery.toLowerCase();
+                              return (
+                                (entry.source_text || '').toLowerCase().includes(query) ||
+                                (entry.translated_text || '').toLowerCase().includes(query) ||
+                                (entry.source_lang || '').toLowerCase().includes(query) ||
+                                (entry.target_lang || '').toLowerCase().includes(query)
+                              );
+                            }).length
+                          : entriesToCount.length;
+                        const totalCount = entriesToCount.length;
+                        const originalTotal = memoryContent.total;
+                        return `${filteredCount} of ${totalCount}${totalCount !== originalTotal ? ` (${totalCount - originalTotal > 0 ? '+' : ''}${totalCount - originalTotal} new)` : ''} entries${memorySearchQuery.length >= 3 ? ' (filtered)' : ''}`;
+                      })()}
+                    </p>
+                    <div className="glossary-actions">
+                      <button
+                        type="button"
+                        className="glossary-edit-button"
+                        onClick={() => setEditingMemoryEntry({})}
+                        disabled={savingMemory || editingMemoryEntry !== null}
+                      >
+                        Edit
+                      </button>
+                      {editingMemoryEntry !== null && (
+                        <>
+                          <button
+                            type="button"
+                            className="glossary-add-button"
+                            onClick={handleAddMemoryEntry}
+                            disabled={savingMemory}
+                          >
+                            Add Entry
+                          </button>
+                          <button
+                            type="button"
+                            className="glossary-save-button"
+                            onClick={handleSaveMemory}
+                            disabled={savingMemory}
+                          >
+                            {savingMemory ? 'Saving...' : 'Save'}
+                          </button>
+                          <button
+                            type="button"
+                            className="glossary-cancel-button"
+                            onClick={handleCancelEditMemory}
+                            disabled={savingMemory}
+                          >
+                            Cancel
+                          </button>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                  <div className="glossary-table-container">
+                    <table className="glossary-table memory-table">
+                      <thead>
+                        <tr>
+                          <th className="memory-lang-col">Source Language</th>
+                          <th className="memory-lang-col">Target Language</th>
+                          <th>Source Text</th>
+                          <th>Translated Text</th>
+                          {editingMemoryEntry !== null && <th>Actions</th>}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {(() => {
+                          const entriesToShow = editedMemoryEntries || memoryContent.entries;
+                          const filtered = entriesToShow.filter((entry) => {
+                            // Don't filter out empty new entries when editing
+                            if (editingMemoryEntry !== null && (!entry.source_text || !entry.translated_text)) {
+                              return true;
+                            }
+                            if (!memorySearchQuery || memorySearchQuery.length < 3) {
+                              return true;
+                            }
+                            const query = memorySearchQuery.toLowerCase();
+                            return (
+                              (entry.source_text || '').toLowerCase().includes(query) ||
+                              (entry.translated_text || '').toLowerCase().includes(query) ||
+                              (entry.source_lang || '').toLowerCase().includes(query) ||
+                              (entry.target_lang || '').toLowerCase().includes(query)
+                            );
+                          });
+                          
+                          if (filtered.length === 0 && (!editingMemoryEntry || memorySearchQuery.length >= 3)) {
+                            return (
+                              <tr>
+                                <td colSpan={editingMemoryEntry !== null ? 5 : 4} className="glossary-no-results">
+                                  No entries found matching "{memorySearchQuery}"
+                                </td>
+                              </tr>
+                            );
+                          }
+                          
+                          const isEditing = editingMemoryEntry !== null;
+                          
+                          return filtered.map((entry, displayIndex) => {
+                            // Find the actual index in entriesToShow (which is editedMemoryEntries when editing)
+                            // Since filtered entries are references to entriesToShow entries, we can find the index directly
+                            const entryIndex = entriesToShow.findIndex((e) => {
+                              // Match by key if available (most reliable)
+                              if (entry.key && e.key) {
+                                return e.key === entry.key;
+                              }
+                              // For entries without keys (new entries), match by object reference
+                              return e === entry;
+                            });
+                            
+                            // Fallback to displayIndex if not found (shouldn't happen, but safer)
+                            const actualIndex = entryIndex !== -1 ? entryIndex : displayIndex;
+                            
+                            return (
+                              <tr key={entry.key || `entry-${actualIndex}`}>
+                                <td className="memory-lang-col">
+                                  {isEditing ? (
+                                    <input
+                                      type="text"
+                                      className="glossary-edit-input"
+                                      value={entry.source_lang || ''}
+                                      onChange={(e) => handleEditMemoryEntry(actualIndex, 'source_lang', e.target.value)}
+                                      placeholder="Source lang"
+                                    />
+                                  ) : (
+                                    entry.source_lang || '-'
+                                  )}
+                                </td>
+                                <td className="memory-lang-col">
+                                  {isEditing ? (
+                                    <input
+                                      type="text"
+                                      className="glossary-edit-input"
+                                      value={entry.target_lang || ''}
+                                      onChange={(e) => handleEditMemoryEntry(actualIndex, 'target_lang', e.target.value)}
+                                      placeholder="Target lang"
+                                    />
+                                  ) : (
+                                    entry.target_lang || '-'
+                                  )}
+                                </td>
+                                <td className="memory-text-cell">
+                                  <div className="memory-text-cell-wrapper">
+                                    {isEditing ? (
+                                      <textarea
+                                        className="glossary-edit-input memory-edit-textarea"
+                                        value={entry.source_text || ''}
+                                        onChange={(e) => handleEditMemoryEntry(actualIndex, 'source_text', e.target.value)}
+                                        placeholder="Source text"
+                                        rows={3}
+                                      />
+                                    ) : (
+                                      <div className="memory-text-content">{entry.source_text || '-'}</div>
+                                    )}
+                                    <button
+                                      type="button"
+                                      className="memory-fullscreen-toggle"
+                                      onClick={() => handleOpenFullscreen(actualIndex, 'source_text', isEditing)}
+                                      title="Open in fullscreen"
+                                      aria-label="Open in fullscreen"
+                                    >
+                                      🗖
+                                    </button>
+                                  </div>
+                                </td>
+                                <td className="memory-text-cell">
+                                  <div className="memory-text-cell-wrapper">
+                                    {isEditing ? (
+                                      <textarea
+                                        className="glossary-edit-input memory-edit-textarea"
+                                        value={entry.translated_text || ''}
+                                        onChange={(e) => handleEditMemoryEntry(actualIndex, 'translated_text', e.target.value)}
+                                        placeholder="Translated text"
+                                        rows={3}
+                                      />
+                                    ) : (
+                                      <div className="memory-text-content">{entry.translated_text || '-'}</div>
+                                    )}
+                                    <button
+                                      type="button"
+                                      className="memory-fullscreen-toggle"
+                                      onClick={() => handleOpenFullscreen(actualIndex, 'translated_text', isEditing)}
+                                      title="Open in fullscreen"
+                                      aria-label="Open in fullscreen"
+                                    >
+                                      🗖
+                                    </button>
+                                  </div>
+                                </td>
+                                {isEditing && (
+                                  <td className="glossary-actions-cell">
+                                    <button
+                                      type="button"
+                                      className="glossary-delete-button"
+                                      onClick={() => handleDeleteMemoryEntry(actualIndex)}
+                                      disabled={savingMemory}
+                                      aria-label="Delete entry"
+                                    >
+                                      ×
+                                    </button>
+                                  </td>
+                                )}
+                              </tr>
+                            );
+                          });
+                        })()}
+                      </tbody>
+                    </table>
+                  </div>
+                </>
+              ) : null}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Fullscreen Text Modal */}
+      {fullscreenText && (
+        <div className="memory-fullscreen-overlay" onClick={handleCloseFullscreen}>
+          <div className="memory-fullscreen-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="memory-fullscreen-header">
+              <h2 className="memory-fullscreen-title">
+                {fullscreenText.field === 'source_text' ? 'Source Text' : 'Translated Text'}
+              </h2>
+              <button
+                type="button"
+                className="memory-fullscreen-close"
+                onClick={handleCloseFullscreen}
+                aria-label="Close fullscreen"
+              >
+                ×
+              </button>
+            </div>
+            <div className="memory-fullscreen-content">
+              {fullscreenText.isEditing ? (
+                <textarea
+                  className="memory-fullscreen-textarea"
+                  value={fullscreenText.value}
+                  onChange={(e) => handleFullscreenTextChange(e.target.value)}
+                  placeholder={fullscreenText.field === 'source_text' ? 'Source text' : 'Translated text'}
+                  autoFocus
+                />
+              ) : (
+                <div className="memory-fullscreen-text">
+                  {fullscreenText.value || '-'}
+                </div>
+              )}
+            </div>
+            {fullscreenText.isEditing && (
+              <div className="memory-fullscreen-actions">
+                <button
+                  type="button"
+                  className="glossary-save-button"
+                  onClick={handleSaveFullscreenText}
+                >
+                  Save
+                </button>
+                <button
+                  type="button"
+                  className="glossary-cancel-button"
+                  onClick={handleCloseFullscreen}
+                >
+                  Cancel
+                </button>
+              </div>
+            )}
+            {!fullscreenText.isEditing && (
+              <div className="memory-fullscreen-actions">
+                <button
+                  type="button"
+                  className="glossary-edit-button"
+                  onClick={() => setFullscreenText({...fullscreenText, isEditing: true})}
+                >
+                  Edit
+                </button>
+                <button
+                  type="button"
+                  className="glossary-cancel-button"
+                  onClick={handleCloseFullscreen}
+                >
+                  Close
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}

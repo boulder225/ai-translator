@@ -671,6 +671,195 @@ textarea:hover {
   font-style: italic;
 }
 
+.memory-text-cell {
+  max-width: 300px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.memory-text-content {
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 0.5rem;
+  background: var(--bg-tertiary);
+  border-radius: 4px;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.memory-edit-textarea {
+  width: 100%;
+  min-height: 60px;
+  resize: vertical;
+  font-family: inherit;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+/* Make language columns narrower in memory table */
+.memory-table th.memory-lang-col,
+.memory-table td.memory-lang-col {
+  width: 80px;
+  min-width: 80px;
+  max-width: 100px;
+}
+
+.memory-table th:not(.memory-lang-col),
+.memory-table td:not(.memory-lang-col) {
+  min-width: 200px;
+}
+
+.memory-text-cell-wrapper {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.memory-text-cell-wrapper .memory-text-content,
+.memory-text-cell-wrapper .memory-edit-textarea {
+  flex: 1;
+}
+
+.memory-fullscreen-toggle {
+  background: transparent;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  color: var(--text-tertiary);
+  transition: color 0.2s, background-color 0.2s;
+  border-radius: 4px;
+  line-height: 1;
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+.memory-fullscreen-toggle:hover {
+  color: var(--text-secondary);
+  background: var(--bg-tertiary);
+  opacity: 1;
+}
+
+/* Fullscreen Modal */
+.memory-fullscreen-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 2rem;
+}
+
+.memory-fullscreen-modal {
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  box-shadow: 0 8px 32px var(--shadow-lg);
+  width: 100%;
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: background-color 0.3s ease;
+}
+
+.memory-fullscreen-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+.memory-fullscreen-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.memory-fullscreen-close {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.memory-fullscreen-close:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.memory-fullscreen-content {
+  padding: 1.5rem;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+}
+
+.memory-fullscreen-text {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 1.5rem;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--text-primary);
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  min-height: 400px;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.memory-fullscreen-textarea {
+  width: 100%;
+  min-height: 500px;
+  padding: 1.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 1rem;
+  line-height: 1.6;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  resize: vertical;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.memory-fullscreen-textarea:focus {
+  outline: none;
+  border-color: var(--border-accent);
+  border-width: 2px;
+  box-shadow: 0 0 0 2px var(--shadow-sm);
+}
+
+.memory-fullscreen-actions {
+  display: flex;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-top: 1px solid var(--border-color);
+  flex-shrink: 0;
+  justify-content: flex-end;
+}
+
 .toolbar-help-text {
   font-size: 0.75rem;
   color: var(--text-tertiary);
