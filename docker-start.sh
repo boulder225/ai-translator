@@ -21,6 +21,12 @@ sed -i '/http {/,/^}/ s|include /etc/nginx/sites-enabled|# include /etc/nginx/si
 sed -i '/^[[:space:]]*daemon[[:space:]]/d' /etc/nginx/nginx.conf
 echo "Nginx sites-enabled after cleanup:"
 ls -la /etc/nginx/sites-enabled/ || echo "sites-enabled directory empty (good)"
+echo "Checking for symlinks in sites-enabled:"
+find /etc/nginx/sites-enabled -type l -ls || echo "No symlinks found (good)"
+echo "Removing any files found in sites-enabled:"
+rm -f /etc/nginx/sites-enabled/* 2>/dev/null || true
+echo "Final sites-enabled contents:"
+ls -la /etc/nginx/sites-enabled/ || echo "sites-enabled directory empty (good)"
 echo "Checking for any default site files:"
 find /etc/nginx -name "default" -type f 2>/dev/null || echo "No default files found (good)"
 echo "Checking nginx.conf for sites-enabled include:"
