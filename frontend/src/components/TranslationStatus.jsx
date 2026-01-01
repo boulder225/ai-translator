@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { downloadTranslation, getTranslationReport, cancelTranslation, downloadTranslatedText } from '../services/api';
+import EditableTranslatedText from './EditableTranslatedText';
 import './TranslationStatus.css';
 
 function TranslationStatus({ jobId, status, onReset, onReportUpdate }) {
@@ -215,66 +216,12 @@ function TranslationStatus({ jobId, status, onReset, onReportUpdate }) {
                     </button>
                   </div>
                   <div className="text-content translated-text markdown-content">
-                    {status.translated_text.map((paragraph, idx) => {
-                      if (!paragraph) return null;
-                      
-                      // Process paragraph to handle both glossary and memory tags
-                      // Split by both tag types and render appropriately
-                      const parts = paragraph.split(/(<glossary>.*?<\/glossary>|<memory>.*?<\/memory>)/g);
-                      
-                      return (
-                        <div key={idx} className="paragraph-wrapper">
-                          {parts.map((part, partIdx) => {
-                            // Handle glossary tags
-                            if (part.startsWith('<glossary>') && part.endsWith('</glossary>')) {
-                              const glossaryText = part.slice(10, -11); // Remove <glossary></glossary>
-                              return (
-                                <ReactMarkdown 
-                                  key={partIdx} 
-                                  remarkPlugins={[remarkGfm]}
-                                  components={{
-                                    strong: ({node, ...props}) => (
-                                      <strong className="glossary-term" {...props} />
-                                    ),
-                                  }}
-                                >
-                                  {`**${glossaryText}**`}
-                                </ReactMarkdown>
-                              );
-                            }
-                            
-                            // Handle memory tags
-                            if (part.startsWith('<memory>') && part.endsWith('</memory>')) {
-                              const memoryText = part.slice(8, -9); // Remove <memory></memory>
-                              return (
-                                <span key={partIdx} className="memory-term">
-                                  {memoryText}
-                                </span>
-                              );
-                            }
-                            
-                            // Regular text - render with markdown (but preserve any remaining tags)
-                            if (part.trim()) {
-                              return (
-                                <ReactMarkdown 
-                                  key={partIdx} 
-                                  remarkPlugins={[remarkGfm]}
-                                  components={{
-                                    strong: ({node, ...props}) => (
-                                      <strong className="glossary-term" {...props} />
-                                    ),
-                                  }}
-                                >
-                                  {part}
-                                </ReactMarkdown>
-                              );
-                            }
-                            
-                            return null;
-                          })}
-                        </div>
-                      );
-                    })}
+                    <EditableTranslatedText
+                      paragraphs={status.translated_text}
+                      sourceLang={status.report?.source_lang || 'fr'}
+                      targetLang={status.report?.target_lang || 'it'}
+                      glossaryName="glossary"
+                    />
                   </div>
                 </div>
               </div>

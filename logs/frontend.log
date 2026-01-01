@@ -7,3 +7,430 @@
 
   ➜  Local:   http://localhost:5173/
   ➜  Network: http://192.168.0.87:5173/
+6:13:22 PM [vite] hmr update /src/components/TranslationStatus.jsx
+6:13:32 PM [vite] hmr update /src/components/TranslationStatus.jsx
+6:13:44 PM [vite] hmr update /src/components/EditableTranslatedText.jsx
+6:14:10 PM [vite] hmr update /src/components/EditableTranslatedText.jsx
+6:14:17 PM [vite] hmr update /src/components/EditableTranslatedText.css
+6:14:19 PM [vite] hmr update /src/components/EditableTranslatedText.jsx
+6:14:24 PM [vite] hmr update /src/components/EditableTranslatedText.css
+6:14:24 PM [vite] hmr update /src/components/EditableTranslatedText.jsx
+6:14:24 PM [vite] hmr update /src/components/TranslationStatus.jsx
+6:16:43 PM [vite] hmr update /src/components/EditableTranslatedText.jsx
+6:16:44 PM [vite] hmr update /src/components/EditableTranslatedText.jsx
+6:16:44 PM [vite] Internal server error: /Users/enrico/workspace/translator/frontend/src/components/EditableTranslatedText.jsx: Identifier 'range' has already been declared. (128:10)
+
+  126 |
+  127 |     // Calculate position for alternatives dropdown
+> 128 |     const range = selection.getRangeAt(0);
+      |           ^
+  129 |     const rect = range.getBoundingClientRect();
+  130 |     const containerRect = containerRef.current?.getBoundingClientRect();
+  131 |     
+  Plugin: vite:react-babel
+  File: /Users/enrico/workspace/translator/frontend/src/components/EditableTranslatedText.jsx:128:10
+  126|  
+  127|      // Calculate position for alternatives dropdown
+  128|      const range = selection.getRangeAt(0);
+     |            ^
+  129|      const rect = range.getBoundingClientRect();
+  130|      const containerRect = containerRef.current?.getBoundingClientRect();
+      at constructor (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:367:19)
+      at JSXParserMixin.raise (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:6624:19)
+      at ScopeHandler.checkRedeclarationInScope (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:1646:19)
+      at ScopeHandler.declareName (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:1612:12)
+      at JSXParserMixin.declareNameFromIdentifier (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:7594:16)
+      at JSXParserMixin.checkIdentifier (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:7590:12)
+      at JSXParserMixin.checkLVal (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:7527:12)
+      at JSXParserMixin.parseVarId (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13488:10)
+      at JSXParserMixin.parseVar (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13459:12)
+      at JSXParserMixin.parseVarStatement (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13306:10)
+      at JSXParserMixin.parseStatementContent (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12927:23)
+      at JSXParserMixin.parseStatementLike (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12843:17)
+      at JSXParserMixin.parseStatementListItem (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12823:17)
+      at JSXParserMixin.parseBlockOrModuleBlockBody (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13392:61)
+      at JSXParserMixin.parseBlockBody (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13385:10)
+      at JSXParserMixin.parseBlock (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13373:10)
+      at JSXParserMixin.parseFunctionBody (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12174:24)
+      at JSXParserMixin.parseArrowExpression (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12149:10)
+      at JSXParserMixin.parseParenAndDistinguishExpression (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:11759:12)
+      at JSXParserMixin.parseExprAtom (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:11395:23)
+      at JSXParserMixin.parseExprAtom (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:4793:20)
+      at JSXParserMixin.parseExprSubscripts (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:11145:23)
+      at JSXParserMixin.parseUpdate (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:11130:21)
+      at JSXParserMixin.parseMaybeUnary (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:11110:23)
+      at JSXParserMixin.parseMaybeUnaryOrPrivate (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:10963:61)
+      at JSXParserMixin.parseExprOps (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:10968:23)
+      at JSXParserMixin.parseMaybeConditional (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:10945:23)
+      at JSXParserMixin.parseMaybeAssign (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:10895:21)
+      at /Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:10864:39
+      at JSXParserMixin.allowInAnd (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12495:16)
+      at JSXParserMixin.parseMaybeAssignAllowIn (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:10864:17)
+      at JSXParserMixin.parseVar (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13460:91)
+      at JSXParserMixin.parseVarStatement (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13306:10)
+      at JSXParserMixin.parseStatementContent (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12927:23)
+      at JSXParserMixin.parseStatementLike (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12843:17)
+      at JSXParserMixin.parseStatementListItem (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12823:17)
+      at JSXParserMixin.parseBlockOrModuleBlockBody (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13392:61)
+      at JSXParserMixin.parseBlockBody (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13385:10)
+      at JSXParserMixin.parseBlock (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13373:10)
+      at JSXParserMixin.parseFunctionBody (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12174:24)
+      at JSXParserMixin.parseFunctionBodyAndFinish (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12160:10)
+      at /Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13521:12
+      at JSXParserMixin.withSmartMixTopicForbiddingContext (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12477:14)
+      at JSXParserMixin.parseFunction (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13520:10)
+      at JSXParserMixin.parseFunctionStatement (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13201:17)
+      at JSXParserMixin.parseStatementContent (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12867:21)
+      at JSXParserMixin.parseStatementLike (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12843:17)
+      at JSXParserMixin.parseModuleItem (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12820:17)
+      at JSXParserMixin.parseBlockOrModuleBlockBody (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13392:36)
+      at JSXParserMixin.parseBlockBody (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13385:10)
+6:16:53 PM [vite] hmr update /src/components/EditableTranslatedText.jsx
+6:16:53 PM [vite] Internal server error: /Users/enrico/workspace/translator/frontend/src/components/EditableTranslatedText.jsx: Identifier 'range' has already been declared. (129:10)
+
+  127 |
+  128 |     // Calculate position for alternatives dropdown
+> 129 |     const range = selection.getRangeAt(0);
+      |           ^
+  130 |     const rect = range.getBoundingClientRect();
+  131 |     const containerRect = containerRef.current?.getBoundingClientRect();
+  132 |     
+  Plugin: vite:react-babel
+  File: /Users/enrico/workspace/translator/frontend/src/components/EditableTranslatedText.jsx:129:10
+  127|  
+  128|      // Calculate position for alternatives dropdown
+  129|      const range = selection.getRangeAt(0);
+     |            ^
+  130|      const rect = range.getBoundingClientRect();
+  131|      const containerRect = containerRef.current?.getBoundingClientRect();
+      at constructor (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:367:19)
+      at JSXParserMixin.raise (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:6624:19)
+      at ScopeHandler.checkRedeclarationInScope (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:1646:19)
+      at ScopeHandler.declareName (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:1612:12)
+      at JSXParserMixin.declareNameFromIdentifier (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:7594:16)
+      at JSXParserMixin.checkIdentifier (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:7590:12)
+      at JSXParserMixin.checkLVal (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:7527:12)
+      at JSXParserMixin.parseVarId (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13488:10)
+      at JSXParserMixin.parseVar (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13459:12)
+      at JSXParserMixin.parseVarStatement (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13306:10)
+      at JSXParserMixin.parseStatementContent (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12927:23)
+      at JSXParserMixin.parseStatementLike (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12843:17)
+      at JSXParserMixin.parseStatementListItem (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12823:17)
+      at JSXParserMixin.parseBlockOrModuleBlockBody (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13392:61)
+      at JSXParserMixin.parseBlockBody (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13385:10)
+      at JSXParserMixin.parseBlock (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13373:10)
+      at JSXParserMixin.parseFunctionBody (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12174:24)
+      at JSXParserMixin.parseArrowExpression (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12149:10)
+      at JSXParserMixin.parseParenAndDistinguishExpression (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:11759:12)
+      at JSXParserMixin.parseExprAtom (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:11395:23)
+      at JSXParserMixin.parseExprAtom (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:4793:20)
+      at JSXParserMixin.parseExprSubscripts (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:11145:23)
+      at JSXParserMixin.parseUpdate (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:11130:21)
+      at JSXParserMixin.parseMaybeUnary (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:11110:23)
+      at JSXParserMixin.parseMaybeUnaryOrPrivate (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:10963:61)
+      at JSXParserMixin.parseExprOps (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:10968:23)
+      at JSXParserMixin.parseMaybeConditional (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:10945:23)
+      at JSXParserMixin.parseMaybeAssign (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:10895:21)
+      at /Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:10864:39
+      at JSXParserMixin.allowInAnd (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12495:16)
+      at JSXParserMixin.parseMaybeAssignAllowIn (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:10864:17)
+      at JSXParserMixin.parseVar (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13460:91)
+      at JSXParserMixin.parseVarStatement (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13306:10)
+      at JSXParserMixin.parseStatementContent (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12927:23)
+      at JSXParserMixin.parseStatementLike (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12843:17)
+      at JSXParserMixin.parseStatementListItem (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12823:17)
+      at JSXParserMixin.parseBlockOrModuleBlockBody (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13392:61)
+      at JSXParserMixin.parseBlockBody (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13385:10)
+      at JSXParserMixin.parseBlock (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13373:10)
+      at JSXParserMixin.parseFunctionBody (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12174:24)
+      at JSXParserMixin.parseFunctionBodyAndFinish (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12160:10)
+      at /Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13521:12
+      at JSXParserMixin.withSmartMixTopicForbiddingContext (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12477:14)
+      at JSXParserMixin.parseFunction (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13520:10)
+      at JSXParserMixin.parseFunctionStatement (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13201:17)
+      at JSXParserMixin.parseStatementContent (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12867:21)
+      at JSXParserMixin.parseStatementLike (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12843:17)
+      at JSXParserMixin.parseModuleItem (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12820:17)
+      at JSXParserMixin.parseBlockOrModuleBlockBody (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13392:36)
+      at JSXParserMixin.parseBlockBody (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13385:10)
+6:16:54 PM [vite] hmr update /src/components/EditableTranslatedText.jsx
+6:16:54 PM [vite] Internal server error: /Users/enrico/workspace/translator/frontend/src/components/EditableTranslatedText.jsx: Identifier 'range' has already been declared. (129:10)
+
+  127 |
+  128 |     // Calculate position for alternatives dropdown
+> 129 |     const range = selection.getRangeAt(0);
+      |           ^
+  130 |     const rect = range.getBoundingClientRect();
+  131 |     const containerRect = containerRef.current?.getBoundingClientRect();
+  132 |     
+  Plugin: vite:react-babel
+  File: /Users/enrico/workspace/translator/frontend/src/components/EditableTranslatedText.jsx:129:10
+  127|  
+  128|      // Calculate position for alternatives dropdown
+  129|      const range = selection.getRangeAt(0);
+     |            ^
+  130|      const rect = range.getBoundingClientRect();
+  131|      const containerRect = containerRef.current?.getBoundingClientRect();
+      at constructor (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:367:19)
+      at JSXParserMixin.raise (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:6624:19)
+      at ScopeHandler.checkRedeclarationInScope (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:1646:19)
+      at ScopeHandler.declareName (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:1612:12)
+      at JSXParserMixin.declareNameFromIdentifier (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:7594:16)
+      at JSXParserMixin.checkIdentifier (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:7590:12)
+      at JSXParserMixin.checkLVal (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:7527:12)
+      at JSXParserMixin.parseVarId (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13488:10)
+      at JSXParserMixin.parseVar (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13459:12)
+      at JSXParserMixin.parseVarStatement (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13306:10)
+      at JSXParserMixin.parseStatementContent (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12927:23)
+      at JSXParserMixin.parseStatementLike (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12843:17)
+      at JSXParserMixin.parseStatementListItem (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12823:17)
+      at JSXParserMixin.parseBlockOrModuleBlockBody (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13392:61)
+      at JSXParserMixin.parseBlockBody (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13385:10)
+      at JSXParserMixin.parseBlock (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13373:10)
+      at JSXParserMixin.parseFunctionBody (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12174:24)
+      at JSXParserMixin.parseArrowExpression (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12149:10)
+      at JSXParserMixin.parseParenAndDistinguishExpression (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:11759:12)
+      at JSXParserMixin.parseExprAtom (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:11395:23)
+      at JSXParserMixin.parseExprAtom (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:4793:20)
+      at JSXParserMixin.parseExprSubscripts (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:11145:23)
+      at JSXParserMixin.parseUpdate (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:11130:21)
+      at JSXParserMixin.parseMaybeUnary (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:11110:23)
+      at JSXParserMixin.parseMaybeUnaryOrPrivate (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:10963:61)
+      at JSXParserMixin.parseExprOps (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:10968:23)
+      at JSXParserMixin.parseMaybeConditional (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:10945:23)
+      at JSXParserMixin.parseMaybeAssign (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:10895:21)
+      at /Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:10864:39
+      at JSXParserMixin.allowInAnd (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12495:16)
+      at JSXParserMixin.parseMaybeAssignAllowIn (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:10864:17)
+      at JSXParserMixin.parseVar (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13460:91)
+      at JSXParserMixin.parseVarStatement (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13306:10)
+      at JSXParserMixin.parseStatementContent (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12927:23)
+      at JSXParserMixin.parseStatementLike (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12843:17)
+      at JSXParserMixin.parseStatementListItem (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12823:17)
+      at JSXParserMixin.parseBlockOrModuleBlockBody (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13392:61)
+      at JSXParserMixin.parseBlockBody (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13385:10)
+      at JSXParserMixin.parseBlock (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13373:10)
+      at JSXParserMixin.parseFunctionBody (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12174:24)
+      at JSXParserMixin.parseFunctionBodyAndFinish (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12160:10)
+      at /Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13521:12
+      at JSXParserMixin.withSmartMixTopicForbiddingContext (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12477:14)
+      at JSXParserMixin.parseFunction (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13520:10)
+      at JSXParserMixin.parseFunctionStatement (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13201:17)
+      at JSXParserMixin.parseStatementContent (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12867:21)
+      at JSXParserMixin.parseStatementLike (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12843:17)
+      at JSXParserMixin.parseModuleItem (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12820:17)
+      at JSXParserMixin.parseBlockOrModuleBlockBody (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13392:36)
+      at JSXParserMixin.parseBlockBody (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13385:10)
+6:17:00 PM [vite] hmr update /src/components/EditableTranslatedText.jsx
+6:17:00 PM [vite] Internal server error: /Users/enrico/workspace/translator/frontend/src/components/EditableTranslatedText.jsx: Identifier 'range' has already been declared. (129:10)
+
+  127 |
+  128 |     // Calculate position for alternatives dropdown
+> 129 |     const range = selection.getRangeAt(0);
+      |           ^
+  130 |     const rect = range.getBoundingClientRect();
+  131 |     const containerRect = containerRef.current?.getBoundingClientRect();
+  132 |     
+  Plugin: vite:react-babel
+  File: /Users/enrico/workspace/translator/frontend/src/components/EditableTranslatedText.jsx:129:10
+  127|  
+  128|      // Calculate position for alternatives dropdown
+  129|      const range = selection.getRangeAt(0);
+     |            ^
+  130|      const rect = range.getBoundingClientRect();
+  131|      const containerRect = containerRef.current?.getBoundingClientRect();
+      at constructor (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:367:19)
+      at JSXParserMixin.raise (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:6624:19)
+      at ScopeHandler.checkRedeclarationInScope (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:1646:19)
+      at ScopeHandler.declareName (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:1612:12)
+      at JSXParserMixin.declareNameFromIdentifier (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:7594:16)
+      at JSXParserMixin.checkIdentifier (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:7590:12)
+      at JSXParserMixin.checkLVal (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:7527:12)
+      at JSXParserMixin.parseVarId (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13488:10)
+      at JSXParserMixin.parseVar (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13459:12)
+      at JSXParserMixin.parseVarStatement (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13306:10)
+      at JSXParserMixin.parseStatementContent (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12927:23)
+      at JSXParserMixin.parseStatementLike (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12843:17)
+      at JSXParserMixin.parseStatementListItem (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12823:17)
+      at JSXParserMixin.parseBlockOrModuleBlockBody (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13392:61)
+      at JSXParserMixin.parseBlockBody (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13385:10)
+      at JSXParserMixin.parseBlock (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13373:10)
+      at JSXParserMixin.parseFunctionBody (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12174:24)
+      at JSXParserMixin.parseArrowExpression (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12149:10)
+      at JSXParserMixin.parseParenAndDistinguishExpression (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:11759:12)
+      at JSXParserMixin.parseExprAtom (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:11395:23)
+      at JSXParserMixin.parseExprAtom (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:4793:20)
+      at JSXParserMixin.parseExprSubscripts (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:11145:23)
+      at JSXParserMixin.parseUpdate (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:11130:21)
+      at JSXParserMixin.parseMaybeUnary (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:11110:23)
+      at JSXParserMixin.parseMaybeUnaryOrPrivate (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:10963:61)
+      at JSXParserMixin.parseExprOps (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:10968:23)
+      at JSXParserMixin.parseMaybeConditional (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:10945:23)
+      at JSXParserMixin.parseMaybeAssign (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:10895:21)
+      at /Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:10864:39
+      at JSXParserMixin.allowInAnd (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12495:16)
+      at JSXParserMixin.parseMaybeAssignAllowIn (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:10864:17)
+      at JSXParserMixin.parseVar (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13460:91)
+      at JSXParserMixin.parseVarStatement (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13306:10)
+      at JSXParserMixin.parseStatementContent (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12927:23)
+      at JSXParserMixin.parseStatementLike (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12843:17)
+      at JSXParserMixin.parseStatementListItem (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12823:17)
+      at JSXParserMixin.parseBlockOrModuleBlockBody (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13392:61)
+      at JSXParserMixin.parseBlockBody (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13385:10)
+      at JSXParserMixin.parseBlock (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13373:10)
+      at JSXParserMixin.parseFunctionBody (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12174:24)
+      at JSXParserMixin.parseFunctionBodyAndFinish (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12160:10)
+      at /Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13521:12
+      at JSXParserMixin.withSmartMixTopicForbiddingContext (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12477:14)
+      at JSXParserMixin.parseFunction (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13520:10)
+      at JSXParserMixin.parseFunctionStatement (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13201:17)
+      at JSXParserMixin.parseStatementContent (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12867:21)
+      at JSXParserMixin.parseStatementLike (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12843:17)
+      at JSXParserMixin.parseModuleItem (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12820:17)
+      at JSXParserMixin.parseBlockOrModuleBlockBody (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13392:36)
+      at JSXParserMixin.parseBlockBody (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13385:10)
+6:17:01 PM [vite] hmr update /src/components/EditableTranslatedText.jsx
+6:17:01 PM [vite] Internal server error: /Users/enrico/workspace/translator/frontend/src/components/EditableTranslatedText.jsx: Identifier 'range' has already been declared. (129:10)
+
+  127 |
+  128 |     // Calculate position for alternatives dropdown
+> 129 |     const range = selection.getRangeAt(0);
+      |           ^
+  130 |     const rect = range.getBoundingClientRect();
+  131 |     const containerRect = containerRef.current?.getBoundingClientRect();
+  132 |     
+  Plugin: vite:react-babel
+  File: /Users/enrico/workspace/translator/frontend/src/components/EditableTranslatedText.jsx:129:10
+  127|  
+  128|      // Calculate position for alternatives dropdown
+  129|      const range = selection.getRangeAt(0);
+     |            ^
+  130|      const rect = range.getBoundingClientRect();
+  131|      const containerRect = containerRef.current?.getBoundingClientRect();
+      at constructor (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:367:19)
+      at JSXParserMixin.raise (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:6624:19)
+      at ScopeHandler.checkRedeclarationInScope (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:1646:19)
+      at ScopeHandler.declareName (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:1612:12)
+      at JSXParserMixin.declareNameFromIdentifier (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:7594:16)
+      at JSXParserMixin.checkIdentifier (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:7590:12)
+      at JSXParserMixin.checkLVal (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:7527:12)
+      at JSXParserMixin.parseVarId (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13488:10)
+      at JSXParserMixin.parseVar (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13459:12)
+      at JSXParserMixin.parseVarStatement (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13306:10)
+      at JSXParserMixin.parseStatementContent (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12927:23)
+      at JSXParserMixin.parseStatementLike (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12843:17)
+      at JSXParserMixin.parseStatementListItem (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12823:17)
+      at JSXParserMixin.parseBlockOrModuleBlockBody (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13392:61)
+      at JSXParserMixin.parseBlockBody (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13385:10)
+      at JSXParserMixin.parseBlock (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13373:10)
+      at JSXParserMixin.parseFunctionBody (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12174:24)
+      at JSXParserMixin.parseArrowExpression (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12149:10)
+      at JSXParserMixin.parseParenAndDistinguishExpression (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:11759:12)
+      at JSXParserMixin.parseExprAtom (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:11395:23)
+      at JSXParserMixin.parseExprAtom (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:4793:20)
+      at JSXParserMixin.parseExprSubscripts (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:11145:23)
+      at JSXParserMixin.parseUpdate (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:11130:21)
+      at JSXParserMixin.parseMaybeUnary (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:11110:23)
+      at JSXParserMixin.parseMaybeUnaryOrPrivate (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:10963:61)
+      at JSXParserMixin.parseExprOps (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:10968:23)
+      at JSXParserMixin.parseMaybeConditional (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:10945:23)
+      at JSXParserMixin.parseMaybeAssign (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:10895:21)
+      at /Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:10864:39
+      at JSXParserMixin.allowInAnd (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12495:16)
+      at JSXParserMixin.parseMaybeAssignAllowIn (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:10864:17)
+      at JSXParserMixin.parseVar (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13460:91)
+      at JSXParserMixin.parseVarStatement (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13306:10)
+      at JSXParserMixin.parseStatementContent (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12927:23)
+      at JSXParserMixin.parseStatementLike (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12843:17)
+      at JSXParserMixin.parseStatementListItem (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12823:17)
+      at JSXParserMixin.parseBlockOrModuleBlockBody (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13392:61)
+      at JSXParserMixin.parseBlockBody (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13385:10)
+      at JSXParserMixin.parseBlock (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13373:10)
+      at JSXParserMixin.parseFunctionBody (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12174:24)
+      at JSXParserMixin.parseFunctionBodyAndFinish (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12160:10)
+      at /Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13521:12
+      at JSXParserMixin.withSmartMixTopicForbiddingContext (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12477:14)
+      at JSXParserMixin.parseFunction (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13520:10)
+      at JSXParserMixin.parseFunctionStatement (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13201:17)
+      at JSXParserMixin.parseStatementContent (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12867:21)
+      at JSXParserMixin.parseStatementLike (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12843:17)
+      at JSXParserMixin.parseModuleItem (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12820:17)
+      at JSXParserMixin.parseBlockOrModuleBlockBody (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13392:36)
+      at JSXParserMixin.parseBlockBody (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13385:10)
+6:17:09 PM [vite] hmr update /src/components/EditableTranslatedText.jsx
+6:17:09 PM [vite] Internal server error: /Users/enrico/workspace/translator/frontend/src/components/EditableTranslatedText.jsx: Identifier 'range' has already been declared. (129:10)
+
+  127 |
+  128 |     // Calculate position for alternatives dropdown
+> 129 |     const range = selection.getRangeAt(0);
+      |           ^
+  130 |     const rect = range.getBoundingClientRect();
+  131 |     const containerRect = containerRef.current?.getBoundingClientRect();
+  132 |     
+  Plugin: vite:react-babel
+  File: /Users/enrico/workspace/translator/frontend/src/components/EditableTranslatedText.jsx:129:10
+  127|  
+  128|      // Calculate position for alternatives dropdown
+  129|      const range = selection.getRangeAt(0);
+     |            ^
+  130|      const rect = range.getBoundingClientRect();
+  131|      const containerRect = containerRef.current?.getBoundingClientRect();
+      at constructor (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:367:19)
+      at JSXParserMixin.raise (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:6624:19)
+      at ScopeHandler.checkRedeclarationInScope (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:1646:19)
+      at ScopeHandler.declareName (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:1612:12)
+      at JSXParserMixin.declareNameFromIdentifier (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:7594:16)
+      at JSXParserMixin.checkIdentifier (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:7590:12)
+      at JSXParserMixin.checkLVal (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:7527:12)
+      at JSXParserMixin.parseVarId (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13488:10)
+      at JSXParserMixin.parseVar (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13459:12)
+      at JSXParserMixin.parseVarStatement (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13306:10)
+      at JSXParserMixin.parseStatementContent (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12927:23)
+      at JSXParserMixin.parseStatementLike (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12843:17)
+      at JSXParserMixin.parseStatementListItem (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12823:17)
+      at JSXParserMixin.parseBlockOrModuleBlockBody (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13392:61)
+      at JSXParserMixin.parseBlockBody (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13385:10)
+      at JSXParserMixin.parseBlock (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13373:10)
+      at JSXParserMixin.parseFunctionBody (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12174:24)
+      at JSXParserMixin.parseArrowExpression (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12149:10)
+      at JSXParserMixin.parseParenAndDistinguishExpression (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:11759:12)
+      at JSXParserMixin.parseExprAtom (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:11395:23)
+      at JSXParserMixin.parseExprAtom (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:4793:20)
+      at JSXParserMixin.parseExprSubscripts (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:11145:23)
+      at JSXParserMixin.parseUpdate (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:11130:21)
+      at JSXParserMixin.parseMaybeUnary (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:11110:23)
+      at JSXParserMixin.parseMaybeUnaryOrPrivate (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:10963:61)
+      at JSXParserMixin.parseExprOps (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:10968:23)
+      at JSXParserMixin.parseMaybeConditional (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:10945:23)
+      at JSXParserMixin.parseMaybeAssign (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:10895:21)
+      at /Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:10864:39
+      at JSXParserMixin.allowInAnd (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12495:16)
+      at JSXParserMixin.parseMaybeAssignAllowIn (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:10864:17)
+      at JSXParserMixin.parseVar (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13460:91)
+      at JSXParserMixin.parseVarStatement (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13306:10)
+      at JSXParserMixin.parseStatementContent (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12927:23)
+      at JSXParserMixin.parseStatementLike (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12843:17)
+      at JSXParserMixin.parseStatementListItem (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12823:17)
+      at JSXParserMixin.parseBlockOrModuleBlockBody (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13392:61)
+      at JSXParserMixin.parseBlockBody (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13385:10)
+      at JSXParserMixin.parseBlock (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13373:10)
+      at JSXParserMixin.parseFunctionBody (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12174:24)
+      at JSXParserMixin.parseFunctionBodyAndFinish (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12160:10)
+      at /Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13521:12
+      at JSXParserMixin.withSmartMixTopicForbiddingContext (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12477:14)
+      at JSXParserMixin.parseFunction (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13520:10)
+      at JSXParserMixin.parseFunctionStatement (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13201:17)
+      at JSXParserMixin.parseStatementContent (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12867:21)
+      at JSXParserMixin.parseStatementLike (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12843:17)
+      at JSXParserMixin.parseModuleItem (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:12820:17)
+      at JSXParserMixin.parseBlockOrModuleBlockBody (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13392:36)
+      at JSXParserMixin.parseBlockBody (/Users/enrico/workspace/translator/frontend/node_modules/@babel/parser/lib/index.js:13385:10)
+6:17:39 PM [vite] hmr update /src/components/EditableTranslatedText.jsx
+6:17:45 PM [vite] hmr update /src/components/EditableTranslatedText.jsx
+6:19:33 PM [vite] hmr update /src/components/EditableTranslatedText.jsx
+6:19:35 PM [vite] hmr update /src/components/EditableTranslatedText.jsx
+6:19:45 PM [vite] hmr update /src/components/EditableTranslatedText.jsx
+6:19:46 PM [vite] hmr update /src/components/EditableTranslatedText.jsx
+6:19:47 PM [vite] hmr update /src/components/EditableTranslatedText.jsx
+6:19:49 PM [vite] hmr update /src/components/EditableTranslatedText.jsx
+6:19:57 PM [vite] hmr update /src/components/EditableTranslatedText.jsx

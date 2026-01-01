@@ -62,13 +62,25 @@ logger.info(f"Logging initialized. Log file: {log_file_path}")
 
 app = FastAPI(title="Legal Translator API", version="0.1.0")
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=[
+# CORS configuration - allow all origins in production, specific origins in development
+cors_origins = os.getenv("CORS_ORIGINS", "").split(",") if os.getenv("CORS_ORIGINS") else []
+if not cors_origins:
+    # Default: allow localhost and ngrok for development
+    cors_origins = [
         "http://localhost:3000",
         "http://localhost:5173",
-    ],
-    allow_origin_regex=r"https://.*\.ngrok\.(io|app|free\.app)",
+    ]
+    allow_origin_regex = r"https://.*\.ngrok\.(io|app|free\.app)"
+else:
+    # In production, use specific origins or allow all if "*" is set
+    allow_origin_regex = None
+    if "*" in cors_origins:
+        cors_origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=cors_origins,
+    allow_origin_regex=allow_origin_regex,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -480,6 +492,10 @@ def _run_translation(job_id: str) -> None:
 @app.get("/")
 async def root():
     return {"message": "Legal Translator API", "version": "0.1.0"}
+
+@app.get("/api/health")
+async def health():
+    return {"status": "healthy", "service": "legal-translator-api"}
 
 
 @app.get("/api/glossaries")

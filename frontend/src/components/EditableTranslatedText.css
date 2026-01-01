@@ -1,0 +1,157 @@
+.editable-translated-text-container {
+  position: relative;
+  width: 100%;
+}
+
+.editable-text-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  background: var(--bg-tertiary);
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+}
+
+.edit-toggle-button {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.edit-toggle-button:hover {
+  background: var(--bg-secondary);
+  border-color: var(--border-accent);
+}
+
+.edit-hint {
+  font-size: 0.875rem;
+  color: var(--text-tertiary);
+  font-style: italic;
+}
+
+.translated-text-content {
+  min-height: 200px;
+  padding: 1rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  line-height: 1.6;
+}
+
+.translated-text-content.editable {
+  outline: 2px solid #00B4D8;
+  outline-offset: -2px;
+  background: var(--bg-primary);
+  cursor: text;
+  white-space: pre-wrap;
+}
+
+.translated-text-content.editable:focus {
+  outline-color: #0077B6;
+}
+
+.translated-text-content.editable .paragraph-wrapper {
+  margin-bottom: 1.5rem;
+  min-height: 1.5rem;
+}
+
+.translated-text-content.editable .paragraph-wrapper:last-child {
+  margin-bottom: 0;
+}
+
+.alternatives-dropdown {
+  position: absolute;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  min-width: 300px;
+  max-width: 500px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.alternatives-header {
+  padding: 0.75rem 1rem;
+  background: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border-color);
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.alternatives-list {
+  max-height: 350px;
+  overflow-y: auto;
+}
+
+.alternative-item {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.alternative-item:hover {
+  background: var(--bg-tertiary);
+}
+
+.alternative-item:last-child {
+  border-bottom: none;
+}
+
+.alternative-text {
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+  font-size: 1rem;
+}
+
+.alternative-term {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.25rem;
+}
+
+.alternative-context {
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+  font-style: italic;
+  margin-top: 0.25rem;
+}
+
+.alternative-item:hover .alternative-text {
+  color: #00B4D8;
+}
+
+/* Ensure glossary terms are still visible in editable mode */
+.translated-text-content.editable .glossary-term {
+  background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%);
+  padding: 0.15rem 0.3rem;
+  border-radius: 3px;
+  border: 1px solid #ffc107;
+  font-weight: 600;
+  color: #856404;
+  display: inline-block;
+}
+
+.translated-text-content.editable .memory-term {
+  background: linear-gradient(135deg, #d1e7dd 0%, #a3cfbb 100%);
+  padding: 0.15rem 0.3rem;
+  border-radius: 3px;
+  border: 1px solid #198754;
+  font-weight: 600;
+  color: #0a3622;
+  display: inline-block;
+}
