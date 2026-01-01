@@ -11,7 +11,11 @@ COPY frontend/package*.json ./
 RUN npm ci
 
 COPY frontend/ ./
-RUN npm run build
+RUN npm run build && \
+    echo "Build completed. Contents of dist:" && \
+    ls -la dist/ && \
+    echo "Checking for index.html:" && \
+    test -f dist/index.html && echo "index.html found" || echo "ERROR: index.html not found"
 
 # Stage 2: Python backend
 FROM python:3.11-slim AS backend
@@ -35,11 +39,14 @@ RUN pip install --no-cache-dir -e .
 COPY --from=frontend-builder /app/frontend/dist /usr/share/nginx/html
 
 # Remove default nginx site and copy our configuration
-RUN rm -f /etc/nginx/sites-enabled/default
+RUN rm -f /etc/nginx/sites-enabled/default && \
+    rm -f /etc/nginx/conf.d/default.conf
 COPY frontend/nginx.conf /etc/nginx/conf.d/default.conf
 
-# Verify frontend files are present
-RUN ls -la /usr/share/nginx/html/ || echo "Warning: Frontend files not found"
+# Verify frontend files are present and set correct permissions
+RUN chmod -R 755 /usr/share/nginx/html && \
+    ls -la /usr/share/nginx/html/ && \
+    test -f /usr/share/nginx/html/index.html && echo "✓ index.html found" || echo "✗ ERROR: index.html not found"
 
 # Create necessary directories
 RUN mkdir -p /app/data /app/logs /app/glossary
