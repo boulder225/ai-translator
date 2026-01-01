@@ -58,8 +58,10 @@ RUN rm -rf /etc/nginx/sites-enabled && \
     mkdir -p /etc/nginx/sites-enabled && \
     rm -f /etc/nginx/sites-available/default && \
     rm -f /etc/nginx/conf.d/default.conf && \
+    # Find and remove any default files
+    find /etc/nginx -name "default" -delete 2>/dev/null || true && \
     # Comment out sites-enabled include in main nginx.conf to avoid conflicts
-    sed -i 's|include /etc/nginx/sites-enabled/\*;|# include /etc/nginx/sites-enabled/*;|g' /etc/nginx/nginx.conf && \
+    sed -i 's|^[[:space:]]*include[[:space:]]*/etc/nginx/sites-enabled/\*;|    # include /etc/nginx/sites-enabled/*;|g' /etc/nginx/nginx.conf && \
     sed -i 's|include.*sites-enabled|# include sites-enabled|g' /etc/nginx/nginx.conf && \
     # Remove daemon directive (we use -g flag on command line instead)
     sed -i '/^[[:space:]]*daemon[[:space:]]/d' /etc/nginx/nginx.conf && \
@@ -67,7 +69,9 @@ RUN rm -rf /etc/nginx/sites-enabled && \
     echo "Verifying sites-enabled is empty:" && \
     ls -la /etc/nginx/sites-enabled/ && \
     echo "Verifying nginx.conf has sites-enabled commented:" && \
-    grep -n "sites-enabled" /etc/nginx/nginx.conf || echo "No sites-enabled found (good)"
+    grep -n "sites-enabled" /etc/nginx/nginx.conf || echo "No sites-enabled found (good)" && \
+    echo "Verifying no default files exist:" && \
+    find /etc/nginx -name "default" 2>/dev/null || echo "No default files found (good)"
 COPY frontend/nginx.conf /etc/nginx/conf.d/app.conf
 
 # Verify frontend files are present and set correct permissions
