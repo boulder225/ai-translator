@@ -61,11 +61,17 @@ EXPOSE 80
 
 # Create startup script
 RUN echo '#!/bin/bash\n\
-# Start backend in background\n\
+set -e\n\
+echo "Starting services..."\n\
+echo "Frontend files in /usr/share/nginx/html:"\n\
+ls -la /usr/share/nginx/html/ || echo "WARNING: No files found"\n\
+echo "Nginx config:"\n\
+cat /etc/nginx/conf.d/default.conf\n\
+echo "Starting backend..."\n\
 cd /app\n\
 uvicorn src.translator.api:app --host 0.0.0.0 --port 8080 &\n\
-\n\
-# Start nginx in foreground\n\
+echo "Backend started, PID: $!"\n\
+echo "Starting nginx..."\n\
 nginx -g "daemon off;"' > /app/start.sh && chmod +x /app/start.sh
 
 # Set environment variables
