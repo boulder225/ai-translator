@@ -976,4 +976,8 @@ INFO:     Finished server process [65432]
 INFO:     Started server process [65448]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
-kend.log
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [65448]
+INFO:     Stopping reloader process [61360]
