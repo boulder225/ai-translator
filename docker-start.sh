@@ -6,21 +6,21 @@ ls -la /usr/share/nginx/html/ || echo "WARNING: No files found"
 echo "Nginx config files:"
 ls -la /etc/nginx/conf.d/
 echo "Removing any remaining default sites..."
-# Aggressively remove everything related to default sites
-rm -rf /etc/nginx/sites-enabled
-mkdir -p /etc/nginx/sites-enabled
-# Remove default site file and any symlinks
+# First, remove the default file directly if it exists in sites-enabled
+rm -f /etc/nginx/sites-enabled/default
+# Remove default site file and any symlinks from all locations
 rm -f /etc/nginx/sites-available/default
-find /etc/nginx -name "default" -type f -delete 2>/dev/null || true
-find /etc/nginx -name "default" -type l -delete 2>/dev/null || true
+find /etc/nginx -name "default" -delete 2>/dev/null || true
+# Aggressively remove everything in sites-enabled
+rm -rf /etc/nginx/sites-enabled/*
 # Comment out ALL sites-enabled includes in nginx.conf BEFORE testing
-# Use multiple sed patterns to catch all variations
+# The pattern in nginx.conf is: include /etc/nginx/sites-enabled/*;
 sed -i 's|^[[:space:]]*include[[:space:]]*/etc/nginx/sites-enabled/\*;|    # include /etc/nginx/sites-enabled/*;|g' /etc/nginx/nginx.conf
-sed -i 's|include.*sites-enabled/\*|# include sites-enabled/*|g' /etc/nginx/nginx.conf
+sed -i 's|include[[:space:]]*/etc/nginx/sites-enabled/\*;|# include /etc/nginx/sites-enabled/*;|g' /etc/nginx/nginx.conf
 sed -i 's|include.*sites-enabled|# include sites-enabled|g' /etc/nginx/nginx.conf
 # Verify the include is commented
 echo "Checking if sites-enabled include is commented:"
-grep "sites-enabled" /etc/nginx/nginx.conf
+grep -n "sites-enabled" /etc/nginx/nginx.conf
 # Remove daemon directive from config file since we use -g flag on command line
 sed -i '/^[[:space:]]*daemon[[:space:]]/d' /etc/nginx/nginx.conf
 echo "Nginx sites-enabled after cleanup:"
