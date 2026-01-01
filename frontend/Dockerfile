@@ -44,6 +44,8 @@ RUN rm -rf /etc/nginx/sites-enabled/* && \
     rm -f /etc/nginx/conf.d/default.conf && \
     # Comment out sites-enabled include in main nginx.conf to avoid conflicts
     sed -i 's|include /etc/nginx/sites-enabled/\*;|# include /etc/nginx/sites-enabled/*;|g' /etc/nginx/nginx.conf && \
+    # Remove any existing daemon directive and add our own
+    sed -i '/^daemon /d' /etc/nginx/nginx.conf && \
     echo "daemon off;" >> /etc/nginx/nginx.conf
 COPY frontend/nginx.conf /etc/nginx/conf.d/app.conf
 
@@ -74,8 +76,12 @@ ls -la /etc/nginx/conf.d/\n\
 echo "Removing any remaining default sites..."\n\
 rm -rf /etc/nginx/sites-enabled/*\n\
 rm -f /etc/nginx/sites-available/default\n\
+# Also ensure the sites-enabled include is commented out\n\
+sed -i 's|include /etc/nginx/sites-enabled/\*;|# include /etc/nginx/sites-enabled/*;|g' /etc/nginx/nginx.conf\n\
 echo "Nginx sites-enabled after cleanup:"\n\
 ls -la /etc/nginx/sites-enabled/ || echo "sites-enabled directory empty (good)"\n\
+echo "Checking nginx.conf for sites-enabled include:"\n\
+grep -n "sites-enabled" /etc/nginx/nginx.conf || echo "No sites-enabled references found (good)"\n\
 echo "Testing nginx config..."\n\
 nginx -t\n\
 echo "Starting backend..."\n\
