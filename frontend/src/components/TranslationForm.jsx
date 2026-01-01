@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { startTranslation, getPrompt, detectLanguage, getGlossaryContent, updateGlossaryContent, getMemoryContent, updateMemoryContent } from '../services/api';
+import { startTranslation, getPrompt, detectLanguage, getGlossaryContent, updateGlossaryContent, getMemoryContent, updateMemoryContent, deleteAllMemoryContent } from '../services/api';
 import './TranslationForm.css';
 
 function TranslationForm({ onTranslationStart, userRole }) {
@@ -174,6 +174,28 @@ function TranslationForm({ onTranslationStart, userRole }) {
     // Remove entry at the specified index
     const updated = editedMemoryEntries.filter((_, i) => i !== index);
     setEditedMemoryEntries(updated);
+  };
+
+  const handleDeleteAllMemory = async () => {
+    if (!window.confirm('Are you sure you want to delete ALL memory entries? This action cannot be undone.')) {
+      return;
+    }
+    
+    setSavingMemory(true);
+    try {
+      const result = await deleteAllMemoryContent();
+      // Reload memory content to reflect empty state
+      const content = await getMemoryContent();
+      setMemoryContent(content);
+      setEditedMemoryEntries(content.entries ? [...content.entries] : []);
+      // Exit edit mode if active
+      setEditingMemoryEntry(null);
+    } catch (error) {
+      console.error('Failed to delete all memory:', error);
+      alert(`Failed to delete all memory: ${error.response?.data?.detail || error.message}`);
+    } finally {
+      setSavingMemory(false);
+    }
   };
 
   const handleOpenFullscreen = (entryIndex, field, isEditing) => {
@@ -875,6 +897,15 @@ function TranslationForm({ onTranslationStart, userRole }) {
                           </button>
                         </>
                       )}
+                      <button
+                        type="button"
+                        className="glossary-delete-all-button"
+                        onClick={handleDeleteAllMemory}
+                        disabled={savingMemory || loadingMemory || !memoryContent || memoryContent.total === 0}
+                        title="Delete all memory entries"
+                      >
+                        Delete All
+                      </button>
                     </div>
                   </div>
                   <div className="glossary-table-container">

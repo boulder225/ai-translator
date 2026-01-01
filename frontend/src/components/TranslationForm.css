@@ -605,6 +605,31 @@ textarea:hover {
   cursor: not-allowed;
 }
 
+.glossary-delete-all-button {
+  background: var(--bg-secondary);
+  color: var(--error-text);
+  border: 1px solid var(--error-text);
+  border-radius: 0;
+  padding: 0.5rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-transform: uppercase;
+  margin-left: auto;
+}
+
+.glossary-delete-all-button:hover:not(:disabled) {
+  background: var(--error-text);
+  color: var(--bg-secondary);
+  border-color: var(--error-text);
+}
+
+.glossary-delete-all-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .glossary-table-container {
   overflow-x: auto;
 }

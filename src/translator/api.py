@@ -209,7 +209,16 @@ def _run_translation(job_id: str) -> None:
         source_lang = job["source_lang"]
         target_lang = job["target_lang"]
         glossary_path_str = job.get("glossary_path")
-        skip_memory = job.get("skip_memory", True)
+        skip_memory = job.get("skip_memory", False)  # Default False means memory is enabled
+        # #region agent log
+        import json as json_module
+        log_path = "/Users/enrico/workspace/translator/.cursor/debug.log"
+        try:
+            with open(log_path, "a") as f:
+                f.write(json_module.dumps({"sessionId": "debug-session", "runId": "run1", "hypothesisId": "D", "location": "api.py:212", "message": "skip_memory value in translation", "data": {"skip_memory": skip_memory, "job_skip_memory": job.get("skip_memory")}, "timestamp": __import__("time").time() * 1000}) + "\n")
+        except Exception:
+            pass
+        # #endregion
         custom_prompt = job.get("custom_prompt")
         user_role = job.get("user_role", "")
         # #region agent log
@@ -514,51 +523,63 @@ async def get_glossary_content(glossary_name: str):
         logger.error(f"Error reading glossary {glossary_name}: {e}")
         raise HTTPException(status_code=500, detail=f"Error reading glossary: {str(e)}")
     
-        return {
-            "name": glossary_path.stem,
-            "path": str(glossary_path),
-            "entries": entries,
-            "total": len(entries)
-        }
+    return {
+        "name": glossary_path.stem,
+        "path": str(glossary_path),
+        "entries": entries,
+        "total": len(entries)
+    }
 
 
 @app.get("/api/memory/content")
 async def get_memory_content():
     """Get all translation memory entries."""
+    # #region agent log
+    import json as json_module
+    log_path = "/Users/enrico/workspace/translator/.cursor/debug.log"
+    try:
+        with open(log_path, "a") as f:
+            f.write(json_module.dumps({"sessionId": "debug-session", "runId": "api-memory", "hypothesisId": "B", "location": "api.py:525", "message": "API get_memory_content called", "timestamp": __import__("time").time() * 1000}) + "\n")
+    except Exception:
+        pass
+    # #endregion
     settings = get_settings()
     memory_file = settings.data_root / "memory.json"
     
-    if not memory_file.exists():
+    # Use TranslationMemory to get cleaned entries (filters out stale entries)
+    try:
+        # #region agent log
+        try:
+            with open(log_path, "a") as f:
+                f.write(json_module.dumps({"sessionId": "debug-session", "runId": "api-memory", "hypothesisId": "B", "location": "api.py:533", "message": "Creating TranslationMemory instance", "data": {"memory_file": str(memory_file), "file_exists": memory_file.exists()}, "timestamp": __import__("time").time() * 1000}) + "\n")
+        except Exception:
+            pass
+        # #endregion
+        memory = TranslationMemory(memory_file)
+        entries = []
+        for record in memory:
+            entries.append({
+                "key": record.key,
+                "source_text": record.source_text,
+                "translated_text": record.translated_text,
+                "source_lang": record.source_lang,
+                "target_lang": record.target_lang
+            })
+        # #region agent log
+        try:
+            with open(log_path, "a") as f:
+                f.write(json_module.dumps({"sessionId": "debug-session", "runId": "api-memory", "hypothesisId": "B", "location": "api.py:550", "message": "Returning memory entries", "data": {"total_entries": len(entries)}, "timestamp": __import__("time").time() * 1000}) + "\n")
+        except Exception:
+            pass
+        # #endregion
         return {
             "path": str(memory_file),
-            "entries": [],
-            "total": 0
+            "entries": entries,
+            "total": len(entries)
         }
-    
-    # Read and return memory content
-    entries = []
-    try:
-        raw = memory_file.read_text(encoding="utf-8")
-        data = json.loads(raw or "{}")
-        
-        for key, record in data.items():
-            if isinstance(record, dict) and "source_text" in record and "translated_text" in record:
-                entries.append({
-                    "key": key,
-                    "source_text": record.get("source_text", ""),
-                    "translated_text": record.get("translated_text", ""),
-                    "source_lang": record.get("source_lang", ""),
-                    "target_lang": record.get("target_lang", "")
-                })
     except Exception as e:
-        logger.error(f"Error reading memory file: {e}")
+        logger.error(f"Error reading memory: {e}")
         raise HTTPException(status_code=500, detail=f"Error reading memory: {str(e)}")
-    
-    return {
-        "path": str(memory_file),
-        "entries": entries,
-        "total": len(entries)
-    }
 
 
 @app.put("/api/memory/content")
@@ -643,6 +664,30 @@ async def update_memory_content(request: Request):
     except Exception as e:
         logger.error(f"Error updating memory: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=f"Error updating memory: {str(e)}")
+
+
+@app.delete("/api/memory/content")
+async def delete_all_memory_content():
+    """Delete all translation memory entries."""
+    settings = get_settings()
+    memory_file = settings.data_root / "memory.json"
+    
+    try:
+        # Write empty JSON object to clear all entries
+        memory_file.parent.mkdir(parents=True, exist_ok=True)
+        memory_file.write_text("{}", encoding="utf-8")
+        
+        logger.info("Deleted all memory entries")
+        
+        return {
+            "path": str(memory_file),
+            "entries": [],
+            "total": 0,
+            "message": "All memory entries deleted successfully"
+        }
+    except Exception as e:
+        logger.error(f"Error deleting memory: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=f"Error deleting memory: {str(e)}")
 
 
 @app.put("/api/glossary/{glossary_name}/content")
@@ -881,7 +926,7 @@ async def start_translation(
     source_lang: str = Form("fr"),
     target_lang: str = Form("it"),
     use_glossary: bool = Form(False),
-    skip_memory: bool = Form(True),
+    skip_memory: bool = Form(False),  # Default False means memory is enabled
     custom_prompt: Optional[str] = Form(None),
     reference_doc: Optional[UploadFile] = File(None),
 ):

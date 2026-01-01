@@ -1,86 +1,85 @@
 INFO:     Will watch for changes in these directories: ['/Users/enrico/workspace/translator']
 INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
-INFO:     Started reloader process [2299] using WatchFiles
-2025-12-29 21:53:59 - src.translator.api - INFO - Logging initialized. Log file: /Users/enrico/workspace/translator/logs/backend.log
-INFO:     Started server process [2302]
+INFO:     Started reloader process [61360] using WatchFiles
+2026-01-01 17:46:02 - src.translator.api - INFO - Logging initialized. Log file: /Users/enrico/workspace/translator/logs/backend.log
+INFO:     Started server process [61363]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
-2025-12-29 21:55:34 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 21:55:34 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 21:55:34 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
+2026-01-01 17:46:05 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
+2026-01-01 17:46:05 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
+2026-01-01 17:46:05 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
 [prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
 [prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:62558 - "GET /api/prompt HTTP/1.1" 200 OK
-2025-12-29 21:55:34 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 21:55:34 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 21:55:34 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
+INFO:     127.0.0.1:50558 - "GET /api/prompt HTTP/1.1" 200 OK
+2026-01-01 17:46:05 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
+2026-01-01 17:46:05 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
+2026-01-01 17:46:05 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
 [prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:62559 - "GET /api/prompt HTTP/1.1" 200 OK
-INFO:     127.0.0.1:62560 - "GET /api/glossary/glossary/content HTTP/1.1" 200 OK
-2025-12-29 21:59:24 - src.translator.api - INFO - Detected language: fr (prob: 1.00) -> fr
-INFO:     127.0.0.1:62661 - "POST /api/detect-language HTTP/1.1" 200 OK
-2025-12-29 21:59:31 - src.translator.api - INFO - ================================================================================
-2025-12-29 21:59:31 - src.translator.api - INFO - [REQUEST 1da0c8a7] ===== NEW TRANSLATION REQUEST =====
-2025-12-29 21:59:31 - src.translator.api - INFO - [REQUEST 1da0c8a7] Timestamp: 1767041971.5946
-2025-12-29 21:59:31 - src.translator.api - INFO - [REQUEST 1da0c8a7] File name: OBJET DU BAIL4.txt
-2025-12-29 21:59:31 - src.translator.api - INFO - [REQUEST 1da0c8a7] Source: fr -> Target: it
-2025-12-29 21:59:31 - src.translator.api - INFO - [REQUEST 1da0c8a7] File size: 129 bytes
-2025-12-29 21:59:31 - src.translator.api - INFO - [REQUEST 1da0c8a7] File hash: 6c27678b169985646fa3b971e35c8042
-2025-12-29 21:59:31 - src.translator.api - INFO - [REQUEST 1da0c8a7] First 200 bytes: b"\n\n2. OBJET DU BAIL\n\n\xe2\x98\x90 Appartement de ______ pi\xc3\xa8ces  \n\xe2\x98\x90 ______ chambre(s) meubl\xc3\xa9e(s)\n\nAdresse de l'immeuble: [\xc3\x80 compl\xc3\xa9ter]"
-2025-12-29 21:59:31 - src.translator.api - INFO - [REQUEST 1da0c8a7] Use glossary: True
-2025-12-29 21:59:31 - src.translator.api - INFO - [REQUEST 1da0c8a7] Using default glossary: glossary/glossary.csv
-2025-12-29 21:59:31 - src.translator.api - INFO - [REQUEST 1da0c8a7] Generated job_id: 740a4a96-b641-4123-a5ed-f671e9812a78
-2025-12-29 21:59:31 - src.translator.api - INFO - Job 740a4a96-b641-4123-a5ed-f671e9812a78: Created isolated input file: input_740a4a96-b641-4123-a5ed-f671e9812a78_w6q86ddk.txt
-2025-12-29 21:59:31 - src.translator.api - INFO - Job 740a4a96-b641-4123-a5ed-f671e9812a78: File hash: 6c27678b16998564...
-2025-12-29 21:59:31 - src.translator.api - INFO - [REQUEST 1da0c8a7] Job 740a4a96-b641-4123-a5ed-f671e9812a78 stored in translation_jobs
-2025-12-29 21:59:31 - src.translator.api - INFO - [REQUEST 1da0c8a7] Total active jobs: 1
-2025-12-29 21:59:31 - src.translator.api - INFO - ================================================================================
-2025-12-29 21:59:31 - src.translator.api - INFO - [REQUEST 1da0c8a7] Job 740a4a96-b641-4123-a5ed-f671e9812a78: Translation thread started
-2025-12-29 21:59:31 - src.translator.api - INFO - [TRANSLATION 740a4a96-b641-4123-a5ed-f671e9812a78] ===== STARTING TRANSLATION THREAD =====
-2025-12-29 21:59:31 - src.translator.api - INFO - [REQUEST 1da0c8a7] ===== REQUEST PROCESSING COMPLETE =====
-2025-12-29 21:59:31 - src.translator.api - INFO - [TRANSLATION 740a4a96-b641-4123-a5ed-f671e9812a78] Job data from storage:
-2025-12-29 21:59:31 - src.translator.api - INFO - ================================================================================
-2025-12-29 21:59:31 - src.translator.api - INFO - [TRANSLATION 740a4a96-b641-4123-a5ed-f671e9812a78]   - File hash: 6c27678b169985646fa3b971e35c8042
-INFO:     127.0.0.1:62663 - "POST /api/translate HTTP/1.1" 202 Accepted
-2025-12-29 21:59:31 - src.translator.api - INFO - [TRANSLATION 740a4a96-b641-4123-a5ed-f671e9812a78]   - Input path: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_740a4a96-b641-4123-a5ed-f671e9812a78_w6q86ddk.txt
-2025-12-29 21:59:31 - src.translator.api - INFO - [TRANSLATION 740a4a96-b641-4123-a5ed-f671e9812a78]   - Source: fr -> Target: it
-2025-12-29 21:59:31 - src.translator.api - INFO - Job 740a4a96-b641-4123-a5ed-f671e9812a78: [FILE VERIFICATION] Opening file: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_740a4a96-b641-4123-a5ed-f671e9812a78_w6q86ddk.txt
-2025-12-29 21:59:31 - src.translator.api - INFO - Job 740a4a96-b641-4123-a5ed-f671e9812a78: [FILE VERIFICATION] File absolute path: /private/var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_740a4a96-b641-4123-a5ed-f671e9812a78_w6q86ddk.txt
-2025-12-29 21:59:31 - src.translator.api - INFO - Job 740a4a96-b641-4123-a5ed-f671e9812a78: [FILE VERIFICATION] File exists: True
-2025-12-29 21:59:31 - src.translator.api - INFO - Job 740a4a96-b641-4123-a5ed-f671e9812a78: [FILE VERIFICATION] Read 129 bytes from file
-2025-12-29 21:59:31 - src.translator.api - INFO - Job 740a4a96-b641-4123-a5ed-f671e9812a78: [FILE VERIFICATION] Expected hash: 6c27678b169985646fa3b971e35c8042
-2025-12-29 21:59:31 - src.translator.api - INFO - Job 740a4a96-b641-4123-a5ed-f671e9812a78: [FILE VERIFICATION] Actual hash: 6c27678b169985646fa3b971e35c8042
-2025-12-29 21:59:31 - src.translator.api - INFO - Job 740a4a96-b641-4123-a5ed-f671e9812a78: [FILE VERIFICATION] First 100 bytes: b'\n\n2. OBJET DU BAIL\n\n\xe2\x98\x90 Appartement de ______ pi\xc3\xa8ces  \n\xe2\x98\x90 ______ chambre(s) meubl\xc3\xa9e(s)\n\nAdresse d'
-2025-12-29 21:59:31 - src.translator.api - INFO - Job 740a4a96-b641-4123-a5ed-f671e9812a78: [FILE VERIFICATION] Hash verified successfully
-2025-12-29 21:59:31 - src.translator.api - INFO - Job 740a4a96-b641-4123-a5ed-f671e9812a78: [FILE VERIFICATION] File: input_740a4a96-b641-4123-a5ed-f671e9812a78_w6q86ddk.txt, Size: 129 bytes
-2025-12-29 21:59:31 - src.translator.api - INFO - Job 740a4a96-b641-4123-a5ed-f671e9812a78: Created isolated temp directory: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/translation_740a4a96-b641-4123-a5ed-f671e9812a78_zngu80ru
-2025-12-29 21:59:31 - src.translator.api - INFO - Job 740a4a96-b641-4123-a5ed-f671e9812a78: Loading glossary from glossary/glossary.csv (file will be read fresh)
-2025-12-29 21:59:31 - src.translator.api - INFO - Job 740a4a96-b641-4123-a5ed-f671e9812a78: Loaded glossary 'glossary' with 1350 entries
-INFO:     127.0.0.1:62665 - "GET /api/translate/740a4a96-b641-4123-a5ed-f671e9812a78/status HTTP/1.1" 200 OK
-2025-12-29 21:59:31 - src.translator.api - INFO - Job 740a4a96-b641-4123-a5ed-f671e9812a78: Using shared translation memory from /Users/enrico/workspace/translator/data/memory.json
-2025-12-29 21:59:31 - src.translator.api - INFO - Job 740a4a96-b641-4123-a5ed-f671e9812a78: Memory contains 202 existing records
-2025-12-29 21:59:31 - src.translator.api - INFO - Job 740a4a96-b641-4123-a5ed-f671e9812a78: Using custom prompt provided by user
-2025-12-29 21:59:31 - src.translator.api - INFO - Job 740a4a96-b641-4123-a5ed-f671e9812a78: [PRE-TRANSLATE] About to call translate_file_to_memory
-2025-12-29 21:59:31 - src.translator.api - INFO - Job 740a4a96-b641-4123-a5ed-f671e9812a78: [PRE-TRANSLATE] Input path: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_740a4a96-b641-4123-a5ed-f671e9812a78_w6q86ddk.txt
-2025-12-29 21:59:31 - src.translator.api - INFO - Job 740a4a96-b641-4123-a5ed-f671e9812a78: [PRE-TRANSLATE] Input path absolute: /private/var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_740a4a96-b641-4123-a5ed-f671e9812a78_w6q86ddk.txt
-2025-12-29 21:59:31 - src.translator.api - INFO - Job 740a4a96-b641-4123-a5ed-f671e9812a78: [PRE-TRANSLATE] Input file exists: True
-2025-12-29 21:59:31 - src.translator.api - INFO - Job 740a4a96-b641-4123-a5ed-f671e9812a78: [PRE-TRANSLATE] Final verification - Hash: 6c27678b169985646fa3b971e35c8042
-2025-12-29 21:59:31 - src.translator.api - INFO - Job 740a4a96-b641-4123-a5ed-f671e9812a78: [PRE-TRANSLATE] Expected hash: 6c27678b169985646fa3b971e35c8042
-2025-12-29 21:59:31 - src.translator.api - INFO - Job 740a4a96-b641-4123-a5ed-f671e9812a78: [PRE-TRANSLATE] File verified, calling translate_file_to_memory
-2025-12-29 21:59:31 - src.translator.api - INFO - Job 740a4a96-b641-4123-a5ed-f671e9812a78: [PRE-TRANSLATE] Source lang: fr, Target lang: it
-2025-12-29 21:59:31 - src.translator.api - INFO - Job 740a4a96-b641-4123-a5ed-f671e9812a78: Stored 3 original paragraphs
-2025-12-29 21:59:31 - src.translator.processing - INFO - [translate_file_to_memory] ===== STARTING SINGLE-SHOT TRANSLATION =====
-2025-12-29 21:59:31 - src.translator.processing - INFO - [translate_file_to_memory] Input path: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_740a4a96-b641-4123-a5ed-f671e9812a78_w6q86ddk.txt
-2025-12-29 21:59:31 - src.translator.processing - INFO - [translate_file_to_memory] Absolute path: /private/var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_740a4a96-b641-4123-a5ed-f671e9812a78_w6q86ddk.txt
-2025-12-29 21:59:31 - src.translator.processing - INFO - [translate_file_to_memory] File hash: 6c27678b169985646fa3b971e35c8042
-2025-12-29 21:59:31 - src.translator.processing - INFO - [translate_file_to_memory] File size: 129 bytes
-2025-12-29 21:59:31 - src.translator.processing - INFO - [translate_file_to_memory] Reading entire file as text...
-2025-12-29 21:59:31 - src.translator.processing - INFO - [_read_file_as_text] Reading entire file as text: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_740a4a96-b641-4123-a5ed-f671e9812a78_w6q86ddk.txt
-2025-12-29 21:59:31 - src.translator.processing - INFO - [_read_file_as_text] File type: .txt
-2025-12-29 21:59:31 - src.translator.processing - INFO - [_read_file_as_text] File hash: 6c27678b169985646fa3b971e35c8042
-2025-12-29 21:59:31 - src.translator.processing - INFO - [_read_file_as_text] File size: 129 bytes
-2025-12-29 21:59:31 - src.translator.processing - INFO - [_read_file_as_text] Extracted text length: 121 characters
-2025-12-29 21:59:31 - src.translator.processing - INFO - [_read_file_as_text] First 200 chars: 
+INFO:     127.0.0.1:50559 - "GET /api/prompt HTTP/1.1" 200 OK
+2026-01-01 17:46:29 - src.translator.api - INFO - Detected language: fr (prob: 1.00) -> fr
+INFO:     127.0.0.1:50570 - "POST /api/detect-language HTTP/1.1" 200 OK
+2026-01-01 17:46:31 - src.translator.api - INFO - ================================================================================
+2026-01-01 17:46:31 - src.translator.api - INFO - [REQUEST 313a5725] ===== NEW TRANSLATION REQUEST =====
+2026-01-01 17:46:31 - src.translator.api - INFO - [REQUEST 313a5725] Timestamp: 1767285991.7466948
+2026-01-01 17:46:31 - src.translator.api - INFO - [REQUEST 313a5725] File name: OBJET DU BAIL4.txt
+2026-01-01 17:46:31 - src.translator.api - INFO - [REQUEST 313a5725] Source: fr -> Target: it
+2026-01-01 17:46:31 - src.translator.api - INFO - [REQUEST 313a5725] File size: 129 bytes
+2026-01-01 17:46:31 - src.translator.api - INFO - [REQUEST 313a5725] File hash: 6c27678b169985646fa3b971e35c8042
+2026-01-01 17:46:31 - src.translator.api - INFO - [REQUEST 313a5725] First 200 bytes: b"\n\n2. OBJET DU BAIL\n\n\xe2\x98\x90 Appartement de ______ pi\xc3\xa8ces  \n\xe2\x98\x90 ______ chambre(s) meubl\xc3\xa9e(s)\n\nAdresse de l'immeuble: [\xc3\x80 compl\xc3\xa9ter]"
+2026-01-01 17:46:31 - src.translator.api - INFO - [REQUEST 313a5725] Use glossary: True
+2026-01-01 17:46:31 - src.translator.api - INFO - [REQUEST 313a5725] Using default glossary: glossary/glossary.csv
+2026-01-01 17:46:31 - src.translator.api - INFO - [REQUEST 313a5725] Generated job_id: 69dd944e-b771-4673-8ea1-4af9b8896e6a
+2026-01-01 17:46:31 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: Created isolated input file: input_69dd944e-b771-4673-8ea1-4af9b8896e6a_cmua0dnt.txt
+2026-01-01 17:46:31 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: File hash: 6c27678b16998564...
+2026-01-01 17:46:31 - src.translator.api - INFO - [REQUEST 313a5725] Job 69dd944e-b771-4673-8ea1-4af9b8896e6a stored in translation_jobs
+2026-01-01 17:46:31 - src.translator.api - INFO - [REQUEST 313a5725] Total active jobs: 1
+2026-01-01 17:46:31 - src.translator.api - INFO - ================================================================================
+2026-01-01 17:46:31 - src.translator.api - INFO - [REQUEST 313a5725] Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: Translation thread started
+2026-01-01 17:46:31 - src.translator.api - INFO - [TRANSLATION 69dd944e-b771-4673-8ea1-4af9b8896e6a] ===== STARTING TRANSLATION THREAD =====
+2026-01-01 17:46:31 - src.translator.api - INFO - [REQUEST 313a5725] ===== REQUEST PROCESSING COMPLETE =====
+2026-01-01 17:46:31 - src.translator.api - INFO - [TRANSLATION 69dd944e-b771-4673-8ea1-4af9b8896e6a] Job data from storage:
+2026-01-01 17:46:31 - src.translator.api - INFO - ================================================================================
+2026-01-01 17:46:31 - src.translator.api - INFO - [TRANSLATION 69dd944e-b771-4673-8ea1-4af9b8896e6a]   - File hash: 6c27678b169985646fa3b971e35c8042
+INFO:     127.0.0.1:50572 - "POST /api/translate HTTP/1.1" 202 Accepted
+2026-01-01 17:46:31 - src.translator.api - INFO - [TRANSLATION 69dd944e-b771-4673-8ea1-4af9b8896e6a]   - Input path: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_69dd944e-b771-4673-8ea1-4af9b8896e6a_cmua0dnt.txt
+2026-01-01 17:46:31 - src.translator.api - INFO - [TRANSLATION 69dd944e-b771-4673-8ea1-4af9b8896e6a]   - Source: fr -> Target: it
+2026-01-01 17:46:31 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: [FILE VERIFICATION] Opening file: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_69dd944e-b771-4673-8ea1-4af9b8896e6a_cmua0dnt.txt
+2026-01-01 17:46:31 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: [FILE VERIFICATION] File absolute path: /private/var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_69dd944e-b771-4673-8ea1-4af9b8896e6a_cmua0dnt.txt
+2026-01-01 17:46:31 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: [FILE VERIFICATION] File exists: True
+2026-01-01 17:46:31 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: [FILE VERIFICATION] Read 129 bytes from file
+2026-01-01 17:46:31 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: [FILE VERIFICATION] Expected hash: 6c27678b169985646fa3b971e35c8042
+2026-01-01 17:46:31 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: [FILE VERIFICATION] Actual hash: 6c27678b169985646fa3b971e35c8042
+2026-01-01 17:46:31 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: [FILE VERIFICATION] First 100 bytes: b'\n\n2. OBJET DU BAIL\n\n\xe2\x98\x90 Appartement de ______ pi\xc3\xa8ces  \n\xe2\x98\x90 ______ chambre(s) meubl\xc3\xa9e(s)\n\nAdresse d'
+2026-01-01 17:46:31 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: [FILE VERIFICATION] Hash verified successfully
+2026-01-01 17:46:31 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: [FILE VERIFICATION] File: input_69dd944e-b771-4673-8ea1-4af9b8896e6a_cmua0dnt.txt, Size: 129 bytes
+2026-01-01 17:46:31 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: Created isolated temp directory: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/translation_69dd944e-b771-4673-8ea1-4af9b8896e6a_qbisx36h
+2026-01-01 17:46:31 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: Loading glossary from glossary/glossary.csv (file will be read fresh)
+2026-01-01 17:46:31 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: Loaded glossary 'glossary' with 1352 entries
+INFO:     127.0.0.1:50574 - "GET /api/translate/69dd944e-b771-4673-8ea1-4af9b8896e6a/status HTTP/1.1" 200 OK
+2026-01-01 17:46:31 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: Using shared translation memory from /Users/enrico/workspace/translator/data/memory.json
+2026-01-01 17:46:31 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: Memory contains 0 existing records
+2026-01-01 17:46:31 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: Using custom prompt provided by user
+2026-01-01 17:46:31 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: [PRE-TRANSLATE] About to call translate_file_to_memory
+2026-01-01 17:46:31 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: [PRE-TRANSLATE] Input path: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_69dd944e-b771-4673-8ea1-4af9b8896e6a_cmua0dnt.txt
+2026-01-01 17:46:31 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: [PRE-TRANSLATE] Input path absolute: /private/var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_69dd944e-b771-4673-8ea1-4af9b8896e6a_cmua0dnt.txt
+2026-01-01 17:46:31 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: [PRE-TRANSLATE] Input file exists: True
+2026-01-01 17:46:31 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: [PRE-TRANSLATE] Final verification - Hash: 6c27678b169985646fa3b971e35c8042
+2026-01-01 17:46:31 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: [PRE-TRANSLATE] Expected hash: 6c27678b169985646fa3b971e35c8042
+2026-01-01 17:46:31 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: [PRE-TRANSLATE] File verified, calling translate_file_to_memory
+2026-01-01 17:46:31 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: [PRE-TRANSLATE] Source lang: fr, Target lang: it
+2026-01-01 17:46:31 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: Stored 3 original paragraphs
+2026-01-01 17:46:31 - src.translator.processing - INFO - [translate_file_to_memory] ===== STARTING SINGLE-SHOT TRANSLATION =====
+2026-01-01 17:46:31 - src.translator.processing - INFO - [translate_file_to_memory] Input path: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_69dd944e-b771-4673-8ea1-4af9b8896e6a_cmua0dnt.txt
+2026-01-01 17:46:31 - src.translator.processing - INFO - [translate_file_to_memory] Absolute path: /private/var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_69dd944e-b771-4673-8ea1-4af9b8896e6a_cmua0dnt.txt
+2026-01-01 17:46:31 - src.translator.processing - INFO - [translate_file_to_memory] File hash: 6c27678b169985646fa3b971e35c8042
+2026-01-01 17:46:31 - src.translator.processing - INFO - [translate_file_to_memory] File size: 129 bytes
+2026-01-01 17:46:31 - src.translator.processing - INFO - [translate_file_to_memory] Reading entire file as text...
+2026-01-01 17:46:31 - src.translator.processing - INFO - [_read_file_as_text] Reading entire file as text: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_69dd944e-b771-4673-8ea1-4af9b8896e6a_cmua0dnt.txt
+2026-01-01 17:46:31 - src.translator.processing - INFO - [_read_file_as_text] File type: .txt
+2026-01-01 17:46:31 - src.translator.processing - INFO - [_read_file_as_text] File hash: 6c27678b169985646fa3b971e35c8042
+2026-01-01 17:46:31 - src.translator.processing - INFO - [_read_file_as_text] File size: 129 bytes
+2026-01-01 17:46:31 - src.translator.processing - INFO - [_read_file_as_text] Extracted text length: 121 characters
+2026-01-01 17:46:31 - src.translator.processing - INFO - [_read_file_as_text] First 200 chars: 
 
 2. OBJET DU BAIL
 
@@ -88,139 +87,32 @@ INFO:     127.0.0.1:62665 - "GET /api/translate/740a4a96-b641-4123-a5ed-f671e981
 ☐ ______ chambre(s) meublée(s)
 
 Adresse de l'immeuble: [À compléter]...
-2025-12-29 21:59:31 - src.translator.processing - INFO - [translate_file_to_memory] Looking up glossary matches...
-2025-12-29 21:59:31 - src.translator.processing - INFO - [translate_file_to_memory] Found 0 glossary matches (after filtering reference doc conflicts)
-2025-12-29 21:59:31 - src.translator.processing - INFO - [translate_file_to_memory] ===== STEP 1: CHECKING TRANSLATION MEMORY =====
-2025-12-29 21:59:31 - src.translator.processing - INFO - [translate_file_to_memory] Memory enabled (skip_memory=False), checking for existing translation...
-2025-12-29 21:59:31 - src.translator.processing - INFO - [translate_file_to_memory] Document length: 121 characters
-2025-12-29 21:59:31 - src.translator.processing - INFO - [translate_file_to_memory] Found memory match with similarity: 100.0%
-2025-12-29 21:59:31 - src.translator.processing - INFO - [translate_file_to_memory] Memory source preview: 
-
-2. OBJET DU BAIL
-
-☐ Appartement de ______ pièces au ___ étage
-☐ Maison de ______ pièces
-☐ ______ chambre(s) meublée(s)
-
-Adresse de l'immeuble: [À co...
-2025-12-29 21:59:31 - src.translator.processing - INFO - [translate_file_to_memory] Memory translation preview: # TRADUZIONE
-
-## 2. OGGETTO DELLA LOCAZIONE
-
-☐ Sgabuzzino di ______ locali al ___ piano
-☐ Casa di ______ locali
-☐ ______ camera/e ammobiliata/e
-
-Indir...
-2025-12-29 21:59:31 - src.translator.processing - INFO - [translate_file_to_memory] ✅ STEP 1 RESULT: Using translation from memory (similarity: 100.0%)
-2025-12-29 21:59:31 - src.translator.processing - INFO - [translate_file_to_memory] ✅ No Claude API call needed - translation retrieved from memory
-2025-12-29 21:59:31 - src.translator.processing - INFO - [translate_file_to_memory] ===== STEP 2: SKIPPED (using memory translation) =====
-2025-12-29 21:59:31 - src.translator.processing - INFO - [translate_file_to_memory] No Claude API call needed - translation retrieved from memory
-2025-12-29 21:59:31 - src.translator.processing - INFO - [translate_file_to_memory] ===== STEP 3: SKIPPED (translation already in memory) =====
-2025-12-29 21:59:31 - src.translator.processing - INFO - [translate_file_to_memory] Translation already exists in memory, no need to store again
-2025-12-29 21:59:31 - src.translator.processing - INFO - [translate_file_to_memory] Translation complete: 0.10s
-2025-12-29 21:59:31 - src.translator.processing - INFO - [translate_file_to_memory] Translated length: 4,128 characters
-2025-12-29 21:59:31 - src.translator.glossary_enricher - INFO - [apply_glossary_with_highlighting] Applying glossary: glossary
-2025-12-29 21:59:31 - src.translator.glossary_enricher - INFO - [apply_glossary_with_highlighting] Translated text length: 4128
-2025-12-29 21:59:32 - src.translator.glossary_enricher - INFO - [apply_glossary_with_highlighting] Applied 5 glossary terms
-2025-12-29 21:59:32 - src.translator.glossary_enricher - INFO - [apply_glossary_with_highlighting] Breakdown: 4 translation matches, 1 source replacements
-2025-12-29 21:59:32 - src.translator.processing - INFO - [translate_file_to_memory] Glossary enrichment: 5 terms highlighted (after filtering reference doc)
-2025-12-29 21:59:32 - src.translator.glossary_enricher - INFO - [apply_memory_with_highlighting] Applying translation memory
-2025-12-29 21:59:32 - src.translator.glossary_enricher - INFO - [apply_memory_with_highlighting] Translated text length: 4235
-2025-12-29 21:59:32 - src.translator.glossary_enricher - INFO - [apply_memory_with_highlighting] Found 15 memory records for fr->it
-2025-12-29 21:59:32 - src.translator.glossary_enricher - INFO - [apply_memory_with_highlighting] Applied 0 memory terms
-2025-12-29 21:59:32 - src.translator.processing - INFO - [translate_file_to_memory] Memory enrichment: 0 terms highlighted
-2025-12-29 21:59:32 - src.translator.processing - INFO - [translate_file_to_memory] Generating PDF from 3 source paragraphs and 18 translated paragraphs
-2025-12-29 21:59:32 - src.translator.pdf_writer - INFO - [write_pdf_to_bytes] Creating two-column layout with 3 source paragraphs and 18 translated paragraphs
-2025-12-29 21:59:32 - src.translator.processing - INFO - [translate_file_to_memory] PDF generated: 6,732 bytes
-2025-12-29 21:59:32 - src.translator.api - INFO - [TRANSLATION 740a4a96-b641-4123-a5ed-f671e9812a78] Translation complete
-2025-12-29 21:59:32 - src.translator.api - INFO - [TRANSLATION 740a4a96-b641-4123-a5ed-f671e9812a78] PDF generated in memory: 6,732 bytes
-2025-12-29 21:59:32 - src.translator.api - INFO - [TRANSLATION 740a4a96-b641-4123-a5ed-f671e9812a78] Original paragraphs: 3
-2025-12-29 21:59:32 - src.translator.api - INFO - [TRANSLATION 740a4a96-b641-4123-a5ed-f671e9812a78] Translated paragraphs: 18
-2025-12-29 21:59:32 - src.translator.api - INFO - [TRANSLATION 740a4a96-b641-4123-a5ed-f671e9812a78] Status updated to completed
-2025-12-29 21:59:32 - src.translator.api - INFO - [TRANSLATION 740a4a96-b641-4123-a5ed-f671e9812a78] Final job hash: 6c27678b169985646fa3b971e35c8042
-2025-12-29 21:59:32 - src.translator.api - INFO - [TRANSLATION 740a4a96-b641-4123-a5ed-f671e9812a78] ===== TRANSLATION COMPLETE =====
-2025-12-29 21:59:32 - src.translator.api - INFO - ================================================================================
-2025-12-29 21:59:32 - src.translator.api - INFO - Job 740a4a96-b641-4123-a5ed-f671e9812a78: Cleaned up input file
-INFO:     127.0.0.1:62667 - "GET /api/translate/740a4a96-b641-4123-a5ed-f671e9812a78/status HTTP/1.1" 200 OK
-INFO:     127.0.0.1:62669 - "GET /api/translate/740a4a96-b641-4123-a5ed-f671e9812a78/report HTTP/1.1" 200 OK
-2025-12-29 21:59:44 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 21:59:44 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 21:59:44 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:62673 - "GET /api/prompt HTTP/1.1" 200 OK
-2025-12-29 21:59:44 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 21:59:44 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 21:59:44 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:62675 - "GET /api/prompt HTTP/1.1" 200 OK
-INFO:     127.0.0.1:62680 - "GET /api/glossary/glossary/content HTTP/1.1" 200 OK
-2025-12-29 22:00:27 - src.translator.api - INFO - Updated glossary glossary with 1351 entries
-INFO:     127.0.0.1:62693 - "PUT /api/glossary/glossary/content HTTP/1.1" 200 OK
-2025-12-29 22:00:44 - src.translator.api - INFO - Detected language: fr (prob: 1.00) -> fr
-INFO:     127.0.0.1:62713 - "POST /api/detect-language HTTP/1.1" 200 OK
-2025-12-29 22:00:49 - src.translator.api - INFO - ================================================================================
-2025-12-29 22:00:49 - src.translator.api - INFO - [REQUEST 6b6a245a] ===== NEW TRANSLATION REQUEST =====
-2025-12-29 22:00:49 - src.translator.api - INFO - [REQUEST 6b6a245a] Timestamp: 1767042049.8724658
-2025-12-29 22:00:49 - src.translator.api - INFO - [REQUEST 6b6a245a] File name: OBJET DU BAIL4.txt
-2025-12-29 22:00:49 - src.translator.api - INFO - [REQUEST 6b6a245a] Source: fr -> Target: it
-2025-12-29 22:00:49 - src.translator.api - INFO - [REQUEST 6b6a245a] File size: 129 bytes
-2025-12-29 22:00:49 - src.translator.api - INFO - [REQUEST 6b6a245a] File hash: 6c27678b169985646fa3b971e35c8042
-2025-12-29 22:00:49 - src.translator.api - INFO - [REQUEST 6b6a245a] First 200 bytes: b"\n\n2. OBJET DU BAIL\n\n\xe2\x98\x90 Appartement de ______ pi\xc3\xa8ces  \n\xe2\x98\x90 ______ chambre(s) meubl\xc3\xa9e(s)\n\nAdresse de l'immeuble: [\xc3\x80 compl\xc3\xa9ter]"
-2025-12-29 22:00:49 - src.translator.api - INFO - [REQUEST 6b6a245a] Use glossary: True
-2025-12-29 22:00:49 - src.translator.api - INFO - [REQUEST 6b6a245a] Using default glossary: glossary/glossary.csv
-2025-12-29 22:00:49 - src.translator.api - INFO - [REQUEST 6b6a245a] Generated job_id: 7817a392-e278-48b7-a4a8-8044baee8040
-2025-12-29 22:00:49 - src.translator.api - INFO - Job 7817a392-e278-48b7-a4a8-8044baee8040: Created isolated input file: input_7817a392-e278-48b7-a4a8-8044baee8040_nbon73cw.txt
-2025-12-29 22:00:49 - src.translator.api - INFO - Job 7817a392-e278-48b7-a4a8-8044baee8040: File hash: 6c27678b16998564...
-2025-12-29 22:00:49 - src.translator.api - INFO - [REQUEST 6b6a245a] Job 7817a392-e278-48b7-a4a8-8044baee8040 stored in translation_jobs
-2025-12-29 22:00:49 - src.translator.api - INFO - [REQUEST 6b6a245a] Total active jobs: 1
-2025-12-29 22:00:49 - src.translator.api - INFO - ================================================================================
-2025-12-29 22:00:49 - src.translator.api - INFO - [REQUEST 6b6a245a] Job 7817a392-e278-48b7-a4a8-8044baee8040: Translation thread started
-2025-12-29 22:00:49 - src.translator.api - INFO - [TRANSLATION 7817a392-e278-48b7-a4a8-8044baee8040] ===== STARTING TRANSLATION THREAD =====
-2025-12-29 22:00:49 - src.translator.api - INFO - [REQUEST 6b6a245a] ===== REQUEST PROCESSING COMPLETE =====
-2025-12-29 22:00:49 - src.translator.api - INFO - [TRANSLATION 7817a392-e278-48b7-a4a8-8044baee8040] Job data from storage:
-2025-12-29 22:00:49 - src.translator.api - INFO - ================================================================================
-INFO:     127.0.0.1:62722 - "POST /api/translate HTTP/1.1" 202 Accepted
-2025-12-29 22:00:49 - src.translator.api - INFO - [TRANSLATION 7817a392-e278-48b7-a4a8-8044baee8040]   - File hash: 6c27678b169985646fa3b971e35c8042
-2025-12-29 22:00:49 - src.translator.api - INFO - [TRANSLATION 7817a392-e278-48b7-a4a8-8044baee8040]   - Input path: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_7817a392-e278-48b7-a4a8-8044baee8040_nbon73cw.txt
-2025-12-29 22:00:49 - src.translator.api - INFO - [TRANSLATION 7817a392-e278-48b7-a4a8-8044baee8040]   - Source: fr -> Target: it
-2025-12-29 22:00:49 - src.translator.api - INFO - Job 7817a392-e278-48b7-a4a8-8044baee8040: [FILE VERIFICATION] Opening file: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_7817a392-e278-48b7-a4a8-8044baee8040_nbon73cw.txt
-2025-12-29 22:00:49 - src.translator.api - INFO - Job 7817a392-e278-48b7-a4a8-8044baee8040: [FILE VERIFICATION] File absolute path: /private/var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_7817a392-e278-48b7-a4a8-8044baee8040_nbon73cw.txt
-2025-12-29 22:00:49 - src.translator.api - INFO - Job 7817a392-e278-48b7-a4a8-8044baee8040: [FILE VERIFICATION] File exists: True
-2025-12-29 22:00:49 - src.translator.api - INFO - Job 7817a392-e278-48b7-a4a8-8044baee8040: [FILE VERIFICATION] Read 129 bytes from file
-2025-12-29 22:00:49 - src.translator.api - INFO - Job 7817a392-e278-48b7-a4a8-8044baee8040: [FILE VERIFICATION] Expected hash: 6c27678b169985646fa3b971e35c8042
-2025-12-29 22:00:49 - src.translator.api - INFO - Job 7817a392-e278-48b7-a4a8-8044baee8040: [FILE VERIFICATION] Actual hash: 6c27678b169985646fa3b971e35c8042
-2025-12-29 22:00:49 - src.translator.api - INFO - Job 7817a392-e278-48b7-a4a8-8044baee8040: [FILE VERIFICATION] First 100 bytes: b'\n\n2. OBJET DU BAIL\n\n\xe2\x98\x90 Appartement de ______ pi\xc3\xa8ces  \n\xe2\x98\x90 ______ chambre(s) meubl\xc3\xa9e(s)\n\nAdresse d'
-2025-12-29 22:00:49 - src.translator.api - INFO - Job 7817a392-e278-48b7-a4a8-8044baee8040: [FILE VERIFICATION] Hash verified successfully
-2025-12-29 22:00:49 - src.translator.api - INFO - Job 7817a392-e278-48b7-a4a8-8044baee8040: [FILE VERIFICATION] File: input_7817a392-e278-48b7-a4a8-8044baee8040_nbon73cw.txt, Size: 129 bytes
-2025-12-29 22:00:49 - src.translator.api - INFO - Job 7817a392-e278-48b7-a4a8-8044baee8040: Created isolated temp directory: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/translation_7817a392-e278-48b7-a4a8-8044baee8040_lhhmvxnr
-2025-12-29 22:00:49 - src.translator.api - INFO - Job 7817a392-e278-48b7-a4a8-8044baee8040: Loading glossary from glossary/glossary.csv (file will be read fresh)
-2025-12-29 22:00:49 - src.translator.api - INFO - Job 7817a392-e278-48b7-a4a8-8044baee8040: Loaded glossary 'glossary' with 1351 entries
-INFO:     127.0.0.1:62724 - "GET /api/translate/7817a392-e278-48b7-a4a8-8044baee8040/status HTTP/1.1" 200 OK
-2025-12-29 22:00:49 - src.translator.api - INFO - Job 7817a392-e278-48b7-a4a8-8044baee8040: Using shared translation memory from /Users/enrico/workspace/translator/data/memory.json
-2025-12-29 22:00:49 - src.translator.api - INFO - Job 7817a392-e278-48b7-a4a8-8044baee8040: Memory contains 202 existing records
-2025-12-29 22:00:49 - src.translator.api - INFO - Job 7817a392-e278-48b7-a4a8-8044baee8040: Using custom prompt provided by user
-2025-12-29 22:00:49 - src.translator.api - INFO - Job 7817a392-e278-48b7-a4a8-8044baee8040: [PRE-TRANSLATE] About to call translate_file_to_memory
-2025-12-29 22:00:49 - src.translator.api - INFO - Job 7817a392-e278-48b7-a4a8-8044baee8040: [PRE-TRANSLATE] Input path: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_7817a392-e278-48b7-a4a8-8044baee8040_nbon73cw.txt
-2025-12-29 22:00:49 - src.translator.api - INFO - Job 7817a392-e278-48b7-a4a8-8044baee8040: [PRE-TRANSLATE] Input path absolute: /private/var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_7817a392-e278-48b7-a4a8-8044baee8040_nbon73cw.txt
-2025-12-29 22:00:49 - src.translator.api - INFO - Job 7817a392-e278-48b7-a4a8-8044baee8040: [PRE-TRANSLATE] Input file exists: True
-2025-12-29 22:00:49 - src.translator.api - INFO - Job 7817a392-e278-48b7-a4a8-8044baee8040: [PRE-TRANSLATE] Final verification - Hash: 6c27678b169985646fa3b971e35c8042
-2025-12-29 22:00:49 - src.translator.api - INFO - Job 7817a392-e278-48b7-a4a8-8044baee8040: [PRE-TRANSLATE] Expected hash: 6c27678b169985646fa3b971e35c8042
-2025-12-29 22:00:49 - src.translator.api - INFO - Job 7817a392-e278-48b7-a4a8-8044baee8040: [PRE-TRANSLATE] File verified, calling translate_file_to_memory
-2025-12-29 22:00:49 - src.translator.api - INFO - Job 7817a392-e278-48b7-a4a8-8044baee8040: [PRE-TRANSLATE] Source lang: fr, Target lang: it
-2025-12-29 22:00:49 - src.translator.api - INFO - Job 7817a392-e278-48b7-a4a8-8044baee8040: Stored 3 original paragraphs
-2025-12-29 22:00:49 - src.translator.processing - INFO - [translate_file_to_memory] ===== STARTING SINGLE-SHOT TRANSLATION =====
-2025-12-29 22:00:49 - src.translator.processing - INFO - [translate_file_to_memory] Input path: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_7817a392-e278-48b7-a4a8-8044baee8040_nbon73cw.txt
-2025-12-29 22:00:49 - src.translator.processing - INFO - [translate_file_to_memory] Absolute path: /private/var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_7817a392-e278-48b7-a4a8-8044baee8040_nbon73cw.txt
-2025-12-29 22:00:49 - src.translator.processing - INFO - [translate_file_to_memory] File hash: 6c27678b169985646fa3b971e35c8042
-2025-12-29 22:00:49 - src.translator.processing - INFO - [translate_file_to_memory] File size: 129 bytes
-2025-12-29 22:00:49 - src.translator.processing - INFO - [translate_file_to_memory] Reading entire file as text...
-2025-12-29 22:00:49 - src.translator.processing - INFO - [_read_file_as_text] Reading entire file as text: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_7817a392-e278-48b7-a4a8-8044baee8040_nbon73cw.txt
-2025-12-29 22:00:49 - src.translator.processing - INFO - [_read_file_as_text] File type: .txt
-2025-12-29 22:00:49 - src.translator.processing - INFO - [_read_file_as_text] File hash: 6c27678b169985646fa3b971e35c8042
-2025-12-29 22:00:49 - src.translator.processing - INFO - [_read_file_as_text] File size: 129 bytes
-2025-12-29 22:00:49 - src.translator.processing - INFO - [_read_file_as_text] Extracted text length: 121 characters
-2025-12-29 22:00:49 - src.translator.processing - INFO - [_read_file_as_text] First 200 chars: 
+2026-01-01 17:46:31 - src.translator.processing - INFO - [translate_file_to_memory] Looking up glossary matches...
+2026-01-01 17:46:31 - src.translator.processing - INFO - [translate_file_to_memory] Found 1 glossary matches (after filtering reference doc conflicts)
+2026-01-01 17:46:31 - src.translator.processing - INFO - [translate_file_to_memory] ===== STEP 1: CHECKING TRANSLATION MEMORY =====
+2026-01-01 17:46:31 - src.translator.processing - INFO - [translate_file_to_memory] Memory enabled (skip_memory=False), checking for existing translation...
+2026-01-01 17:46:31 - src.translator.processing - INFO - [translate_file_to_memory] Document length: 121 characters
+2026-01-01 17:46:31 - src.translator.processing - INFO - [translate_file_to_memory] ⚠️ STEP 1 RESULT: No memory matches found (threshold: 95%)
+2026-01-01 17:46:31 - src.translator.processing - INFO - [translate_file_to_memory] ⚠️ Will proceed to STEP 2: Query Claude API
+2026-01-01 17:46:31 - src.translator.processing - INFO - [translate_file_to_memory] Found 0 memory hits for Claude context (threshold: 80%)
+2026-01-01 17:46:31 - src.translator.processing - INFO - [translate_file_to_memory] ===== STEP 2: QUERYING CLAUDE API =====
+2026-01-01 17:46:31 - src.translator.processing - INFO - [translate_file_to_memory] Sending entire document to Claude API (single call)
+2026-01-01 17:46:31 - src.translator.processing - INFO - [translate_file_to_memory] Document length: 121 characters
+2026-01-01 17:46:31 - src.translator.processing - INFO - [translate_file_to_memory] Glossary matches: 1
+2026-01-01 17:46:31 - src.translator.processing - INFO - [translate_file_to_memory] Memory hits for context: 0
+2026-01-01 17:46:31 - src.translator.claude_client - INFO - ================================================================================
+2026-01-01 17:46:31 - src.translator.claude_client - INFO - 🚀 CLAUDE API REQUEST - ENTIRE DOCUMENT (SINGLE SHOT)
+2026-01-01 17:46:31 - src.translator.claude_client - INFO - ================================================================================
+2026-01-01 17:46:31 - src.translator.claude_client - INFO - Model: claude-sonnet-4-5-20250929
+2026-01-01 17:46:31 - src.translator.claude_client - INFO - Max tokens: 8192
+2026-01-01 17:46:31 - src.translator.claude_client - INFO - Document length: 121 characters
+2026-01-01 17:46:31 - src.translator.claude_client - INFO - Total prompt length: 12,017 characters (~3,004 tokens)
+2026-01-01 17:46:31 - src.translator.claude_client - INFO - Source language: fr -> Target language: it
+2026-01-01 17:46:31 - src.translator.claude_client - INFO - Glossary entries: 1
+2026-01-01 17:46:31 - src.translator.claude_client - INFO - Memory entries: 0
+2026-01-01 17:46:31 - src.translator.claude_client - INFO - --------------------------------------------------------------------------------
+2026-01-01 17:46:31 - src.translator.claude_client - INFO - 📝 DOCUMENT PREVIEW (first 500 chars):
+2026-01-01 17:46:31 - src.translator.claude_client - INFO - 
 
 2. OBJET DU BAIL
 
@@ -228,196 +120,26 @@ INFO:     127.0.0.1:62724 - "GET /api/translate/7817a392-e278-48b7-a4a8-8044baee
 ☐ ______ chambre(s) meublée(s)
 
 Adresse de l'immeuble: [À compléter]...
-2025-12-29 22:00:49 - src.translator.processing - INFO - [translate_file_to_memory] Looking up glossary matches...
-2025-12-29 22:00:49 - src.translator.processing - INFO - [translate_file_to_memory] Found 1 glossary matches (after filtering reference doc conflicts)
-2025-12-29 22:00:49 - src.translator.processing - INFO - [translate_file_to_memory] ===== STEP 1: CHECKING TRANSLATION MEMORY =====
-2025-12-29 22:00:49 - src.translator.processing - INFO - [translate_file_to_memory] Memory enabled (skip_memory=False), checking for existing translation...
-2025-12-29 22:00:49 - src.translator.processing - INFO - [translate_file_to_memory] Document length: 121 characters
-2025-12-29 22:00:49 - src.translator.processing - INFO - [translate_file_to_memory] Found memory match with similarity: 100.0%
-2025-12-29 22:00:49 - src.translator.processing - INFO - [translate_file_to_memory] Memory source preview: 
-
-2. OBJET DU BAIL
-
-☐ Appartement de ______ pièces au ___ étage
-☐ Maison de ______ pièces
-☐ ______ chambre(s) meublée(s)
-
-Adresse de l'immeuble: [À co...
-2025-12-29 22:00:49 - src.translator.processing - INFO - [translate_file_to_memory] Memory translation preview: # TRADUZIONE
-
-## 2. OGGETTO DELLA LOCAZIONE
-
-☐ Sgabuzzino di ______ locali al ___ piano
-☐ Casa di ______ locali
-☐ ______ camera/e ammobiliata/e
-
-Indir...
-2025-12-29 22:00:49 - src.translator.processing - INFO - [translate_file_to_memory] ✅ STEP 1 RESULT: Using translation from memory (similarity: 100.0%)
-2025-12-29 22:00:49 - src.translator.processing - INFO - [translate_file_to_memory] ✅ No Claude API call needed - translation retrieved from memory
-2025-12-29 22:00:49 - src.translator.processing - INFO - [translate_file_to_memory] ===== STEP 2: SKIPPED (using memory translation) =====
-2025-12-29 22:00:49 - src.translator.processing - INFO - [translate_file_to_memory] No Claude API call needed - translation retrieved from memory
-2025-12-29 22:00:49 - src.translator.processing - INFO - [translate_file_to_memory] ===== STEP 3: SKIPPED (translation already in memory) =====
-2025-12-29 22:00:49 - src.translator.processing - INFO - [translate_file_to_memory] Translation already exists in memory, no need to store again
-2025-12-29 22:00:49 - src.translator.processing - INFO - [translate_file_to_memory] Translation complete: 0.10s
-2025-12-29 22:00:49 - src.translator.processing - INFO - [translate_file_to_memory] Translated length: 4,128 characters
-2025-12-29 22:00:49 - src.translator.glossary_enricher - INFO - [apply_glossary_with_highlighting] Applying glossary: glossary
-2025-12-29 22:00:49 - src.translator.glossary_enricher - INFO - [apply_glossary_with_highlighting] Translated text length: 4128
-2025-12-29 22:00:50 - src.translator.glossary_enricher - INFO - [apply_glossary_with_highlighting] Applied 8 glossary terms
-2025-12-29 22:00:50 - src.translator.glossary_enricher - INFO - [apply_glossary_with_highlighting] Breakdown: 4 translation matches, 4 source replacements
-2025-12-29 22:00:50 - src.translator.processing - INFO - [translate_file_to_memory] Glossary enrichment: 8 terms highlighted (after filtering reference doc)
-2025-12-29 22:00:50 - src.translator.glossary_enricher - INFO - [apply_memory_with_highlighting] Applying translation memory
-2025-12-29 22:00:50 - src.translator.glossary_enricher - INFO - [apply_memory_with_highlighting] Translated text length: 4289
-2025-12-29 22:00:50 - src.translator.glossary_enricher - INFO - [apply_memory_with_highlighting] Found 15 memory records for fr->it
-2025-12-29 22:00:50 - src.translator.glossary_enricher - INFO - [apply_memory_with_highlighting] Applied 0 memory terms
-2025-12-29 22:00:50 - src.translator.processing - INFO - [translate_file_to_memory] Memory enrichment: 0 terms highlighted
-2025-12-29 22:00:50 - src.translator.processing - INFO - [translate_file_to_memory] Generating PDF from 3 source paragraphs and 18 translated paragraphs
-2025-12-29 22:00:50 - src.translator.pdf_writer - INFO - [write_pdf_to_bytes] Creating two-column layout with 3 source paragraphs and 18 translated paragraphs
-2025-12-29 22:00:50 - src.translator.processing - INFO - [translate_file_to_memory] PDF generated: 6,722 bytes
-2025-12-29 22:00:50 - src.translator.api - INFO - [TRANSLATION 7817a392-e278-48b7-a4a8-8044baee8040] Translation complete
-2025-12-29 22:00:50 - src.translator.api - INFO - [TRANSLATION 7817a392-e278-48b7-a4a8-8044baee8040] PDF generated in memory: 6,722 bytes
-2025-12-29 22:00:50 - src.translator.api - INFO - [TRANSLATION 7817a392-e278-48b7-a4a8-8044baee8040] Original paragraphs: 3
-2025-12-29 22:00:50 - src.translator.api - INFO - [TRANSLATION 7817a392-e278-48b7-a4a8-8044baee8040] Translated paragraphs: 18
-2025-12-29 22:00:50 - src.translator.api - INFO - [TRANSLATION 7817a392-e278-48b7-a4a8-8044baee8040] Status updated to completed
-2025-12-29 22:00:50 - src.translator.api - INFO - [TRANSLATION 7817a392-e278-48b7-a4a8-8044baee8040] Final job hash: 6c27678b169985646fa3b971e35c8042
-2025-12-29 22:00:50 - src.translator.api - INFO - [TRANSLATION 7817a392-e278-48b7-a4a8-8044baee8040] ===== TRANSLATION COMPLETE =====
-2025-12-29 22:00:50 - src.translator.api - INFO - ================================================================================
-2025-12-29 22:00:50 - src.translator.api - INFO - Job 7817a392-e278-48b7-a4a8-8044baee8040: Cleaned up input file
-INFO:     127.0.0.1:62726 - "GET /api/translate/7817a392-e278-48b7-a4a8-8044baee8040/status HTTP/1.1" 200 OK
-INFO:     127.0.0.1:62728 - "GET /api/translate/7817a392-e278-48b7-a4a8-8044baee8040/report HTTP/1.1" 200 OK
-2025-12-29 22:00:59 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:00:59 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:00:59 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:62732 - "GET /api/prompt HTTP/1.1" 200 OK
-2025-12-29 22:00:59 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:00:59 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:00:59 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:62734 - "GET /api/prompt HTTP/1.1" 200 OK
-2025-12-29 22:01:14 - src.translator.api - INFO - Detected language: fr (prob: 1.00) -> fr
-INFO:     127.0.0.1:62740 - "POST /api/detect-language HTTP/1.1" 200 OK
-2025-12-29 22:01:25 - src.translator.api - INFO - ================================================================================
-2025-12-29 22:01:25 - src.translator.api - INFO - [REQUEST b7dadde4] ===== NEW TRANSLATION REQUEST =====
-2025-12-29 22:01:25 - src.translator.api - INFO - [REQUEST b7dadde4] Timestamp: 1767042085.023914
-2025-12-29 22:01:25 - src.translator.api - INFO - [REQUEST b7dadde4] File name: OBJET DU BAIL4.txt
-2025-12-29 22:01:25 - src.translator.api - INFO - [REQUEST b7dadde4] Source: fr -> Target: it
-2025-12-29 22:01:25 - src.translator.api - INFO - [REQUEST b7dadde4] File size: 129 bytes
-2025-12-29 22:01:25 - src.translator.api - INFO - [REQUEST b7dadde4] File hash: 6c27678b169985646fa3b971e35c8042
-2025-12-29 22:01:25 - src.translator.api - INFO - [REQUEST b7dadde4] First 200 bytes: b"\n\n2. OBJET DU BAIL\n\n\xe2\x98\x90 Appartement de ______ pi\xc3\xa8ces  \n\xe2\x98\x90 ______ chambre(s) meubl\xc3\xa9e(s)\n\nAdresse de l'immeuble: [\xc3\x80 compl\xc3\xa9ter]"
-2025-12-29 22:01:25 - src.translator.api - INFO - [REQUEST b7dadde4] Use glossary: True
-2025-12-29 22:01:25 - src.translator.api - INFO - [REQUEST b7dadde4] Using default glossary: glossary/glossary.csv
-2025-12-29 22:01:25 - src.translator.api - INFO - [REQUEST b7dadde4] Found 1 recent requests with same hash, but all are completed
-2025-12-29 22:01:25 - src.translator.api - INFO - [REQUEST b7dadde4] Allowing re-translation - will check memory first
-2025-12-29 22:01:25 - src.translator.api - INFO - [REQUEST b7dadde4] Generated job_id: 0d5bdce9-a1e1-4953-a05f-e4866ec939e6
-2025-12-29 22:01:25 - src.translator.api - INFO - Job 0d5bdce9-a1e1-4953-a05f-e4866ec939e6: Created isolated input file: input_0d5bdce9-a1e1-4953-a05f-e4866ec939e6_se2fmd0j.txt
-2025-12-29 22:01:25 - src.translator.api - INFO - Job 0d5bdce9-a1e1-4953-a05f-e4866ec939e6: File hash: 6c27678b16998564...
-2025-12-29 22:01:25 - src.translator.api - INFO - [REQUEST b7dadde4] Job 0d5bdce9-a1e1-4953-a05f-e4866ec939e6 stored in translation_jobs
-2025-12-29 22:01:25 - src.translator.api - INFO - [REQUEST b7dadde4] Total active jobs: 1
-2025-12-29 22:01:25 - src.translator.api - INFO - ================================================================================
-2025-12-29 22:01:25 - src.translator.api - INFO - [TRANSLATION 0d5bdce9-a1e1-4953-a05f-e4866ec939e6] ===== STARTING TRANSLATION THREAD =====
-2025-12-29 22:01:25 - src.translator.api - INFO - [REQUEST b7dadde4] Job 0d5bdce9-a1e1-4953-a05f-e4866ec939e6: Translation thread started
-2025-12-29 22:01:25 - src.translator.api - INFO - [TRANSLATION 0d5bdce9-a1e1-4953-a05f-e4866ec939e6] Job data from storage:
-2025-12-29 22:01:25 - src.translator.api - INFO - [REQUEST b7dadde4] ===== REQUEST PROCESSING COMPLETE =====
-2025-12-29 22:01:25 - src.translator.api - INFO - [TRANSLATION 0d5bdce9-a1e1-4953-a05f-e4866ec939e6]   - File hash: 6c27678b169985646fa3b971e35c8042
-2025-12-29 22:01:25 - src.translator.api - INFO - ================================================================================
-2025-12-29 22:01:25 - src.translator.api - INFO - [TRANSLATION 0d5bdce9-a1e1-4953-a05f-e4866ec939e6]   - Input path: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_0d5bdce9-a1e1-4953-a05f-e4866ec939e6_se2fmd0j.txt
-INFO:     127.0.0.1:62748 - "POST /api/translate HTTP/1.1" 202 Accepted
-2025-12-29 22:01:25 - src.translator.api - INFO - [TRANSLATION 0d5bdce9-a1e1-4953-a05f-e4866ec939e6]   - Source: fr -> Target: it
-2025-12-29 22:01:25 - src.translator.api - INFO - Job 0d5bdce9-a1e1-4953-a05f-e4866ec939e6: [FILE VERIFICATION] Opening file: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_0d5bdce9-a1e1-4953-a05f-e4866ec939e6_se2fmd0j.txt
-2025-12-29 22:01:25 - src.translator.api - INFO - Job 0d5bdce9-a1e1-4953-a05f-e4866ec939e6: [FILE VERIFICATION] File absolute path: /private/var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_0d5bdce9-a1e1-4953-a05f-e4866ec939e6_se2fmd0j.txt
-2025-12-29 22:01:25 - src.translator.api - INFO - Job 0d5bdce9-a1e1-4953-a05f-e4866ec939e6: [FILE VERIFICATION] File exists: True
-2025-12-29 22:01:25 - src.translator.api - INFO - Job 0d5bdce9-a1e1-4953-a05f-e4866ec939e6: [FILE VERIFICATION] Read 129 bytes from file
-2025-12-29 22:01:25 - src.translator.api - INFO - Job 0d5bdce9-a1e1-4953-a05f-e4866ec939e6: [FILE VERIFICATION] Expected hash: 6c27678b169985646fa3b971e35c8042
-2025-12-29 22:01:25 - src.translator.api - INFO - Job 0d5bdce9-a1e1-4953-a05f-e4866ec939e6: [FILE VERIFICATION] Actual hash: 6c27678b169985646fa3b971e35c8042
-2025-12-29 22:01:25 - src.translator.api - INFO - Job 0d5bdce9-a1e1-4953-a05f-e4866ec939e6: [FILE VERIFICATION] First 100 bytes: b'\n\n2. OBJET DU BAIL\n\n\xe2\x98\x90 Appartement de ______ pi\xc3\xa8ces  \n\xe2\x98\x90 ______ chambre(s) meubl\xc3\xa9e(s)\n\nAdresse d'
-2025-12-29 22:01:25 - src.translator.api - INFO - Job 0d5bdce9-a1e1-4953-a05f-e4866ec939e6: [FILE VERIFICATION] Hash verified successfully
-2025-12-29 22:01:25 - src.translator.api - INFO - Job 0d5bdce9-a1e1-4953-a05f-e4866ec939e6: [FILE VERIFICATION] File: input_0d5bdce9-a1e1-4953-a05f-e4866ec939e6_se2fmd0j.txt, Size: 129 bytes
-2025-12-29 22:01:25 - src.translator.api - INFO - Job 0d5bdce9-a1e1-4953-a05f-e4866ec939e6: Created isolated temp directory: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/translation_0d5bdce9-a1e1-4953-a05f-e4866ec939e6_qgt770ey
-2025-12-29 22:01:25 - src.translator.api - INFO - Job 0d5bdce9-a1e1-4953-a05f-e4866ec939e6: Loading glossary from glossary/glossary.csv (file will be read fresh)
-INFO:     127.0.0.1:62750 - "GET /api/translate/0d5bdce9-a1e1-4953-a05f-e4866ec939e6/status HTTP/1.1" 200 OK
-2025-12-29 22:01:25 - src.translator.api - INFO - Job 0d5bdce9-a1e1-4953-a05f-e4866ec939e6: Loaded glossary 'glossary' with 1351 entries
-2025-12-29 22:01:25 - src.translator.api - INFO - Job 0d5bdce9-a1e1-4953-a05f-e4866ec939e6: Using shared translation memory from /Users/enrico/workspace/translator/data/memory.json
-2025-12-29 22:01:25 - src.translator.api - INFO - Job 0d5bdce9-a1e1-4953-a05f-e4866ec939e6: Memory contains 202 existing records
-2025-12-29 22:01:25 - src.translator.api - INFO - Job 0d5bdce9-a1e1-4953-a05f-e4866ec939e6: Using custom prompt provided by user
-2025-12-29 22:01:25 - src.translator.api - INFO - Job 0d5bdce9-a1e1-4953-a05f-e4866ec939e6: [PRE-TRANSLATE] About to call translate_file_to_memory
-2025-12-29 22:01:25 - src.translator.api - INFO - Job 0d5bdce9-a1e1-4953-a05f-e4866ec939e6: [PRE-TRANSLATE] Input path: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_0d5bdce9-a1e1-4953-a05f-e4866ec939e6_se2fmd0j.txt
-2025-12-29 22:01:25 - src.translator.api - INFO - Job 0d5bdce9-a1e1-4953-a05f-e4866ec939e6: [PRE-TRANSLATE] Input path absolute: /private/var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_0d5bdce9-a1e1-4953-a05f-e4866ec939e6_se2fmd0j.txt
-2025-12-29 22:01:25 - src.translator.api - INFO - Job 0d5bdce9-a1e1-4953-a05f-e4866ec939e6: [PRE-TRANSLATE] Input file exists: True
-2025-12-29 22:01:25 - src.translator.api - INFO - Job 0d5bdce9-a1e1-4953-a05f-e4866ec939e6: [PRE-TRANSLATE] Final verification - Hash: 6c27678b169985646fa3b971e35c8042
-2025-12-29 22:01:25 - src.translator.api - INFO - Job 0d5bdce9-a1e1-4953-a05f-e4866ec939e6: [PRE-TRANSLATE] Expected hash: 6c27678b169985646fa3b971e35c8042
-2025-12-29 22:01:25 - src.translator.api - INFO - Job 0d5bdce9-a1e1-4953-a05f-e4866ec939e6: [PRE-TRANSLATE] File verified, calling translate_file_to_memory
-2025-12-29 22:01:25 - src.translator.api - INFO - Job 0d5bdce9-a1e1-4953-a05f-e4866ec939e6: [PRE-TRANSLATE] Source lang: fr, Target lang: it
-2025-12-29 22:01:25 - src.translator.api - INFO - Job 0d5bdce9-a1e1-4953-a05f-e4866ec939e6: Stored 3 original paragraphs
-2025-12-29 22:01:25 - src.translator.processing - INFO - [translate_file_to_memory] ===== STARTING SINGLE-SHOT TRANSLATION =====
-2025-12-29 22:01:25 - src.translator.processing - INFO - [translate_file_to_memory] Input path: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_0d5bdce9-a1e1-4953-a05f-e4866ec939e6_se2fmd0j.txt
-2025-12-29 22:01:25 - src.translator.processing - INFO - [translate_file_to_memory] Absolute path: /private/var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_0d5bdce9-a1e1-4953-a05f-e4866ec939e6_se2fmd0j.txt
-2025-12-29 22:01:25 - src.translator.processing - INFO - [translate_file_to_memory] File hash: 6c27678b169985646fa3b971e35c8042
-2025-12-29 22:01:25 - src.translator.processing - INFO - [translate_file_to_memory] File size: 129 bytes
-2025-12-29 22:01:25 - src.translator.processing - INFO - [translate_file_to_memory] Reading entire file as text...
-2025-12-29 22:01:25 - src.translator.processing - INFO - [_read_file_as_text] Reading entire file as text: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_0d5bdce9-a1e1-4953-a05f-e4866ec939e6_se2fmd0j.txt
-2025-12-29 22:01:25 - src.translator.processing - INFO - [_read_file_as_text] File type: .txt
-2025-12-29 22:01:25 - src.translator.processing - INFO - [_read_file_as_text] File hash: 6c27678b169985646fa3b971e35c8042
-2025-12-29 22:01:25 - src.translator.processing - INFO - [_read_file_as_text] File size: 129 bytes
-2025-12-29 22:01:25 - src.translator.processing - INFO - [_read_file_as_text] Extracted text length: 121 characters
-2025-12-29 22:01:25 - src.translator.processing - INFO - [_read_file_as_text] First 200 chars: 
-
-2. OBJET DU BAIL
-
-☐ Appartement de ______ pièces  
-☐ ______ chambre(s) meublée(s)
-
-Adresse de l'immeuble: [À compléter]...
-2025-12-29 22:01:25 - src.translator.processing - INFO - [translate_file_to_memory] Looking up glossary matches...
-2025-12-29 22:01:25 - src.translator.processing - INFO - [translate_file_to_memory] Found 1 glossary matches (after filtering reference doc conflicts)
-2025-12-29 22:01:25 - src.translator.processing - INFO - [translate_file_to_memory] ===== STEP 1: SKIPPED (skip_memory=True) =====
-2025-12-29 22:01:25 - src.translator.processing - INFO - [translate_file_to_memory] Translation memory disabled, proceeding directly to Claude API
-2025-12-29 22:01:25 - src.translator.processing - INFO - [translate_file_to_memory] ===== STEP 2: QUERYING CLAUDE API =====
-2025-12-29 22:01:25 - src.translator.processing - INFO - [translate_file_to_memory] Sending entire document to Claude API (single call)
-2025-12-29 22:01:25 - src.translator.processing - INFO - [translate_file_to_memory] Document length: 121 characters
-2025-12-29 22:01:25 - src.translator.processing - INFO - [translate_file_to_memory] Glossary matches: 1
-2025-12-29 22:01:25 - src.translator.processing - INFO - [translate_file_to_memory] Memory hits for context: 0
-2025-12-29 22:01:25 - src.translator.claude_client - INFO - ================================================================================
-2025-12-29 22:01:25 - src.translator.claude_client - INFO - 🚀 CLAUDE API REQUEST - ENTIRE DOCUMENT (SINGLE SHOT)
-2025-12-29 22:01:25 - src.translator.claude_client - INFO - ================================================================================
-2025-12-29 22:01:25 - src.translator.claude_client - INFO - Model: claude-sonnet-4-5-20250929
-2025-12-29 22:01:25 - src.translator.claude_client - INFO - Max tokens: 8192
-2025-12-29 22:01:25 - src.translator.claude_client - INFO - Document length: 121 characters
-2025-12-29 22:01:25 - src.translator.claude_client - INFO - Total prompt length: 12,017 characters (~3,004 tokens)
-2025-12-29 22:01:25 - src.translator.claude_client - INFO - Source language: fr -> Target language: it
-2025-12-29 22:01:25 - src.translator.claude_client - INFO - Glossary entries: 1
-2025-12-29 22:01:25 - src.translator.claude_client - INFO - Memory entries: 0
-2025-12-29 22:01:25 - src.translator.claude_client - INFO - --------------------------------------------------------------------------------
-2025-12-29 22:01:25 - src.translator.claude_client - INFO - 📝 DOCUMENT PREVIEW (first 500 chars):
-2025-12-29 22:01:25 - src.translator.claude_client - INFO - 
-
-2. OBJET DU BAIL
-
-☐ Appartement de ______ pièces  
-☐ ______ chambre(s) meublée(s)
-
-Adresse de l'immeuble: [À compléter]...
-2025-12-29 22:01:25 - src.translator.claude_client - INFO - --------------------------------------------------------------------------------
-2025-12-29 22:01:25 - src.translator.claude_client - INFO - ⏱️  Sending entire document to Claude API in single call...
-INFO:     127.0.0.1:62753 - "GET /api/translate/0d5bdce9-a1e1-4953-a05f-e4866ec939e6/status HTTP/1.1" 200 OK
-INFO:     127.0.0.1:62755 - "GET /api/translate/0d5bdce9-a1e1-4953-a05f-e4866ec939e6/status HTTP/1.1" 200 OK
-INFO:     127.0.0.1:62759 - "GET /api/translate/0d5bdce9-a1e1-4953-a05f-e4866ec939e6/status HTTP/1.1" 200 OK
-INFO:     127.0.0.1:62761 - "GET /api/translate/0d5bdce9-a1e1-4953-a05f-e4866ec939e6/status HTTP/1.1" 200 OK
-INFO:     127.0.0.1:62763 - "GET /api/translate/0d5bdce9-a1e1-4953-a05f-e4866ec939e6/status HTTP/1.1" 200 OK
-INFO:     127.0.0.1:62765 - "GET /api/translate/0d5bdce9-a1e1-4953-a05f-e4866ec939e6/status HTTP/1.1" 200 OK
-INFO:     127.0.0.1:62767 - "GET /api/translate/0d5bdce9-a1e1-4953-a05f-e4866ec939e6/status HTTP/1.1" 200 OK
-INFO:     127.0.0.1:62770 - "GET /api/translate/0d5bdce9-a1e1-4953-a05f-e4866ec939e6/status HTTP/1.1" 200 OK
-INFO:     127.0.0.1:62772 - "GET /api/translate/0d5bdce9-a1e1-4953-a05f-e4866ec939e6/status HTTP/1.1" 200 OK
-2025-12-29 22:01:44 - httpx - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
-2025-12-29 22:01:44 - src.translator.claude_client - INFO - ================================================================================
-2025-12-29 22:01:44 - src.translator.claude_client - INFO - ✅ CLAUDE API RESPONSE RECEIVED
-2025-12-29 22:01:44 - src.translator.claude_client - INFO - ================================================================================
-2025-12-29 22:01:44 - src.translator.claude_client - INFO - ⏱️  Request duration: 19.75 seconds (0.33 minutes)
-2025-12-29 22:01:44 - src.translator.claude_client - INFO - 📊 Response length: 2,559 characters
-2025-12-29 22:01:44 - src.translator.claude_client - INFO - 📈 Token usage:
-2025-12-29 22:01:44 - src.translator.claude_client - INFO -   - Input tokens: 3819
-2025-12-29 22:01:44 - src.translator.claude_client - INFO -   - Output tokens: 814
-2025-12-29 22:01:44 - src.translator.claude_client - INFO - 📝 TRANSLATION PREVIEW (first 500 chars):
-2025-12-29 22:01:44 - src.translator.claude_client - INFO - # TRADUZIONE
+2026-01-01 17:46:31 - src.translator.claude_client - INFO - --------------------------------------------------------------------------------
+2026-01-01 17:46:31 - src.translator.claude_client - INFO - ⏱️  Sending entire document to Claude API in single call...
+INFO:     127.0.0.1:50577 - "GET /api/translate/69dd944e-b771-4673-8ea1-4af9b8896e6a/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50579 - "GET /api/translate/69dd944e-b771-4673-8ea1-4af9b8896e6a/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50581 - "GET /api/translate/69dd944e-b771-4673-8ea1-4af9b8896e6a/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50584 - "GET /api/translate/69dd944e-b771-4673-8ea1-4af9b8896e6a/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50586 - "GET /api/translate/69dd944e-b771-4673-8ea1-4af9b8896e6a/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50589 - "GET /api/translate/69dd944e-b771-4673-8ea1-4af9b8896e6a/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50592 - "GET /api/translate/69dd944e-b771-4673-8ea1-4af9b8896e6a/status HTTP/1.1" 200 OK
+2026-01-01 17:46:52 - httpx - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-01-01 17:46:52 - src.translator.claude_client - INFO - ================================================================================
+2026-01-01 17:46:52 - src.translator.claude_client - INFO - ✅ CLAUDE API RESPONSE RECEIVED
+2026-01-01 17:46:52 - src.translator.claude_client - INFO - ================================================================================
+2026-01-01 17:46:52 - src.translator.claude_client - INFO - ⏱️  Request duration: 20.21 seconds (0.34 minutes)
+2026-01-01 17:46:52 - src.translator.claude_client - INFO - 📊 Response length: 2,559 characters
+2026-01-01 17:46:52 - src.translator.claude_client - INFO - 📈 Token usage:
+2026-01-01 17:46:52 - src.translator.claude_client - INFO -   - Input tokens: 3819
+2026-01-01 17:46:52 - src.translator.claude_client - INFO -   - Output tokens: 814
+2026-01-01 17:46:52 - src.translator.claude_client - INFO - 📝 TRANSLATION PREVIEW (first 500 chars):
+2026-01-01 17:46:52 - src.translator.claude_client - INFO - # TRADUZIONE
 
 ## 2. OGGETTO DELLA LOCAZIONE
 
@@ -433,340 +155,51 @@ Indirizzo dell'immobile: [Da completare]
 | Originale | Traduzione | Spiegazione | Fonte |
 |-----------|------------|-------------|-------|
 | OBJET DU BAIL | OGGETTO DELLA LOCAZIONE | "Objet du bail" è formula standard nei contratti di locazione svizzeri. In italiano di Svizzera si usa "oggetto della locazione" (non "oggetto del contratto" o "immobile locato")....
-2025-12-29 22:01:44 - src.translator.claude_client - INFO - ================================================================================
-2025-12-29 22:01:44 - src.translator.processing - INFO - [translate_file_to_memory] ✅ STEP 2 RESULT: Claude API translation completed in 19.76s
-2025-12-29 22:01:44 - src.translator.processing - INFO - [translate_file_to_memory] Translated length: 2,559 characters
-2025-12-29 22:01:44 - src.translator.processing - INFO - [translate_file_to_memory] ===== STEP 3: SKIPPED (skip_memory=True) =====
-2025-12-29 22:01:44 - src.translator.processing - INFO - [translate_file_to_memory] Translation memory disabled, not storing translation
-2025-12-29 22:01:44 - src.translator.processing - INFO - [translate_file_to_memory] Translation complete: 19.76s
-2025-12-29 22:01:44 - src.translator.processing - INFO - [translate_file_to_memory] Translated length: 2,559 characters
-2025-12-29 22:01:44 - src.translator.glossary_enricher - INFO - [apply_glossary_with_highlighting] Applying glossary: glossary
-2025-12-29 22:01:44 - src.translator.glossary_enricher - INFO - [apply_glossary_with_highlighting] Translated text length: 2559
-2025-12-29 22:01:45 - src.translator.glossary_enricher - INFO - [apply_glossary_with_highlighting] Applied 10 glossary terms
-2025-12-29 22:01:45 - src.translator.glossary_enricher - INFO - [apply_glossary_with_highlighting] Breakdown: 7 translation matches, 3 source replacements
-2025-12-29 22:01:45 - src.translator.processing - INFO - [translate_file_to_memory] Glossary enrichment: 10 terms highlighted (after filtering reference doc)
-2025-12-29 22:01:45 - src.translator.processing - INFO - [translate_file_to_memory] Memory enrichment skipped (skip_memory=True)
-2025-12-29 22:01:45 - src.translator.processing - INFO - [translate_file_to_memory] Generating PDF from 3 source paragraphs and 13 translated paragraphs
-2025-12-29 22:01:45 - src.translator.pdf_writer - INFO - [write_pdf_to_bytes] Creating two-column layout with 3 source paragraphs and 13 translated paragraphs
-2025-12-29 22:01:45 - src.translator.processing - INFO - [translate_file_to_memory] PDF generated: 4,849 bytes
-2025-12-29 22:01:45 - src.translator.api - INFO - [TRANSLATION 0d5bdce9-a1e1-4953-a05f-e4866ec939e6] Translation complete
-2025-12-29 22:01:45 - src.translator.api - INFO - [TRANSLATION 0d5bdce9-a1e1-4953-a05f-e4866ec939e6] PDF generated in memory: 4,849 bytes
-2025-12-29 22:01:45 - src.translator.api - INFO - [TRANSLATION 0d5bdce9-a1e1-4953-a05f-e4866ec939e6] Original paragraphs: 3
-2025-12-29 22:01:45 - src.translator.api - INFO - [TRANSLATION 0d5bdce9-a1e1-4953-a05f-e4866ec939e6] Translated paragraphs: 13
-2025-12-29 22:01:45 - src.translator.api - INFO - [TRANSLATION 0d5bdce9-a1e1-4953-a05f-e4866ec939e6] Status updated to completed
-2025-12-29 22:01:45 - src.translator.api - INFO - [TRANSLATION 0d5bdce9-a1e1-4953-a05f-e4866ec939e6] Final job hash: 6c27678b169985646fa3b971e35c8042
-2025-12-29 22:01:45 - src.translator.api - INFO - [TRANSLATION 0d5bdce9-a1e1-4953-a05f-e4866ec939e6] ===== TRANSLATION COMPLETE =====
-2025-12-29 22:01:45 - src.translator.api - INFO - ================================================================================
-2025-12-29 22:01:45 - src.translator.api - INFO - Job 0d5bdce9-a1e1-4953-a05f-e4866ec939e6: Cleaned up input file
-INFO:     127.0.0.1:62776 - "GET /api/translate/0d5bdce9-a1e1-4953-a05f-e4866ec939e6/status HTTP/1.1" 200 OK
-INFO:     127.0.0.1:62778 - "GET /api/translate/0d5bdce9-a1e1-4953-a05f-e4866ec939e6/report HTTP/1.1" 200 OK
-2025-12-29 22:05:03 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:05:03 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:05:03 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
+2026-01-01 17:46:52 - src.translator.claude_client - INFO - ================================================================================
+2026-01-01 17:46:52 - src.translator.processing - INFO - [translate_file_to_memory] ✅ STEP 2 RESULT: Claude API translation completed in 20.21s
+2026-01-01 17:46:52 - src.translator.processing - INFO - [translate_file_to_memory] Translated length: 2,559 characters
+2026-01-01 17:46:52 - src.translator.processing - INFO - [translate_file_to_memory] ===== STEP 3: STORING TRANSLATION IN MEMORY =====
+2026-01-01 17:46:52 - src.translator.processing - INFO - [translate_file_to_memory] Storing translation in memory for future use...
+2026-01-01 17:46:52 - src.translator.processing - INFO - [translate_file_to_memory] Source text length: 121 characters
+2026-01-01 17:46:52 - src.translator.processing - INFO - [translate_file_to_memory] Translated text length: 2,559 characters
+2026-01-01 17:46:52 - src.translator.processing - INFO - [translate_file_to_memory] ✅ STEP 3 RESULT: Translation stored in memory successfully
+2026-01-01 17:46:52 - src.translator.processing - INFO - [translate_file_to_memory] Memory file: /Users/enrico/workspace/translator/data/memory.json
+2026-01-01 17:46:52 - src.translator.processing - INFO - [translate_file_to_memory] Total records in memory: 1
+2026-01-01 17:46:52 - src.translator.processing - INFO - [translate_file_to_memory] Translation complete: 20.21s
+2026-01-01 17:46:52 - src.translator.processing - INFO - [translate_file_to_memory] Translated length: 2,559 characters
+2026-01-01 17:46:52 - src.translator.glossary_enricher - INFO - [apply_glossary_with_highlighting] Applying glossary: glossary
+2026-01-01 17:46:52 - src.translator.glossary_enricher - INFO - [apply_glossary_with_highlighting] Translated text length: 2559
+2026-01-01 17:46:52 - src.translator.glossary_enricher - INFO - [apply_glossary_with_highlighting] Applied 10 glossary terms
+2026-01-01 17:46:52 - src.translator.glossary_enricher - INFO - [apply_glossary_with_highlighting] Breakdown: 10 translation matches, 0 source replacements
+2026-01-01 17:46:52 - src.translator.processing - INFO - [translate_file_to_memory] Glossary enrichment: 10 terms highlighted (after filtering reference doc)
+2026-01-01 17:46:52 - src.translator.glossary_enricher - INFO - [apply_memory_with_highlighting] Applying translation memory
+2026-01-01 17:46:52 - src.translator.glossary_enricher - INFO - [apply_memory_with_highlighting] Translated text length: 2769
+2026-01-01 17:46:52 - src.translator.glossary_enricher - INFO - [apply_memory_with_highlighting] Found 1 memory records for fr->it
+2026-01-01 17:46:52 - src.translator.glossary_enricher - INFO - [apply_memory_with_highlighting] Applied 0 memory terms
+2026-01-01 17:46:52 - src.translator.processing - INFO - [translate_file_to_memory] Memory enrichment: 0 terms highlighted
+2026-01-01 17:46:52 - src.translator.processing - INFO - [translate_file_to_memory] Generating PDF from 3 source paragraphs and 13 translated paragraphs
+2026-01-01 17:46:52 - src.translator.pdf_writer - INFO - [write_pdf_to_bytes] Creating two-column layout with 3 source paragraphs and 13 translated paragraphs
+2026-01-01 17:46:52 - src.translator.processing - INFO - [translate_file_to_memory] PDF generated: 4,882 bytes
+2026-01-01 17:46:52 - src.translator.api - INFO - [TRANSLATION 69dd944e-b771-4673-8ea1-4af9b8896e6a] Translation complete
+2026-01-01 17:46:52 - src.translator.api - INFO - [TRANSLATION 69dd944e-b771-4673-8ea1-4af9b8896e6a] PDF generated in memory: 4,882 bytes
+2026-01-01 17:46:52 - src.translator.api - INFO - [TRANSLATION 69dd944e-b771-4673-8ea1-4af9b8896e6a] Original paragraphs: 3
+2026-01-01 17:46:52 - src.translator.api - INFO - [TRANSLATION 69dd944e-b771-4673-8ea1-4af9b8896e6a] Translated paragraphs: 13
+2026-01-01 17:46:52 - src.translator.api - INFO - [TRANSLATION 69dd944e-b771-4673-8ea1-4af9b8896e6a] Status updated to completed
+2026-01-01 17:46:52 - src.translator.api - INFO - [TRANSLATION 69dd944e-b771-4673-8ea1-4af9b8896e6a] Final job hash: 6c27678b169985646fa3b971e35c8042
+2026-01-01 17:46:52 - src.translator.api - INFO - [TRANSLATION 69dd944e-b771-4673-8ea1-4af9b8896e6a] ===== TRANSLATION COMPLETE =====
+2026-01-01 17:46:52 - src.translator.api - INFO - ================================================================================
+2026-01-01 17:46:52 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: Cleaned up input file
+INFO:     127.0.0.1:50594 - "GET /api/translate/69dd944e-b771-4673-8ea1-4af9b8896e6a/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50596 - "GET /api/translate/69dd944e-b771-4673-8ea1-4af9b8896e6a/report HTTP/1.1" 200 OK
+2026-01-01 17:47:34 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
+2026-01-01 17:47:34 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
+2026-01-01 17:47:34 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
 [prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:62930 - "GET /api/prompt HTTP/1.1" 200 OK
-2025-12-29 22:05:03 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:05:03 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:05:03 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
+INFO:     127.0.0.1:50604 - "GET /api/prompt HTTP/1.1" 200 OK
+2026-01-01 17:47:34 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
+2026-01-01 17:47:34 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
+2026-01-01 17:47:34 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
 [prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:62932 - "GET /api/prompt HTTP/1.1" 200 OK
-INFO:     127.0.0.1:62935 - "GET /api/glossary/glossary/content HTTP/1.1" 200 OK
-2025-12-29 22:06:12 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:06:12 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:06:12 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:62994 - "GET /api/prompt HTTP/1.1" 200 OK
-2025-12-29 22:06:16 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:06:16 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:06:16 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:63005 - "GET /api/prompt HTTP/1.1" 200 OK
-2025-12-29 22:06:20 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:06:20 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:06:20 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:63013 - "GET /api/prompt HTTP/1.1" 200 OK
-2025-12-29 22:06:24 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:06:24 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:06:24 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:63019 - "GET /api/prompt HTTP/1.1" 200 OK
-2025-12-29 22:06:44 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:06:44 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:06:44 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:63034 - "GET /api/prompt HTTP/1.1" 200 OK
-2025-12-29 22:07:37 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:07:37 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:07:37 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:63091 - "GET /api/prompt HTTP/1.1" 200 OK
-2025-12-29 22:07:37 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:07:37 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:07:37 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:63092 - "GET /api/prompt HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63096 - "GET /api/glossary/glossary/content HTTP/1.1" 200 OK
-2025-12-29 22:08:33 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:08:33 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:08:33 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:63155 - "GET /api/prompt HTTP/1.1" 200 OK
-2025-12-29 22:08:55 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:08:55 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:08:55 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:63173 - "GET /api/prompt HTTP/1.1" 200 OK
-2025-12-29 22:08:59 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:08:59 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:08:59 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:63175 - "GET /api/prompt HTTP/1.1" 200 OK
-2025-12-29 22:09:22 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:09:22 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:09:22 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:63196 - "GET /api/prompt HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63343 - "GET /api/glossary/glossary/content HTTP/1.1" 200 OK
-2025-12-29 22:11:07 - src.translator.api - INFO - Updated glossary glossary with 1352 entries
-INFO:     127.0.0.1:63360 - "PUT /api/glossary/glossary/content HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63615 - "GET /api/glossary/glossary/content HTTP/1.1" 200 OK
-WARNING:  WatchFiles detected changes in 'src/translator/api.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [2302]
-2025-12-29 22:22:59 - src.translator.api - INFO - Logging initialized. Log file: /Users/enrico/workspace/translator/logs/backend.log
-INFO:     Started server process [4096]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-2025-12-29 22:23:02 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:23:02 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:23:02 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:63841 - "GET /api/prompt HTTP/1.1" 200 OK
-2025-12-29 22:23:14 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:23:14 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:23:14 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:63870 - "GET /api/prompt HTTP/1.1" 200 OK
-2025-12-29 22:23:20 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:23:20 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:23:20 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:63879 - "GET /api/prompt HTTP/1.1" 200 OK
-2025-12-29 22:23:20 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:23:20 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:23:20 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:63881 - "GET /api/prompt HTTP/1.1" 200 OK
-2025-12-29 22:23:25 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:23:25 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:23:25 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:63887 - "GET /api/prompt HTTP/1.1" 200 OK
-2025-12-29 22:23:30 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:23:30 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:23:30 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:63894 - "GET /api/prompt HTTP/1.1" 200 OK
-2025-12-29 22:23:55 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:23:55 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:23:55 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:63914 - "GET /api/prompt HTTP/1.1" 200 OK
-WARNING:  WatchFiles detected changes in 'src/translator/api.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [4096]
-2025-12-29 22:24:50 - src.translator.api - INFO - Logging initialized. Log file: /Users/enrico/workspace/translator/logs/backend.log
-INFO:     Started server process [4193]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-2025-12-29 22:24:50 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:24:50 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:24:50 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:63958 - "GET /api/prompt HTTP/1.1" 200 OK
-INFO:     127.0.0.1:63998 - "GET /api/memory/content HTTP/1.1" 200 OK
-WARNING:  WatchFiles detected changes in 'src/translator/api.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [4193]
-2025-12-29 22:26:50 - src.translator.api - INFO - Logging initialized. Log file: /Users/enrico/workspace/translator/logs/backend.log
-INFO:     Started server process [4257]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-2025-12-29 22:26:54 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:26:54 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:26:54 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:64047 - "GET /api/prompt HTTP/1.1" 200 OK
-2025-12-29 22:27:02 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:27:02 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:27:02 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:64061 - "GET /api/prompt HTTP/1.1" 200 OK
-2025-12-29 22:27:07 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:27:07 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:27:07 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:64064 - "GET /api/prompt HTTP/1.1" 200 OK
-2025-12-29 22:27:07 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:27:07 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:27:07 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:64066 - "GET /api/prompt HTTP/1.1" 200 OK
-2025-12-29 22:27:18 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:27:18 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:27:18 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:64075 - "GET /api/prompt HTTP/1.1" 200 OK
-2025-12-29 22:27:37 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:27:37 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:27:37 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:64084 - "GET /api/prompt HTTP/1.1" 200 OK
-2025-12-29 22:27:59 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:27:59 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:27:59 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:64103 - "GET /api/prompt HTTP/1.1" 200 OK
-2025-12-29 22:28:03 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:28:03 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:28:03 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:64107 - "GET /api/prompt HTTP/1.1" 200 OK
-2025-12-29 22:28:30 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:28:30 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:28:30 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:64150 - "GET /api/prompt HTTP/1.1" 200 OK
-2025-12-29 22:28:43 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:28:43 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:28:43 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:64162 - "GET /api/prompt HTTP/1.1" 200 OK
-2025-12-29 22:28:49 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:28:49 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:28:49 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:64173 - "GET /api/prompt HTTP/1.1" 200 OK
-2025-12-29 22:28:55 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:28:55 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:28:55 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:64181 - "GET /api/prompt HTTP/1.1" 200 OK
-2025-12-29 22:29:02 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:29:02 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:29:02 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:64201 - "GET /api/prompt HTTP/1.1" 200 OK
-2025-12-29 22:29:11 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:29:11 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:29:11 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:64217 - "GET /api/prompt HTTP/1.1" 200 OK
-2025-12-29 22:29:16 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:29:16 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:29:16 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:64225 - "GET /api/prompt HTTP/1.1" 200 OK
-WARNING:  WatchFiles detected changes in 'src/translator/api.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [4257]
-2025-12-29 22:29:38 - src.translator.api - INFO - Logging initialized. Log file: /Users/enrico/workspace/translator/logs/backend.log
-INFO:     Started server process [4773]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-2025-12-29 22:29:38 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:29:38 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:29:38 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:64259 - "GET /api/prompt HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64297 - "GET /api/memory/content HTTP/1.1" 200 OK
-2025-12-29 22:32:18 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:32:18 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:32:18 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:64392 - "GET /api/prompt HTTP/1.1" 200 OK
-2025-12-29 22:32:24 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:32:24 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:32:24 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:64402 - "GET /api/prompt HTTP/1.1" 200 OK
-2025-12-29 22:32:40 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:32:40 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:32:40 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:64419 - "GET /api/prompt HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64435 - "GET /api/memory/content HTTP/1.1" 200 OK
-2025-12-29 22:34:10 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:34:10 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:34:10 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:64483 - "GET /api/prompt HTTP/1.1" 200 OK
-2025-12-29 22:34:10 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:34:10 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:34:10 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:64485 - "GET /api/prompt HTTP/1.1" 200 OK
-2025-12-29 22:34:20 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:34:20 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:34:20 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:64494 - "GET /api/prompt HTTP/1.1" 200 OK
-2025-12-29 22:34:20 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:34:20 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:34:20 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:64496 - "GET /api/prompt HTTP/1.1" 200 OK
-2025-12-29 22:35:10 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:35:10 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:35:10 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:64552 - "GET /api/prompt HTTP/1.1" 200 OK
-2025-12-29 22:35:30 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:35:30 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:35:30 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:64597 - "GET /api/prompt HTTP/1.1" 200 OK
-2025-12-29 22:36:14 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:36:14 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:36:14 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:64669 - "GET /api/prompt HTTP/1.1" 200 OK
-2025-12-29 22:36:30 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:36:30 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:36:30 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:64683 - "GET /api/prompt HTTP/1.1" 200 OK
-2025-12-29 22:36:40 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:36:40 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:36:40 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:64693 - "GET /api/prompt HTTP/1.1" 200 OK
-2025-12-29 22:37:02 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:37:02 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:37:02 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:64725 - "GET /api/prompt HTTP/1.1" 200 OK
-2025-12-29 22:37:30 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:37:30 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:37:30 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:64748 - "GET /api/prompt HTTP/1.1" 200 OK
-2025-12-29 22:37:49 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2025-12-29 22:37:49 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2025-12-29 22:37:49 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:64767 - "GET /api/prompt HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64861 - "GET /api/memory/content HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50606 - "GET /api/prompt HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50608 - "GET /api/memory/content HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50613 - "GET /api/memory/content HTTP/1.1" 200 OK

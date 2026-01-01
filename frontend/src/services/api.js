@@ -100,7 +100,10 @@ export const startTranslation = async (file, options) => {
   const targetLangValue = options.target_lang || 'it';
   formData.append('target_lang', targetLangValue);
   formData.append('use_glossary', options.use_glossary !== false);
-  formData.append('skip_memory', options.skip_memory !== false);
+  // TranslationForm passes skip_memory: !useMemory (already correct)
+  // skip_memory: true means skip, false means use memory
+  // Pass it through directly (TranslationForm always provides it)
+  formData.append('skip_memory', options.skip_memory ?? false);
   
   if (options.reference_doc) {
     formData.append('reference_doc', options.reference_doc);
@@ -170,6 +173,11 @@ export const getMemoryContent = async () => {
 
 export const updateMemoryContent = async (entries) => {
   const response = await api.put('/memory/content', { entries });
+  return response.data;
+};
+
+export const deleteAllMemoryContent = async () => {
+  const response = await api.delete('/memory/content');
   return response.data;
 };
 
