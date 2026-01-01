@@ -2,7 +2,8 @@ name: legal-translator
 region: nyc
 services:
 - name: web
-  dockerfile_path: ./Dockerfile
+  dockerfile_path: ./frontend/Dockerfile
+  build_command: docker build -f frontend/Dockerfile .
   github:
     repo: boulder225/ai-translator
     branch: main
