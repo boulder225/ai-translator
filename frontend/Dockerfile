@@ -44,8 +44,9 @@ RUN rm -rf /etc/nginx/sites-enabled/* && \
     rm -f /etc/nginx/conf.d/default.conf && \
     # Comment out sites-enabled include in main nginx.conf to avoid conflicts
     sed -i 's|include /etc/nginx/sites-enabled/\*;|# include /etc/nginx/sites-enabled/*;|g' /etc/nginx/nginx.conf && \
-    # Remove any existing daemon directive and add our own
-    sed -i '/^daemon /d' /etc/nginx/nginx.conf && \
+    # Remove ALL existing daemon directives (with or without semicolon, with or without value)
+    sed -i '/^[[:space:]]*daemon[[:space:]]/d' /etc/nginx/nginx.conf && \
+    # Add daemon off at the end
     echo "daemon off;" >> /etc/nginx/nginx.conf
 COPY frontend/nginx.conf /etc/nginx/conf.d/app.conf
 
