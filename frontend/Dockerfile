@@ -22,8 +22,10 @@ FROM python:3.11-slim AS backend
 
 WORKDIR /app
 
-# Install system dependencies and immediately remove default nginx site
-RUN apt-get update && apt-get install -y \
+# Install system dependencies and prevent default nginx site creation
+RUN apt-get update && \
+    # Prevent nginx from creating default site by using DEBIAN_FRONTEND
+    DEBIAN_FRONTEND=noninteractive apt-get install -y \
     nginx \
     curl \
     && rm -rf /var/lib/apt/lists/* && \
@@ -31,9 +33,15 @@ RUN apt-get update && apt-get install -y \
     rm -rf /etc/nginx/sites-enabled && \
     mkdir -p /etc/nginx/sites-enabled && \
     rm -f /etc/nginx/sites-available/default && \
-    # Comment out sites-enabled include immediately
-    sed -i 's|include /etc/nginx/sites-enabled/\*;|# include /etc/nginx/sites-enabled/*;|g' /etc/nginx/nginx.conf && \
-    sed -i 's|include.*sites-enabled|# include sites-enabled|g' /etc/nginx/nginx.conf
+    # Remove any default files that might exist
+    find /etc/nginx -name "default" -type f -delete && \
+    find /etc/nginx -name "default" -type l -delete && \
+    # Comment out sites-enabled include immediately (multiple patterns to catch all)
+    sed -i 's|^[[:space:]]*include[[:space:]]*/etc/nginx/sites-enabled/\*;|    # include /etc/nginx/sites-enabled/*;|g' /etc/nginx/nginx.conf && \
+    sed -i 's|include.*sites-enabled|# include sites-enabled|g' /etc/nginx/nginx.conf && \
+    # Verify it's commented out
+    echo "Verifying sites-enabled is commented in nginx.conf:" && \
+    grep -n "sites-enabled" /etc/nginx/nginx.conf
 
 # Copy Python project files
 COPY pyproject.toml ./
