@@ -1,0 +1,69 @@
+# Multi-stage build for legal translator app
+# This Dockerfile is in frontend/ but expects build context to be the repository root
+
+# Stage 1: Build frontend
+FROM node:20-alpine AS frontend-builder
+
+WORKDIR /app/frontend
+
+# Copy frontend files
+COPY frontend/package*.json ./
+RUN npm ci
+
+COPY frontend/ ./
+RUN npm run build
+
+# Stage 2: Python backend
+FROM python:3.11-slim AS backend
+
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    nginx \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy Python project files
+COPY pyproject.toml ./
+COPY src/ ./src/
+
+# Install Python dependencies
+RUN pip install --no-cache-dir -e .
+
+# Copy frontend build from builder stage
+COPY --from=frontend-builder /app/frontend/dist /usr/share/nginx/html
+
+# Copy nginx configuration
+COPY frontend/nginx.conf /etc/nginx/conf.d/default.conf
+
+# Create necessary directories
+RUN mkdir -p /app/data /app/logs /app/glossary
+
+# Copy glossary and data files
+COPY glossary/ /app/glossary/
+COPY data/ /app/data/
+COPY prompt*.md /app/
+
+# Expose port
+EXPOSE 80
+
+# Create startup script
+RUN echo '#!/bin/bash\n\
+# Start backend in background\n\
+cd /app\n\
+uvicorn src.translator.api:app --host 0.0.0.0 --port 8080 &\n\
+\n\
+# Start nginx in foreground\n\
+nginx -g "daemon off;"' > /app/start.sh && chmod +x /app/start.sh
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1
+ENV ANTHROPIC_API_KEY=""
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+  CMD curl -f http://localhost/api/health > /dev/null 2>&1 || exit 1
+
+# Start services
+CMD ["/app/start.sh"]
