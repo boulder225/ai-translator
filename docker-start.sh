@@ -9,14 +9,18 @@ echo "Removing any remaining default sites..."
 # Aggressively remove everything related to default sites
 rm -rf /etc/nginx/sites-enabled
 mkdir -p /etc/nginx/sites-enabled
+# Remove default site file and any symlinks
 rm -f /etc/nginx/sites-available/default
-# Remove any symlinks that might exist
-find /etc/nginx -type l -delete 2>/dev/null || true
+find /etc/nginx -name "default" -type f -delete 2>/dev/null || true
+find /etc/nginx -name "default" -type l -delete 2>/dev/null || true
 # Comment out ALL sites-enabled includes in nginx.conf BEFORE testing
-sed -i 's|include /etc/nginx/sites-enabled/\*;|# include /etc/nginx/sites-enabled/*;|g' /etc/nginx/nginx.conf
+# Use multiple sed patterns to catch all variations
+sed -i 's|^[[:space:]]*include[[:space:]]*/etc/nginx/sites-enabled/\*;|    # include /etc/nginx/sites-enabled/*;|g' /etc/nginx/nginx.conf
+sed -i 's|include.*sites-enabled/\*|# include sites-enabled/*|g' /etc/nginx/nginx.conf
 sed -i 's|include.*sites-enabled|# include sites-enabled|g' /etc/nginx/nginx.conf
-# Also check and comment in http block
-sed -i '/http {/,/^}/ s|include /etc/nginx/sites-enabled|# include /etc/nginx/sites-enabled|g' /etc/nginx/nginx.conf
+# Verify the include is commented
+echo "Checking if sites-enabled include is commented:"
+grep "sites-enabled" /etc/nginx/nginx.conf
 # Remove daemon directive from config file since we use -g flag on command line
 sed -i '/^[[:space:]]*daemon[[:space:]]/d' /etc/nginx/nginx.conf
 echo "Nginx sites-enabled after cleanup:"
