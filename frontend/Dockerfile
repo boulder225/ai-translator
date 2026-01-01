@@ -65,31 +65,32 @@ COPY prompt*.md /app/
 # Expose port
 EXPOSE 80
 
-# Create startup script
-RUN echo '#!/bin/bash\n\
-set -e\n\
-echo "Starting services..."\n\
-echo "Frontend files in /usr/share/nginx/html:"\n\
-ls -la /usr/share/nginx/html/ || echo "WARNING: No files found"\n\
-echo "Nginx config files:"\n\
-ls -la /etc/nginx/conf.d/\n\
-echo "Removing any remaining default sites..."\n\
-rm -rf /etc/nginx/sites-enabled/*\n\
-rm -f /etc/nginx/sites-available/default\n\
-# Also ensure the sites-enabled include is commented out\n\
-sed -i 's|include /etc/nginx/sites-enabled/\*;|# include /etc/nginx/sites-enabled/*;|g' /etc/nginx/nginx.conf\n\
-echo "Nginx sites-enabled after cleanup:"\n\
-ls -la /etc/nginx/sites-enabled/ || echo "sites-enabled directory empty (good)"\n\
-echo "Checking nginx.conf for sites-enabled include:"\n\
-grep -n "sites-enabled" /etc/nginx/nginx.conf || echo "No sites-enabled references found (good)"\n\
-echo "Testing nginx config..."\n\
-nginx -t\n\
-echo "Starting backend..."\n\
-cd /app\n\
-uvicorn src.translator.api:app --host 0.0.0.0 --port 8080 &\n\
-echo "Backend started, PID: $!"\n\
-echo "Starting nginx..."\n\
-nginx -g "daemon off;"' > /app/start.sh && chmod +x /app/start.sh
+# Create startup script using heredoc to avoid shell escaping issues
+RUN cat > /app/start.sh << 'EOFSCRIPT' && chmod +x /app/start.sh
+#!/bin/bash
+set -e
+echo "Starting services..."
+echo "Frontend files in /usr/share/nginx/html:"
+ls -la /usr/share/nginx/html/ || echo "WARNING: No files found"
+echo "Nginx config files:"
+ls -la /etc/nginx/conf.d/
+echo "Removing any remaining default sites..."
+rm -rf /etc/nginx/sites-enabled/*
+rm -f /etc/nginx/sites-available/default
+sed -i 's|include /etc/nginx/sites-enabled/\*;|# include /etc/nginx/sites-enabled/*;|g' /etc/nginx/nginx.conf
+echo "Nginx sites-enabled after cleanup:"
+ls -la /etc/nginx/sites-enabled/ || echo "sites-enabled directory empty (good)"
+echo "Checking nginx.conf for sites-enabled include:"
+grep -n "sites-enabled" /etc/nginx/nginx.conf || echo "No sites-enabled references found (good)"
+echo "Testing nginx config..."
+nginx -t
+echo "Starting backend..."
+cd /app
+uvicorn src.translator.api:app --host 0.0.0.0 --port 8080 &
+echo "Backend started, PID: $!"
+echo "Starting nginx..."
+nginx -g "daemon off;"
+EOFSCRIPT
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
