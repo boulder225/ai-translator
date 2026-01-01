@@ -42,6 +42,7 @@ RUN mkdir -p /app/data /app/logs /app/glossary
 # Copy glossary and data files
 COPY glossary/ /app/glossary/
 COPY data/ /app/data/
+# Copy prompt files
 COPY prompt*.md /app/
 
 # Expose port
