@@ -42,6 +42,8 @@ COPY --from=frontend-builder /app/frontend/dist /usr/share/nginx/html
 RUN rm -rf /etc/nginx/sites-enabled/* && \
     rm -f /etc/nginx/sites-available/default && \
     rm -f /etc/nginx/conf.d/default.conf && \
+    # Comment out sites-enabled include in main nginx.conf to avoid conflicts
+    sed -i 's|include /etc/nginx/sites-enabled/\*;|# include /etc/nginx/sites-enabled/*;|g' /etc/nginx/nginx.conf && \
     echo "daemon off;" >> /etc/nginx/nginx.conf
 COPY frontend/nginx.conf /etc/nginx/conf.d/app.conf
 
@@ -69,8 +71,11 @@ echo "Frontend files in /usr/share/nginx/html:"\n\
 ls -la /usr/share/nginx/html/ || echo "WARNING: No files found"\n\
 echo "Nginx config files:"\n\
 ls -la /etc/nginx/conf.d/\n\
-echo "Nginx sites-enabled:"\n\
-ls -la /etc/nginx/sites-enabled/ || echo "sites-enabled directory not found"\n\
+echo "Removing any remaining default sites..."\n\
+rm -rf /etc/nginx/sites-enabled/*\n\
+rm -f /etc/nginx/sites-available/default\n\
+echo "Nginx sites-enabled after cleanup:"\n\
+ls -la /etc/nginx/sites-enabled/ || echo "sites-enabled directory empty (good)"\n\
 echo "Testing nginx config..."\n\
 nginx -t\n\
 echo "Starting backend..."\n\
