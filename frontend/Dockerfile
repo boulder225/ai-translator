@@ -38,10 +38,12 @@ RUN pip install --no-cache-dir -e .
 # Copy frontend build from builder stage
 COPY --from=frontend-builder /app/frontend/dist /usr/share/nginx/html
 
-# Remove default nginx site and copy our configuration
-RUN rm -f /etc/nginx/sites-enabled/default && \
-    rm -f /etc/nginx/conf.d/default.conf
-COPY frontend/nginx.conf /etc/nginx/conf.d/default.conf
+# Remove default nginx sites and ensure only our config is used
+RUN rm -rf /etc/nginx/sites-enabled/* && \
+    rm -f /etc/nginx/sites-available/default && \
+    rm -f /etc/nginx/conf.d/default.conf && \
+    echo "daemon off;" >> /etc/nginx/nginx.conf
+COPY frontend/nginx.conf /etc/nginx/conf.d/app.conf
 
 # Verify frontend files are present and set correct permissions
 RUN chmod -R 755 /usr/share/nginx/html && \
@@ -65,8 +67,12 @@ set -e\n\
 echo "Starting services..."\n\
 echo "Frontend files in /usr/share/nginx/html:"\n\
 ls -la /usr/share/nginx/html/ || echo "WARNING: No files found"\n\
-echo "Nginx config:"\n\
-cat /etc/nginx/conf.d/default.conf\n\
+echo "Nginx config files:"\n\
+ls -la /etc/nginx/conf.d/\n\
+echo "Nginx sites-enabled:"\n\
+ls -la /etc/nginx/sites-enabled/ || echo "sites-enabled directory not found"\n\
+echo "Testing nginx config..."\n\
+nginx -t\n\
 echo "Starting backend..."\n\
 cd /app\n\
 uvicorn src.translator.api:app --host 0.0.0.0 --port 8080 &\n\
