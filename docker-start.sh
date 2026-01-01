@@ -51,5 +51,10 @@ echo "Starting backend..."
 cd /app
 uvicorn src.translator.api:app --host 0.0.0.0 --port 8080 &
 echo "Backend started, PID: $!"
+echo "Final check before starting nginx..."
+rm -f /etc/nginx/sites-enabled/default
+rm -rf /etc/nginx/sites-enabled/*
+echo "Final sites-enabled contents:"
+ls -la /etc/nginx/sites-enabled/ || echo "Empty (good)"
 echo "Starting nginx..."
 nginx -g "daemon off;"
