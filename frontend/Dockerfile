@@ -22,11 +22,18 @@ FROM python:3.11-slim AS backend
 
 WORKDIR /app
 
-# Install system dependencies
+# Install system dependencies and immediately remove default nginx site
 RUN apt-get update && apt-get install -y \
     nginx \
     curl \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* && \
+    # Immediately remove default site that gets created during nginx installation
+    rm -rf /etc/nginx/sites-enabled && \
+    mkdir -p /etc/nginx/sites-enabled && \
+    rm -f /etc/nginx/sites-available/default && \
+    # Comment out sites-enabled include immediately
+    sed -i 's|include /etc/nginx/sites-enabled/\*;|# include /etc/nginx/sites-enabled/*;|g' /etc/nginx/nginx.conf && \
+    sed -i 's|include.*sites-enabled|# include sites-enabled|g' /etc/nginx/nginx.conf
 
 # Copy Python project files
 COPY pyproject.toml ./
