@@ -34,8 +34,12 @@ RUN pip install --no-cache-dir -e .
 # Copy frontend build from builder stage
 COPY --from=frontend-builder /app/frontend/dist /usr/share/nginx/html
 
-# Copy nginx configuration
+# Remove default nginx site and copy our configuration
+RUN rm -f /etc/nginx/sites-enabled/default
 COPY frontend/nginx.conf /etc/nginx/conf.d/default.conf
+
+# Verify frontend files are present
+RUN ls -la /usr/share/nginx/html/ || echo "Warning: Frontend files not found"
 
 # Create necessary directories
 RUN mkdir -p /app/data /app/logs /app/glossary
