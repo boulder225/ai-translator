@@ -9,12 +9,8 @@ echo "Removing any remaining default sites..."
 rm -rf /etc/nginx/sites-enabled/*
 rm -f /etc/nginx/sites-available/default
 sed -i 's|include /etc/nginx/sites-enabled/\*;|# include /etc/nginx/sites-enabled/*;|g' /etc/nginx/nginx.conf
-# Ensure only one daemon directive exists (remove all, then add one if needed)
+# Remove daemon directive from config file since we use -g flag on command line
 sed -i '/^[[:space:]]*daemon[[:space:]]/d' /etc/nginx/nginx.conf
-# Only add if it doesn't exist (check first)
-if ! grep -q "^[[:space:]]*daemon[[:space:]]" /etc/nginx/nginx.conf; then
-    echo "daemon off;" >> /etc/nginx/nginx.conf
-fi
 echo "Nginx sites-enabled after cleanup:"
 ls -la /etc/nginx/sites-enabled/ || echo "sites-enabled directory empty (good)"
 echo "Checking nginx.conf for sites-enabled include:"
