@@ -39,13 +39,20 @@ RUN pip install --no-cache-dir -e .
 COPY --from=frontend-builder /app/frontend/dist /usr/share/nginx/html
 
 # Remove default nginx sites and ensure only our config is used
-RUN rm -rf /etc/nginx/sites-enabled/* && \
+RUN rm -rf /etc/nginx/sites-enabled && \
+    mkdir -p /etc/nginx/sites-enabled && \
     rm -f /etc/nginx/sites-available/default && \
     rm -f /etc/nginx/conf.d/default.conf && \
     # Comment out sites-enabled include in main nginx.conf to avoid conflicts
     sed -i 's|include /etc/nginx/sites-enabled/\*;|# include /etc/nginx/sites-enabled/*;|g' /etc/nginx/nginx.conf && \
+    sed -i 's|include.*sites-enabled|# include sites-enabled|g' /etc/nginx/nginx.conf && \
     # Remove daemon directive (we use -g flag on command line instead)
-    sed -i '/^[[:space:]]*daemon[[:space:]]/d' /etc/nginx/nginx.conf
+    sed -i '/^[[:space:]]*daemon[[:space:]]/d' /etc/nginx/nginx.conf && \
+    # Verify cleanup
+    echo "Verifying sites-enabled is empty:" && \
+    ls -la /etc/nginx/sites-enabled/ && \
+    echo "Verifying nginx.conf has sites-enabled commented:" && \
+    grep -n "sites-enabled" /etc/nginx/nginx.conf || echo "No sites-enabled found (good)"
 COPY frontend/nginx.conf /etc/nginx/conf.d/app.conf
 
 # Verify frontend files are present and set correct permissions
