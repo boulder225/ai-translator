@@ -1,0 +1,23 @@
+name: legal-translator
+region: nyc
+services:
+- name: web
+  dockerfile_path: ./Dockerfile
+  github:
+    repo: boulder225/ai-translator
+    branch: main
+  run_command: /app/start.sh
+  environment_slug: python
+  instance_count: 1
+  instance_size_slug: basic-xxs
+  http_port: 80
+  health_check:
+    http_path: /api/health
+  envs:
+  - key: ANTHROPIC_API_KEY
+    scope: RUN_TIME
+    type: SECRET
+  - key: CORS_ORIGINS
+    scope: RUN_TIME
+    type: GENERAL
+    value: "*"
