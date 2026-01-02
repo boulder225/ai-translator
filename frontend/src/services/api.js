@@ -104,11 +104,11 @@ export const startTranslation = async (file, options) => {
   // skip_memory: true means skip, false means use memory
   // Pass it through directly (TranslationForm always provides it)
   formData.append('skip_memory', options.skip_memory ?? false);
-  
+
   if (options.reference_doc) {
     formData.append('reference_doc', options.reference_doc);
   }
-  
+
   if (options.custom_prompt) {
     formData.append('custom_prompt', options.custom_prompt);
   }
@@ -118,8 +118,77 @@ export const startTranslation = async (file, options) => {
       'Content-Type': 'multipart/form-data',
     },
   });
-  
+
   return response.data;
+};
+
+export const startTranslationStreaming = async (file, options, onChunk, onComplete, onError) => {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('source_lang', options.source_lang || 'fr');
+  formData.append('target_lang', options.target_lang || 'it');
+  formData.append('use_glossary', options.use_glossary !== false);
+  formData.append('skip_memory', options.skip_memory ?? false);
+
+  if (options.reference_doc) {
+    formData.append('reference_doc', options.reference_doc);
+  }
+
+  if (options.custom_prompt) {
+    formData.append('custom_prompt', options.custom_prompt);
+  }
+
+  try {
+    const userRole = getUserRoleFromStorage();
+    const username = getUsername();
+
+    const response = await fetch(`${API_BASE_URL}/translate-stream`, {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'X-User-Role': userRole || '',
+        'X-Username': username || '',
+      },
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`HTTP ${response.status}: ${errorText}`);
+    }
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n\n');
+      buffer = lines.pop();
+
+      for (const line of lines) {
+        if (line.startsWith('data: ')) {
+          const data = JSON.parse(line.slice(6));
+
+          if (data.type === 'chunk' && onChunk) {
+            onChunk(data.text);
+          } else if (data.type === 'done' && onComplete) {
+            onComplete(data.full_text, data.message, data.stats);
+          } else if (data.type === 'error') {
+            throw new Error(data.message);
+          }
+        }
+      }
+    }
+  } catch (error) {
+    if (onError) {
+      onError(error);
+    } else {
+      throw error;
+    }
+  }
 };
 
 export const getTranslationStatus = async (jobId) => {
@@ -198,3 +267,55 @@ export const downloadTranslatedText = async (jobId) => {
   window.URL.revokeObjectURL(url);
 };
 
+
+export const exportTranslationMemoryTMX = async (jobId) => {
+  const response = await api.get(`/translate/${jobId}/export/tmx`, {
+    responseType: 'blob',
+  });
+  
+  // Extract filename from Content-Disposition header or use default
+  const contentDisposition = response.headers['content-disposition'];
+  let filename = `translation_memory_${jobId}.tmx`;
+  if (contentDisposition) {
+    const filenameMatch = contentDisposition.match(/filename="?([^"]+)"?/);
+    if (filenameMatch) {
+      filename = filenameMatch[1];
+    }
+  }
+  
+  // Create download link
+  const url = window.URL.createObjectURL(new Blob([response.data], { type: 'application/xml' }));
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', filename);
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  window.URL.revokeObjectURL(url);
+};
+
+export const exportGlossaryTBX = async (jobId) => {
+  const response = await api.get(`/translate/${jobId}/export/tbx`, {
+    responseType: 'blob',
+  });
+  
+  // Extract filename from Content-Disposition header or use default
+  const contentDisposition = response.headers['content-disposition'];
+  let filename = `glossary_${jobId}.tbx`;
+  if (contentDisposition) {
+    const filenameMatch = contentDisposition.match(/filename="?([^"]+)"?/);
+    if (filenameMatch) {
+      filename = filenameMatch[1];
+    }
+  }
+  
+  // Create download link
+  const url = window.URL.createObjectURL(new Blob([response.data], { type: 'application/xml' }));
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', filename);
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  window.URL.revokeObjectURL(url);
+};

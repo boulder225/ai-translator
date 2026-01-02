@@ -210,15 +210,6 @@ def _translate_paragraphs(
             stats.glossary_matches += len(glossary_matches)
             
             # Get memory suggestions
-            # #region agent log
-            import json as json_module
-            log_path = "/Users/enrico/workspace/translator/.cursor/debug.log"
-            try:
-                with open(log_path, "a") as f:
-                    f.write(json_module.dumps({"sessionId": "debug-session", "runId": "run1", "hypothesisId": "E", "location": "processing.py:212", "message": "About to get memory suggestions", "data": {"skip_memory": skip_memory, "text_len": len(text)}, "timestamp": __import__("time").time() * 1000}) + "\n")
-            except Exception:
-                pass
-            # #endregion
             memory_suggestions = memory.similar(text, source_lang, target_lang, limit=3, threshold=80.0) if not skip_memory else []
             
             # Split if too long
@@ -242,13 +233,6 @@ def _translate_paragraphs(
                     translated_chunks.append(chunk_translated)
                 stats.model_calls += 1
                 if not skip_memory:
-                    # #region agent log
-                    try:
-                        with open(log_path, "a") as f:
-                            f.write(json_module.dumps({"sessionId": "debug-session", "runId": "run1", "hypothesisId": "E", "location": "processing.py:236", "message": "About to record chunk to memory", "data": {"chunk_len": len(chunk), "translated_len": len(chunk_translated), "skip_memory": skip_memory}, "timestamp": __import__("time").time() * 1000}) + "\n")
-                    except Exception:
-                        pass
-                    # #endregion
                     memory.record(chunk, chunk_translated, source_lang, target_lang)
                 
                 # Combine chunks (simple join, overlap handled by translator)
@@ -264,13 +248,6 @@ def _translate_paragraphs(
                 )
                 stats.model_calls += 1
                 if not skip_memory:
-                    # #region agent log
-                    try:
-                        with open(log_path, "a") as f:
-                            f.write(json_module.dumps({"sessionId": "debug-session", "runId": "run1", "hypothesisId": "E", "location": "processing.py:251", "message": "About to record paragraph to memory", "data": {"text_len": len(text), "translated_len": len(translated_text), "skip_memory": skip_memory}, "timestamp": __import__("time").time() * 1000}) + "\n")
-                    except Exception:
-                        pass
-                    # #endregion
                     memory.record(text, translated_text, source_lang, target_lang)
             
             paragraph_log["model_called"] = True
@@ -633,17 +610,7 @@ def translate_file_to_memory(
     memory_used = False
     memory_hits = []
     memory_record_used = None  # Store the memory record if entire translation came from memory
-    
-    # #region agent log
-    import json as json_module
-    log_path = "/Users/enrico/workspace/translator/.cursor/debug.log"
-    try:
-        with open(log_path, "a") as f:
-            f.write(json_module.dumps({"sessionId": "debug-session", "runId": "run1", "hypothesisId": "G", "location": "processing.py:638", "message": "Starting translate_file_to_memory", "data": {"skip_memory": skip_memory, "doc_len": len(document_text)}, "timestamp": __import__("time").time() * 1000}) + "\n")
-    except Exception:
-        pass
-    # #endregion
-    
+
     if not skip_memory:
         logger.info(f"[translate_file_to_memory] ===== STEP 1: CHECKING TRANSLATION MEMORY =====")
         logger.info(f"[translate_file_to_memory] Memory enabled (skip_memory=False), checking for existing translation...")
@@ -690,13 +657,6 @@ def translate_file_to_memory(
         logger.info(f"[translate_file_to_memory] Translation memory disabled, proceeding directly to Claude API")
     
     # STEP 2: If memory wasn't used, call Claude API
-    # #region agent log
-    try:
-        with open(log_path, "a") as f:
-            f.write(json_module.dumps({"sessionId": "debug-session", "runId": "run1", "hypothesisId": "G", "location": "processing.py:684", "message": "Before STEP 2 check", "data": {"memory_used": memory_used, "skip_memory": skip_memory}, "timestamp": __import__("time").time() * 1000}) + "\n")
-    except Exception:
-        pass
-    # #endregion
     if not memory_used:
         logger.info(f"[translate_file_to_memory] ===== STEP 2: QUERYING CLAUDE API =====")
         # Update progress
@@ -722,76 +682,23 @@ def translate_file_to_memory(
         
         logger.info(f"[translate_file_to_memory] ✅ STEP 2 RESULT: Claude API translation completed in {duration:.2f}s")
         logger.info(f"[translate_file_to_memory] Translated length: {len(translated_text):,} characters")
-        
-        # #region agent log
-        import json as json_module
-        log_path = "/Users/enrico/workspace/translator/.cursor/debug.log"
-        try:
-            with open(log_path, "a") as f:
-                f.write(json_module.dumps({"sessionId": "debug-session", "runId": "run1", "hypothesisId": "G", "location": "processing.py:709", "message": "After STEP 2, before STEP 3", "data": {"skip_memory": skip_memory, "translated_text_len": len(translated_text) if translated_text else 0}, "timestamp": __import__("time").time() * 1000}) + "\n")
-        except Exception:
-            pass
-        # #endregion
-        
+
         # STEP 3: Store translation in memory for future use
-        # #region agent log
-        try:
-            with open(log_path, "a") as f:
-                f.write(json_module.dumps({"sessionId": "debug-session", "runId": "run1", "hypothesisId": "G", "location": "processing.py:710", "message": "Before STEP 3 if check", "data": {"skip_memory": skip_memory}, "timestamp": __import__("time").time() * 1000}) + "\n")
-        except Exception:
-            pass
-        # #endregion
         if not skip_memory:
-            # #region agent log
-            try:
-                with open(log_path, "a") as f:
-                    f.write(json_module.dumps({"sessionId": "debug-session", "runId": "run1", "hypothesisId": "G", "location": "processing.py:717", "message": "Inside STEP 3 if block", "data": {"skip_memory": skip_memory}, "timestamp": __import__("time").time() * 1000}) + "\n")
-            except Exception:
-                pass
-            # #endregion
             logger.info(f"[translate_file_to_memory] ===== STEP 3: STORING TRANSLATION IN MEMORY =====")
             logger.info(f"[translate_file_to_memory] Storing translation in memory for future use...")
             logger.info(f"[translate_file_to_memory] Source text length: {len(document_text):,} characters")
             logger.info(f"[translate_file_to_memory] Translated text length: {len(translated_text):,} characters")
-            
-            # #region agent log
+
             try:
-                with open(log_path, "a") as f:
-                    f.write(json_module.dumps({"sessionId": "debug-session", "runId": "run1", "hypothesisId": "G", "location": "processing.py:757", "message": "After logger.info statements, before try block", "data": {"skip_memory": skip_memory}, "timestamp": __import__("time").time() * 1000}) + "\n")
-            except Exception:
-                pass
-            # #endregion
-            
-            try:
-                # #region agent log
-                try:
-                    with open(log_path, "a") as f:
-                        f.write(json_module.dumps({"sessionId": "debug-session", "runId": "run1", "hypothesisId": "F", "location": "processing.py:758", "message": "Entered try block in STEP 3", "data": {"skip_memory": skip_memory, "translated_text_exists": translated_text is not None, "translated_text_len": len(translated_text) if translated_text else 0}, "timestamp": __import__("time").time() * 1000}) + "\n")
-                except Exception:
-                    pass
-                # #endregion
                 # CRITICAL FIX: Remove ReportLab XML tags before storing in memory
                 # Ensure memory never contains <para> tags
                 cleaned_translated_text = re.sub(r'</?para>', '', translated_text, flags=re.IGNORECASE)
-                # #region agent log
-                try:
-                    with open(log_path, "a") as f:
-                        f.write(json_module.dumps({"sessionId": "debug-session", "runId": "run1", "hypothesisId": "F", "location": "processing.py:769", "message": "About to record entire document to memory", "data": {"source_len": len(document_text), "translated_len": len(cleaned_translated_text), "skip_memory": skip_memory}, "timestamp": __import__("time").time() * 1000}) + "\n")
-                except Exception:
-                    pass
-                # #endregion
                 memory.record(document_text, cleaned_translated_text, source_lang, target_lang, allow_long_entries=True)
                 logger.info(f"[translate_file_to_memory] ✅ STEP 3 RESULT: Translation stored in memory successfully")
                 logger.info(f"[translate_file_to_memory] Memory file: {memory.path}")
                 logger.info(f"[translate_file_to_memory] Total records in memory: {len(memory._records)}")
             except Exception as e:
-                # #region agent log
-                try:
-                    with open(log_path, "a") as f:
-                        f.write(json_module.dumps({"sessionId": "debug-session", "runId": "run1", "hypothesisId": "F", "location": "processing.py:787", "message": "Exception in STEP 3 try block", "data": {"exception_type": type(e).__name__, "exception_message": str(e)}, "timestamp": __import__("time").time() * 1000}) + "\n")
-                except Exception:
-                    pass
-                # #endregion
                 logger.error(f"[translate_file_to_memory] ❌ STEP 3 ERROR: Failed to store translation in memory: {e}")
                 logger.exception(e)
         else:

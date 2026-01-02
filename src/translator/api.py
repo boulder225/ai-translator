@@ -13,10 +13,11 @@ from typing import Optional
 
 from fastapi import FastAPI, File, Form, HTTPException, Request, UploadFile, status
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, StreamingResponse
 from pydantic import BaseModel
 
 from .claude_client import ClaudeTranslator
+from .export import export_tbx, export_tmx
 from .processing import PDF_SUFFIX, translate_file_to_memory
 from .settings import get_settings
 from .terminology import Glossary, TranslationMemory
@@ -222,26 +223,8 @@ def _run_translation(job_id: str) -> None:
         target_lang = job["target_lang"]
         glossary_path_str = job.get("glossary_path")
         skip_memory = job.get("skip_memory", False)  # Default False means memory is enabled
-        # #region agent log
-        import json as json_module
-        log_path = "/Users/enrico/workspace/translator/.cursor/debug.log"
-        try:
-            with open(log_path, "a") as f:
-                f.write(json_module.dumps({"sessionId": "debug-session", "runId": "run1", "hypothesisId": "D", "location": "api.py:212", "message": "skip_memory value in translation", "data": {"skip_memory": skip_memory, "job_skip_memory": job.get("skip_memory")}, "timestamp": __import__("time").time() * 1000}) + "\n")
-        except Exception:
-            pass
-        # #endregion
         custom_prompt = job.get("custom_prompt")
         user_role = job.get("user_role", "")
-        # #region agent log
-        import json
-        log_path = "/Users/enrico/workspace/translator/.cursor/debug.log"
-        try:
-            with open(log_path, "a") as f:
-                f.write(json.dumps({"sessionId": "debug-session", "runId": "run1", "hypothesisId": "role-check", "location": "api.py:214", "message": "User role from job storage", "data": {"job_id": job_id, "user_role": user_role, "user_role_length": len(user_role) if user_role else 0, "job_keys": list(job.keys())}, "timestamp": __import__("time").time() * 1000}) + "\n")
-        except Exception:
-            pass
-        # #endregion
         
         # Verify input file exists and hash matches
         if not input_file_path.exists():
@@ -321,15 +304,6 @@ def _run_translation(job_id: str) -> None:
             
             # Determine prompt to use: custom_prompt if provided, otherwise role-specific prompt
             from .claude_client import _load_prompt_template_for_role
-            # #region agent log
-            import json
-            log_path = "/Users/enrico/workspace/translator/.cursor/debug.log"
-            try:
-                with open(log_path, "a") as f:
-                    f.write(json.dumps({"sessionId": "debug-session", "runId": "run1", "hypothesisId": "role-check", "location": "api.py:305", "message": "Loading prompt for role", "data": {"job_id": job_id, "user_role": user_role, "user_role_repr": repr(user_role), "custom_prompt_provided": bool(custom_prompt)}, "timestamp": __import__("time").time() * 1000}) + "\n")
-            except Exception:
-                pass
-            # #endregion
             prompt_to_use = custom_prompt
             if not prompt_to_use:
                 # Use role-specific prompt if no custom prompt provided
@@ -498,6 +472,15 @@ async def health():
     return {"status": "healthy", "service": "legal-translator-api"}
 
 
+@app.get("/streaming-demo.html")
+async def streaming_demo():
+    """Serve the streaming translation demo page."""
+    demo_path = Path(__file__).parent.parent.parent / "streaming-demo.html"
+    if not demo_path.exists():
+        raise HTTPException(status_code=404, detail="Demo page not found")
+    return FileResponse(demo_path, media_type="text/html")
+
+
 @app.get("/api/glossaries")
 async def list_glossaries():
     return {"glossaries": [str(g) for g in find_glossary_files()]}
@@ -550,27 +533,11 @@ async def get_glossary_content(glossary_name: str):
 @app.get("/api/memory/content")
 async def get_memory_content():
     """Get all translation memory entries."""
-    # #region agent log
-    import json as json_module
-    log_path = "/Users/enrico/workspace/translator/.cursor/debug.log"
-    try:
-        with open(log_path, "a") as f:
-            f.write(json_module.dumps({"sessionId": "debug-session", "runId": "api-memory", "hypothesisId": "B", "location": "api.py:525", "message": "API get_memory_content called", "timestamp": __import__("time").time() * 1000}) + "\n")
-    except Exception:
-        pass
-    # #endregion
     settings = get_settings()
     memory_file = settings.data_root / "memory.json"
-    
+
     # Use TranslationMemory to get cleaned entries (filters out stale entries)
     try:
-        # #region agent log
-        try:
-            with open(log_path, "a") as f:
-                f.write(json_module.dumps({"sessionId": "debug-session", "runId": "api-memory", "hypothesisId": "B", "location": "api.py:533", "message": "Creating TranslationMemory instance", "data": {"memory_file": str(memory_file), "file_exists": memory_file.exists()}, "timestamp": __import__("time").time() * 1000}) + "\n")
-        except Exception:
-            pass
-        # #endregion
         memory = TranslationMemory(memory_file)
         entries = []
         for record in memory:
@@ -581,13 +548,6 @@ async def get_memory_content():
                 "source_lang": record.source_lang,
                 "target_lang": record.target_lang
             })
-        # #region agent log
-        try:
-            with open(log_path, "a") as f:
-                f.write(json_module.dumps({"sessionId": "debug-session", "runId": "api-memory", "hypothesisId": "B", "location": "api.py:550", "message": "Returning memory entries", "data": {"total_entries": len(entries)}, "timestamp": __import__("time").time() * 1000}) + "\n")
-        except Exception:
-            pass
-        # #endregion
         return {
             "path": str(memory_file),
             "entries": entries,
@@ -951,16 +911,7 @@ async def start_translation(
     
     # Get user role from headers for role-specific prompts
     user_role = (request.headers.get("X-User-Role") or request.headers.get("x-user-role") or "").strip()
-    # #region agent log
-    import json
-    log_path = "/Users/enrico/workspace/translator/.cursor/debug.log"
-    try:
-        with open(log_path, "a") as f:
-            f.write(json.dumps({"sessionId": "debug-session", "runId": "run1", "hypothesisId": "role-check", "location": "api.py:677", "message": "User role from headers in start_translation", "data": {"user_role": user_role, "user_role_length": len(user_role) if user_role else 0, "x_user_role_header": request.headers.get("X-User-Role"), "x_user_role_lower_header": request.headers.get("x-user-role")}, "timestamp": __import__("time").time() * 1000}) + "\n")
-    except Exception:
-        pass
-    # #endregion
-    
+
     # Track this request
     request_timestamp = time.time()
     request_id = str(uuid.uuid4())[:8]
@@ -1170,6 +1121,157 @@ async def download_translation(job_id: str):
     )
 
 
+@app.post("/api/translate-stream")
+async def translate_stream(
+    request: Request,
+    file: UploadFile = File(...),
+    source_lang: str = Form(...),
+    target_lang: str = Form(...),
+    use_glossary: bool = Form(True),
+    skip_memory: bool = Form(False),
+    custom_prompt: Optional[str] = Form(None),
+):
+    """
+    Stream translation results in real-time using Server-Sent Events (SSE).
+
+    This endpoint provides immediate feedback as translation progresses,
+    making the user experience feel much faster than waiting for completion.
+    """
+    import asyncio
+    from queue import Queue
+
+    settings = get_settings()
+    if not settings.anthropic_api_key:
+        raise HTTPException(status_code=500, detail="ANTHROPIC_API_KEY not configured")
+
+    # Read uploaded file
+    file_content = await file.read()
+    file_suffix = Path(file.filename).suffix if file.filename else ".txt"
+
+    # Create temp file
+    with tempfile.NamedTemporaryFile(mode='wb', suffix=file_suffix, delete=False) as tmp_file:
+        tmp_file.write(file_content)
+        temp_path = Path(tmp_file.name)
+
+    try:
+        # Read document text
+        from .processing import _read_file_as_text
+        document_text = _read_file_as_text(temp_path)
+
+        # Load glossary
+        glossary = None
+        if use_glossary:
+            default_glossary = Path("glossary") / "glossary.csv"
+            if default_glossary.exists():
+                glossary = _load_glossary(default_glossary, source_lang, target_lang)
+
+        # Load memory
+        memory_file = settings.data_root / "memory.json"
+        memory = TranslationMemory(memory_file)
+
+        # Get user role
+        user_role = (request.headers.get("X-User-Role") or "").strip()
+
+        # Determine prompt
+        from .claude_client import _load_prompt_template_for_role
+        prompt_to_use = custom_prompt or _load_prompt_template_for_role(user_role)
+
+        # Create translator
+        translator = ClaudeTranslator(
+            api_key=settings.anthropic_api_key,
+            dry_run=False,
+            custom_prompt_template=prompt_to_use,
+        )
+
+        # Get glossary matches and memory hits
+        glossary_matches = glossary.matches_in_text(document_text) if glossary else []
+        memory_hits = [] if skip_memory else memory.similar(document_text, source_lang, target_lang, limit=10, threshold=80.0)
+
+        # Check for exact memory match (100% similarity)
+        exact_match = None
+        if not skip_memory:
+            exact_match = memory.get(document_text.strip(), source_lang, target_lang)
+
+        async def event_generator():
+            """Generate Server-Sent Events for streaming translation."""
+            try:
+                # Send start event with metadata
+                start_data = {
+                    'type': 'start',
+                    'message': 'Translation started...',
+                    'using_memory': exact_match is not None,
+                    'glossary_matches': len(glossary_matches),
+                    'memory_hits': len(memory_hits),
+                }
+                yield f"data: {json.dumps(start_data)}\n\n"
+
+                # If exact memory match exists, return it immediately
+                if exact_match:
+                    full_translation = exact_match.translated_text
+                    # Stream the cached translation character by character for visual effect
+                    chunk_size = 50
+                    for i in range(0, len(full_translation), chunk_size):
+                        chunk = full_translation[i:i + chunk_size]
+                        yield f"data: {json.dumps({'type': 'chunk', 'text': chunk})}\n\n"
+                        await asyncio.sleep(0.01)  # Small delay for visual streaming effect
+                else:
+                    # Stream translation from Claude API
+                    full_translation = ""
+                    for chunk in translator.translate_document_streaming(
+                        document_text=document_text,
+                        source_lang=source_lang,
+                        target_lang=target_lang,
+                        glossary_matches=glossary_matches,
+                        memory_hits=memory_hits,
+                    ):
+                        full_translation += chunk
+                        # Send chunk event
+                        yield f"data: {json.dumps({'type': 'chunk', 'text': chunk})}\n\n"
+                        await asyncio.sleep(0)  # Allow other tasks to run
+
+                    # Store in memory if not skipping
+                    if not skip_memory:
+                        memory.record(document_text, full_translation, source_lang, target_lang, allow_long_entries=True)
+
+                # Send completion event with metadata
+                completion_data = {
+                    'type': 'done',
+                    'message': 'Translation complete',
+                    'full_text': full_translation,
+                    'stats': {
+                        'used_memory': exact_match is not None,
+                        'glossary_matches': len(glossary_matches),
+                        'memory_hits': len(memory_hits),
+                        'source_lang': source_lang,
+                        'target_lang': target_lang,
+                    }
+                }
+                yield f"data: {json.dumps(completion_data)}\n\n"
+
+            except Exception as e:
+                logger.error(f"Streaming error: {e}", exc_info=True)
+                yield f"data: {json.dumps({'type': 'error', 'message': str(e)})}\n\n"
+            finally:
+                # Cleanup temp file
+                temp_path.unlink(missing_ok=True)
+
+        return StreamingResponse(
+            event_generator(),
+            media_type="text/event-stream",
+            headers={
+                "Cache-Control": "no-cache",
+                "Connection": "keep-alive",
+                "X-Accel-Buffering": "no",  # Disable nginx buffering
+            }
+        )
+
+    except Exception as e:
+        # Cleanup on error
+        temp_path.unlink(missing_ok=True)
+        logger.error(f"Streaming setup error: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 @app.post("/api/translate/{job_id}/cancel")
 async def cancel_translation(job_id: str):
     """Cancel an ongoing translation job."""
@@ -1224,3 +1326,107 @@ async def get_translated_text(job_id: str):
             "Content-Disposition": f'attachment; filename="translated_{job_id[:8]}.txt"',
         }
     )
+
+
+@app.get("/api/translate/{job_id}/export/tmx")
+async def export_translation_memory_tmx(job_id: str):
+    """Export translation memory as TMX file for Trados."""
+    import tempfile
+    
+    if job_id not in translation_jobs:
+        raise HTTPException(status_code=404, detail=JOB_NOT_FOUND)
+    
+    job = translation_jobs[job_id]
+    if job["status"] != "completed":
+        raise HTTPException(status_code=400, detail="Translation not completed")
+    
+    source_lang = job.get("source_lang", "fr")
+    target_lang = job.get("target_lang", "it")
+    
+    # Load translation memory
+    settings = get_settings()
+    memory_file = settings.data_root / "memory.json"
+    memory = TranslationMemory(memory_file)
+    
+    # Create temporary TMX file
+    temp_file = tempfile.NamedTemporaryFile(delete=False, suffix=".tmx")
+    temp_path = Path(temp_file.name)
+    temp_file.close()
+    
+    try:
+        # Export to TMX
+        export_tmx(memory, temp_path, source_lang, target_lang)
+        
+        # Generate filename
+        filename = f"translation_memory_{source_lang}_{target_lang}_{job_id[:8]}.tmx"
+        
+        return FileResponse(
+            path=temp_path,
+            filename=filename,
+            media_type="application/xml",
+            headers={
+                "Content-Disposition": f'attachment; filename="{filename}"',
+            }
+        )
+    except Exception as e:
+        # Clean up temp file on error
+        if temp_path.exists():
+            temp_path.unlink()
+        logger.error(f"Error exporting TMX: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=f"Error exporting TMX: {str(e)}")
+
+
+@app.get("/api/translate/{job_id}/export/tbx")
+async def export_glossary_tbx(job_id: str):
+    """Export glossary as TBX file for Trados MultiTerm."""
+    import tempfile
+    
+    if job_id not in translation_jobs:
+        raise HTTPException(status_code=404, detail=JOB_NOT_FOUND)
+    
+    job = translation_jobs[job_id]
+    if job["status"] != "completed":
+        raise HTTPException(status_code=400, detail="Translation not completed")
+    
+    source_lang = job.get("source_lang", "fr")
+    target_lang = job.get("target_lang", "it")
+    glossary_path_str = job.get("glossary_path")
+    
+    if not glossary_path_str:
+        raise HTTPException(status_code=400, detail="No glossary was used for this translation")
+    
+    # Load glossary
+    glossary_path = Path(glossary_path_str)
+    if not glossary_path.exists():
+        raise HTTPException(status_code=404, detail="Glossary file not found")
+    
+    glossary = _load_glossary(glossary_path, source_lang, target_lang)
+    if not glossary:
+        raise HTTPException(status_code=500, detail="Failed to load glossary")
+    
+    # Create temporary TBX file
+    temp_file = tempfile.NamedTemporaryFile(delete=False, suffix=".tbx")
+    temp_path = Path(temp_file.name)
+    temp_file.close()
+    
+    try:
+        # Export to TBX
+        export_tbx(glossary, temp_path)
+        
+        # Generate filename
+        filename = f"glossary_{source_lang}_{target_lang}_{job_id[:8]}.tbx"
+        
+        return FileResponse(
+            path=temp_path,
+            filename=filename,
+            media_type="application/xml",
+            headers={
+                "Content-Disposition": f'attachment; filename="{filename}"',
+            }
+        )
+    except Exception as e:
+        # Clean up temp file on error
+        if temp_path.exists():
+            temp_path.unlink()
+        logger.error(f"Error exporting TBX: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=f"Error exporting TBX: {str(e)}")

@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Streaming Translation Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .subtitle {
+            text-align: center;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+
+        .demo-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .demo-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .card h2 {
+            margin-bottom: 15px;
+            color: #667eea;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        input[type="text"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border: 2px dashed #e0e0e0;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: 100%;
+        }
+
+        button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .output-box {
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 15px;
+            min-height: 200px;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .streaming {
+            animation: pulse 2s infinite;
+            border-color: #667eea;
+        }
+
+        @keyframes pulse {
+            0%, 100% { border-color: #667eea; }
+            50% { border-color: #764ba2; }
+        }
+
+        .stats {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            background: #f0f0f0;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        .stat strong {
+            color: #667eea;
+        }
+
+        .status {
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .status.show {
+            display: block;
+        }
+
+        .status.success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+
+        .status.info {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .comparison-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #e0e0e0;
+        }
+
+        .comparison-item h3 {
+            font-size: 14px;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 16px;
+            background: #667eea;
+            margin-left: 2px;
+            animation: blink 1s step-start infinite;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚡ Streaming Translation Demo</h1>
+        <p class="subtitle">Experience real-time translation with Claude API streaming</p>
+
+        <div class="demo-grid">
+            <!-- Input Section -->
+            <div class="card">
+                <h2>📤 Input</h2>
+
+                <div class="form-group">
+                    <label>Choose Input Method:</label>
+                    <select id="inputMethod" onchange="toggleInputMethod()">
+                        <option value="text">Paste Text</option>
+                        <option value="file">Upload File</option>
+                    </select>
+                </div>
+
+                <div id="textInput" class="form-group">
+                    <label>Text to Translate:</label>
+                    <textarea id="sourceText" placeholder="Enter text in source language...">Contrat de bail général pour logements
+
+1. Parties au contrat
+1.1 Bailleresse/bailleur
+Le bailleur loue un appartement au locataire.
+
+2. Objet du bail
+Appartement de 3 pièces au 2ème étage.
+
+3. Durée du contrat
+Le contrat prend effet le 1er janvier 2024.</textarea>
+                </div>
+
+                <div id="fileInput" class="form-group" style="display: none;">
+                    <label>Upload File:</label>
+                    <input type="file" id="fileUpload" accept=".txt,.pdf,.docx">
+                </div>
+
+                <div class="form-group">
+                    <label>Source Language:</label>
+                    <select id="sourceLang">
+                        <option value="fr">French (fr)</option>
+                        <option value="en">English (en)</option>
+                        <option value="de">German (de)</option>
+                        <option value="it">Italian (it)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Target Language:</label>
+                    <select id="targetLang">
+                        <option value="en">English (en)</option>
+                        <option value="fr">French (fr)</option>
+                        <option value="de">German (de)</option>
+                        <option value="it">Italian (it)</option>
+                    </select>
+                </div>
+
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" id="useGlossary" checked>
+                    <label for="useGlossary">Use Glossary</label>
+                </div>
+
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" id="skipMemory">
+                    <label for="skipMemory">Skip Translation Memory</label>
+                </div>
+
+                <button id="translateBtn" onclick="startStreaming()">
+                    🚀 Start Streaming Translation
+                </button>
+            </div>
+
+            <!-- Output Section -->
+            <div class="card">
+                <h2>📥 Output (Live)</h2>
+
+                <div id="status" class="status"></div>
+
+                <div id="output" class="output-box">
+                    Translated text will appear here in real-time...
+                </div>
+
+                <div class="stats">
+                    <div class="stat">
+                        <strong>Characters:</strong> <span id="charCount">0</span>
+                    </div>
+                    <div class="stat">
+                        <strong>Words:</strong> <span id="wordCount">0</span>
+                    </div>
+                    <div class="stat">
+                        <strong>Duration:</strong> <span id="duration">0s</span>
+                    </div>
+                    <div class="stat">
+                        <strong>Speed:</strong> <span id="speed">0</span> chars/s
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comparison Card -->
+        <div class="card">
+            <h2>⚡ Performance Comparison</h2>
+            <div class="comparison">
+                <div class="comparison-item">
+                    <h3>❌ Without Streaming (Traditional)</h3>
+                    <p>• Time to first word: <strong>10-60 seconds</strong></p>
+                    <p>• User sees: <strong>Loading spinner</strong></p>
+                    <p>• Experience: <strong>Appears frozen</strong></p>
+                    <p>• Anxiety level: <strong>😰 High</strong></p>
+                </div>
+                <div class="comparison-item">
+                    <h3>✅ With Streaming (This Demo)</h3>
+                    <p>• Time to first word: <strong>1-3 seconds</strong></p>
+                    <p>• User sees: <strong>Live translation</strong></p>
+                    <p>• Experience: <strong>Real-time feedback</strong></p>
+                    <p>• Anxiety level: <strong>😊 Low</strong></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let startTime = null;
+        let charCount = 0;
+
+        function toggleInputMethod() {
+            const method = document.getElementById('inputMethod').value;
+            document.getElementById('textInput').style.display = method === 'text' ? 'block' : 'none';
+            document.getElementById('fileInput').style.display = method === 'file' ? 'block' : 'none';
+        }
+
+        function showStatus(message, type) {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = `status ${type} show`;
+        }
+
+        function hideStatus() {
+            document.getElementById('status').className = 'status';
+        }
+
+        async function startStreaming() {
+            const inputMethod = document.getElementById('inputMethod').value;
+            const sourceLang = document.getElementById('sourceLang').value;
+            const targetLang = document.getElementById('targetLang').value;
+            const useGlossary = document.getElementById('useGlossary').checked;
+            const skipMemory = document.getElementById('skipMemory').checked;
+            const outputDiv = document.getElementById('output');
+            const btn = document.getElementById('translateBtn');
+
+            // Prepare form data
+            const formData = new FormData();
+            formData.append('source_lang', sourceLang);
+            formData.append('target_lang', targetLang);
+            formData.append('use_glossary', useGlossary);
+            formData.append('skip_memory', skipMemory);
+
+            if (inputMethod === 'file') {
+                const fileInput = document.getElementById('fileUpload');
+                if (!fileInput.files[0]) {
+                    showStatus('Please select a file first!', 'error');
+                    return;
+                }
+                formData.append('file', fileInput.files[0]);
+            } else {
+                const text = document.getElementById('sourceText').value.trim();
+                if (!text) {
+                    showStatus('Please enter some text to translate!', 'error');
+                    return;
+                }
+                // Create a text file blob
+                const blob = new Blob([text], { type: 'text/plain' });
+                formData.append('file', blob, 'input.txt');
+            }
+
+            // Reset UI
+            outputDiv.textContent = '';
+            outputDiv.classList.add('streaming');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading"></span> Streaming...';
+            charCount = 0;
+            startTime = Date.now();
+            hideStatus();
+
+            try {
+                const response = await fetch('/api/translate-stream', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-User-Role': 'translator',
+                        'X-Username': 'demo-user',
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                let buffer = '';
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+
+                    buffer += decoder.decode(value, { stream: true });
+                    const lines = buffer.split('\n\n');
+                    buffer = lines.pop();
+
+                    for (const line of lines) {
+                        if (line.startsWith('data: ')) {
+                            const data = JSON.parse(line.slice(6));
+
+                            if (data.type === 'start') {
+                                showStatus(data.message, 'info');
+                            } else if (data.type === 'chunk') {
+                                outputDiv.textContent += data.text;
+                                charCount += data.text.length;
+                                updateStats();
+                                // Auto-scroll
+                                outputDiv.scrollTop = outputDiv.scrollHeight;
+                            } else if (data.type === 'done') {
+                                outputDiv.classList.remove('streaming');
+                                showStatus('✅ ' + data.message, 'success');
+                                btn.disabled = false;
+                                btn.textContent = '🚀 Start Streaming Translation';
+                            } else if (data.type === 'error') {
+                                throw new Error(data.message);
+                            }
+                        }
+                    }
+                }
+
+            } catch (error) {
+                console.error('Streaming error:', error);
+                outputDiv.classList.remove('streaming');
+                showStatus('❌ Error: ' + error.message, 'error');
+                btn.disabled = false;
+                btn.textContent = '🚀 Start Streaming Translation';
+            }
+        }
+
+        function updateStats() {
+            const elapsed = (Date.now() - startTime) / 1000;
+            const text = document.getElementById('output').textContent;
+            const words = text.trim().split(/\s+/).length;
+            const speed = elapsed > 0 ? Math.round(charCount / elapsed) : 0;
+
+            document.getElementById('charCount').textContent = charCount;
+            document.getElementById('wordCount').textContent = words;
+            document.getElementById('duration').textContent = elapsed.toFixed(1) + 's';
+            document.getElementById('speed').textContent = speed;
+        }
+
+        // Update stats periodically
+        setInterval(() => {
+            if (startTime && document.getElementById('output').classList.contains('streaming')) {
+                updateStats();
+            }
+        }, 100);
+    </script>
+</body>
+</html>

@@ -113,24 +113,8 @@ class ClaudeTranslator:
     custom_prompt_template: str | None = None  # Optional custom prompt template
 
     def __post_init__(self) -> None:
-        # #region agent log
-        import json
-        log_path = "/Users/enrico/workspace/translator/.cursor/debug.log"
-        try:
-            with open(log_path, "a") as f:
-                f.write(json.dumps({"sessionId": "debug-session", "runId": "run1", "hypothesisId": "A,B,E", "location": "claude_client.py:115", "message": "ClaudeTranslator.__post_init__ entry", "data": {"api_key_exists": bool(self.api_key), "api_key_length": len(self.api_key) if self.api_key else 0, "api_key_first_3": self.api_key[:3] if self.api_key and len(self.api_key) >= 3 else "", "api_key_last_3": self.api_key[-3:] if self.api_key and len(self.api_key) >= 3 else "", "dry_run": self.dry_run}, "timestamp": __import__("time").time() * 1000}) + "\n")
-        except Exception:
-            pass
-        # #endregion
         if not self.dry_run and not self.api_key:
             raise RuntimeError("ANTHROPIC_API_KEY is required unless dry_run is enabled.")
-        # #region agent log
-        try:
-            with open(log_path, "a") as f:
-                f.write(json.dumps({"sessionId": "debug-session", "runId": "run1", "hypothesisId": "E", "location": "claude_client.py:117", "message": "Creating Anthropic client", "data": {"api_key_provided": bool(self.api_key), "api_key_length": len(self.api_key) if self.api_key else 0}, "timestamp": __import__("time").time() * 1000}) + "\n")
-        except Exception:
-            pass
-        # #endregion
         self._client = Anthropic(api_key=self.api_key) if not self.dry_run else None
         # Use custom prompt if provided, otherwise use default
         self._prompt_template = self.custom_prompt_template or PROMPT_TEMPLATE
@@ -234,17 +218,7 @@ class ClaudeTranslator:
         
         import time
         start_time = time.time()
-        
-        # #region agent log
-        import json
-        log_path = "/Users/enrico/workspace/translator/.cursor/debug.log"
-        try:
-            with open(log_path, "a") as f:
-                f.write(json.dumps({"sessionId": "debug-session", "runId": "run1", "hypothesisId": "E", "location": "claude_client.py:238", "message": "Before API call", "data": {"client_exists": self._client is not None, "api_key_set": bool(self.api_key), "api_key_length": len(self.api_key) if self.api_key else 0, "model": self.model}, "timestamp": time.time() * 1000}) + "\n")
-        except Exception:
-            pass
-        # #endregion
-        
+
         try:
             response = self._client.messages.create(
                 model=self.model,
@@ -274,31 +248,6 @@ class ClaudeTranslator:
             return translated
         except Exception as e:
             elapsed_time = time.time() - start_time
-            # #region agent log
-            import json
-            log_path = "/Users/enrico/workspace/translator/.cursor/debug.log"
-            try:
-                error_details = {
-                    "error_type": type(e).__name__,
-                    "error_message": str(e),
-                    "elapsed_time": elapsed_time,
-                    "api_key_exists": bool(self.api_key),
-                    "api_key_length": len(self.api_key) if self.api_key else 0,
-                    "api_key_first_3": self.api_key[:3] if self.api_key and len(self.api_key) >= 3 else "",
-                    "api_key_last_3": self.api_key[-3:] if self.api_key and len(self.api_key) >= 3 else "",
-                }
-                # Check if it's an API error with more details
-                if hasattr(e, 'status_code'):
-                    error_details["status_code"] = e.status_code
-                if hasattr(e, 'response'):
-                    error_details["has_response"] = True
-                if hasattr(e, 'body'):
-                    error_details["body_preview"] = str(e.body)[:200] if e.body else None
-                with open(log_path, "a") as f:
-                    f.write(json.dumps({"sessionId": "debug-session", "runId": "run1", "hypothesisId": "A,B,C,D,E", "location": "claude_client.py:274", "message": "API call exception", "data": error_details, "timestamp": time.time() * 1000}) + "\n")
-            except Exception:
-                pass
-            # #endregion
             logger.error("=" * 80)
             logger.error("❌ CLAUDE API CALL FAILED")
             logger.error("=" * 80)
@@ -382,17 +331,7 @@ class ClaudeTranslator:
         
         import time
         start_time = time.time()
-        
-        # #region agent log
-        import json
-        log_path = "/Users/enrico/workspace/translator/.cursor/debug.log"
-        try:
-            with open(log_path, "a") as f:
-                f.write(json.dumps({"sessionId": "debug-session", "runId": "run1", "hypothesisId": "E", "location": "claude_client.py:386", "message": "translate_document: Before API call", "data": {"client_exists": self._client is not None, "api_key_set": bool(self.api_key), "api_key_length": len(self.api_key) if self.api_key else 0, "api_key_first_10": self.api_key[:10] if self.api_key and len(self.api_key) >= 10 else "", "api_key_last_10": self.api_key[-10:] if self.api_key and len(self.api_key) >= 10 else "", "model": self.model}, "timestamp": time.time() * 1000}) + "\n")
-        except Exception:
-            pass
-        # #endregion
-        
+
         try:
             response = self._client.messages.create(
                 model=self.model,
@@ -421,31 +360,6 @@ class ClaudeTranslator:
             return translated
         except Exception as e:
             elapsed_time = time.time() - start_time
-            # #region agent log
-            import json
-            log_path = "/Users/enrico/workspace/translator/.cursor/debug.log"
-            try:
-                error_details = {
-                    "error_type": type(e).__name__,
-                    "error_message": str(e),
-                    "elapsed_time": elapsed_time,
-                    "api_key_exists": bool(self.api_key),
-                    "api_key_length": len(self.api_key) if self.api_key else 0,
-                    "api_key_first_10": self.api_key[:10] if self.api_key and len(self.api_key) >= 10 else "",
-                    "api_key_last_10": self.api_key[-10:] if self.api_key and len(self.api_key) >= 10 else "",
-                    "api_key_starts_with_sk_ant": self.api_key.startswith("sk-ant") if self.api_key else False,
-                }
-                if hasattr(e, 'status_code'):
-                    error_details["status_code"] = e.status_code
-                if hasattr(e, 'response'):
-                    error_details["has_response"] = True
-                if hasattr(e, 'body'):
-                    error_details["body_preview"] = str(e.body)[:200] if e.body else None
-                with open(log_path, "a") as f:
-                    f.write(json.dumps({"sessionId": "debug-session", "runId": "run1", "hypothesisId": "A,B,C,D,E", "location": "claude_client.py:411", "message": "translate_document: API call exception", "data": error_details, "timestamp": time.time() * 1000}) + "\n")
-            except Exception:
-                pass
-            # #endregion
             logger.error("=" * 80)
             logger.error("❌ CLAUDE API CALL FAILED")
             logger.error("=" * 80)
@@ -457,6 +371,92 @@ class ClaudeTranslator:
             logger.error(f"  - Prompt length: {prompt_length:,} chars (~{estimated_tokens:,} tokens)")
             logger.error(f"  - Model: {self.model}")
             logger.error(f"  - Max tokens: {self.max_tokens}")
+            logger.error("=" * 80)
+            raise
+
+    def translate_document_streaming(
+        self,
+        document_text: str,
+        *,
+        source_lang: str,
+        target_lang: str,
+        glossary_matches: Sequence[GlossaryMatch] | None = None,
+        memory_hits: Sequence[TranslationRecord] | None = None,
+        reference_doc_pairs: dict[str, str] | None = None,
+    ):
+        """
+        Translate entire document with streaming support.
+        Yields chunks of translated text as they arrive from Claude API.
+
+        Yields:
+            str: Chunks of translated text
+        """
+        if not document_text.strip():
+            return
+
+        # Build prompt (same as non-streaming version)
+        glossary_section = _format_glossary(glossary_matches)
+        memory_section = _format_memory(memory_hits)
+        reference_doc_section = _format_reference_doc(reference_doc_pairs) if reference_doc_pairs else None
+
+        prompt = _build_prompt(
+            base_template=self._prompt_template,
+            source_lang=source_lang,
+            target_lang=target_lang,
+            glossary_section=glossary_section,
+            memory_section=memory_section,
+            paragraph=document_text,
+            reference_doc_section=reference_doc_section,
+        )
+
+        prompt_length = len(prompt)
+        estimated_tokens = prompt_length // 4
+
+        logger.info("=" * 80)
+        logger.info("🔄 STREAMING CLAUDE API REQUEST")
+        logger.info("=" * 80)
+        logger.info(f"📊 Document details:")
+        logger.info(f"  - Document length: {len(document_text):,} characters")
+        logger.info(f"  - Source: {source_lang} -> Target: {target_lang}")
+        logger.info(f"  - Glossary matches: {len(glossary_matches) if glossary_matches else 0}")
+        logger.info(f"  - Memory hits: {len(memory_hits) if memory_hits else 0}")
+        logger.info(f"  - Reference doc pairs: {len(reference_doc_pairs) if reference_doc_pairs else 0}")
+        logger.info(f"📏 Prompt details:")
+        logger.info(f"  - Total prompt length: {prompt_length:,} characters (~{estimated_tokens:,} tokens)")
+        logger.info(f"🎯 Model: {self.model}")
+        logger.info(f"⏱️  Starting streaming translation...")
+        logger.info("=" * 80)
+
+        import time
+        start_time = time.time()
+
+        try:
+            # Use streaming API
+            with self._client.messages.stream(
+                model=self.model,
+                max_tokens=self.max_tokens,
+                temperature=0,
+                messages=[{"role": "user", "content": prompt}],
+            ) as stream:
+                for text in stream.text_stream:
+                    yield text
+
+            elapsed_time = time.time() - start_time
+
+            logger.info("=" * 80)
+            logger.info("✅ CLAUDE API STREAMING COMPLETED")
+            logger.info("=" * 80)
+            logger.info(f"⏱️  Total duration: {elapsed_time:.2f} seconds")
+            logger.info("=" * 80)
+
+        except Exception as e:
+            elapsed_time = time.time() - start_time
+            logger.error("=" * 80)
+            logger.error("❌ CLAUDE API STREAMING FAILED")
+            logger.error("=" * 80)
+            logger.error(f"⏱️  Failed after: {elapsed_time:.2f} seconds")
+            logger.error(f"❌ Error type: {type(e).__name__}")
+            logger.error(f"❌ Error message: {str(e)}")
             logger.error("=" * 80)
             raise
 

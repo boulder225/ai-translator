@@ -17,6 +17,11 @@ build/
 data/
 logs/
 
+# Debug logs (security: prevent sensitive data exposure)
+.cursor/
+*.log
+debug.log
+
 # Streamlit
 .streamlit/
 # prompt.md - Removed from gitignore to include in Docker builds

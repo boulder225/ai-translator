@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { downloadTranslation, getTranslationReport, cancelTranslation, downloadTranslatedText } from '../services/api';
+import { downloadTranslation, getTranslationReport, cancelTranslation, downloadTranslatedText, exportTranslationMemoryTMX, exportGlossaryTBX } from '../services/api';
 import EditableTranslatedText from './EditableTranslatedText';
 import './TranslationStatus.css';
 
@@ -9,6 +9,8 @@ function TranslationStatus({ jobId, status, onReset, onReportUpdate }) {
   const [report, setReport] = useState(null);
   const [downloading, setDownloading] = useState(false);
   const [downloadingText, setDownloadingText] = useState(false);
+  const [exportingTMX, setExportingTMX] = useState(false);
+  const [exportingTBX, setExportingTBX] = useState(false);
   const [cancelling, setCancelling] = useState(false);
   const [fullscreenColumn, setFullscreenColumn] = useState(null); // 'original', 'translated', or null
 
@@ -52,6 +54,30 @@ function TranslationStatus({ jobId, status, onReset, onReportUpdate }) {
       alert('Failed to download translated text');
     } finally {
       setDownloadingText(false);
+    }
+  };
+
+  const handleExportTMX = async () => {
+    setExportingTMX(true);
+    try {
+      await exportTranslationMemoryTMX(jobId);
+    } catch (error) {
+      console.error('Export TMX failed:', error);
+      alert(error.response?.data?.detail || 'Failed to export translation memory as TMX');
+    } finally {
+      setExportingTMX(false);
+    }
+  };
+
+  const handleExportTBX = async () => {
+    setExportingTBX(true);
+    try {
+      await exportGlossaryTBX(jobId);
+    } catch (error) {
+      console.error('Export TBX failed:', error);
+      alert(error.response?.data?.detail || 'Failed to export glossary as TBX');
+    } finally {
+      setExportingTBX(false);
     }
   };
 
@@ -172,6 +198,22 @@ function TranslationStatus({ jobId, status, onReset, onReportUpdate }) {
                       {downloadingText ? 'Downloading...' : '📝 Download as Text'}
                     </button>
                   )}
+                  <button
+                    className="button button-secondary"
+                    onClick={handleExportTMX}
+                    disabled={exportingTMX}
+                    title="Export translation memory as TMX for Trados"
+                  >
+                    {exportingTMX ? 'Exporting...' : '📦 Export TMX'}
+                  </button>
+                  <button
+                    className="button button-secondary"
+                    onClick={handleExportTBX}
+                    disabled={exportingTBX}
+                    title="Export glossary as TBX for Trados MultiTerm (only available if glossary was used)"
+                  >
+                    {exportingTBX ? 'Exporting...' : '📚 Export TBX'}
+                  </button>
                 </div>
               </div>
               <div className={`comparison-container ${fullscreenColumn ? 'fullscreen-active' : ''}`}>

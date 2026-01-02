@@ -2,13 +2,14 @@ import { useState, useEffect } from 'react';
 import { startTranslation, getPrompt, detectLanguage, getGlossaryContent, updateGlossaryContent, getMemoryContent, updateMemoryContent, deleteAllMemoryContent } from '../services/api';
 import './TranslationForm.css';
 
-function TranslationForm({ onTranslationStart, userRole }) {
+function TranslationForm({ onTranslationStart, onStreamingStart, userRole }) {
   const [file, setFile] = useState(null);
   const [referenceDoc, setReferenceDoc] = useState(null);
   const [sourceLang, setSourceLang] = useState('fr');
   const [targetLang, setTargetLang] = useState('it');
   const [useGlossary, setUseGlossary] = useState(true);
   const [useMemory, setUseMemory] = useState(true);
+  const [useStreaming, setUseStreaming] = useState(true);
   const [customPrompt, setCustomPrompt] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -314,7 +315,7 @@ function TranslationForm({ onTranslationStart, userRole }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!file) {
       setError('Please select a file');
       return;
@@ -331,25 +332,33 @@ function TranslationForm({ onTranslationStart, userRole }) {
     setError(null);
 
     console.log(`[FRONTEND] Starting translation for file: ${file.name}, size: ${file.size} bytes`);
-
+    console.log(`[FRONTEND] Translation mode: ${useStreaming ? 'STREAMING' : 'TRADITIONAL'}`);
     console.log(`[FRONTEND] Starting translation with source_lang: ${sourceLang}, target_lang: ${targetLang}`);
 
     try {
-      const result = await startTranslation(file, {
+      const options = {
         source_lang: sourceLang,
         target_lang: targetLang,
         use_glossary: useGlossary,
         skip_memory: !useMemory,
         custom_prompt: customPrompt || null,
         reference_doc: referenceDoc || null,
-      });
+      };
 
-      console.log(`[FRONTEND] Translation started, job_id: ${result.job_id}`);
-      onTranslationStart(result.job_id);
+      if (useStreaming) {
+        // Use streaming mode
+        console.log('[FRONTEND] Using streaming translation');
+        onStreamingStart(file, options);
+      } else {
+        // Use traditional job-based translation
+        console.log('[FRONTEND] Using traditional job-based translation');
+        const result = await startTranslation(file, options);
+        console.log(`[FRONTEND] Translation started, job_id: ${result.job_id}`);
+        onTranslationStart(result.job_id);
+      }
     } catch (err) {
       console.error('[FRONTEND] Translation error:', err);
       setError(err.response?.data?.detail || err.message || 'Translation failed');
-    } finally {
       setLoading(false);
       setSubmitting(false);
     }

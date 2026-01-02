@@ -3,6 +3,7 @@ import './App.css';
 import Login from './components/Login';
 import TranslationForm from './components/TranslationForm';
 import TranslationStatus from './components/TranslationStatus';
+import StreamingTranslation from './components/StreamingTranslation';
 import { getTranslationStatus } from './services/api';
 
 function App() {
@@ -15,6 +16,9 @@ function App() {
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem('theme') || 'light';
   });
+  const [streamingMode, setStreamingMode] = useState(false);
+  const [streamingFile, setStreamingFile] = useState(null);
+  const [streamingOptions, setStreamingOptions] = useState(null);
 
   // Apply theme to document
   useEffect(() => {
@@ -80,10 +84,25 @@ function App() {
     setReport(null); // Reset report when starting new translation
   };
 
+  const handleStreamingStart = (file, options) => {
+    setStreamingMode(true);
+    setStreamingFile(file);
+    setStreamingOptions(options);
+    setCurrentJob('streaming'); // Use placeholder job ID
+  };
+
+  const handleStreamingComplete = (translatedText) => {
+    console.log('[FRONTEND] Streaming translation completed');
+    // Could save translated text to state if needed
+  };
+
   const handleReset = () => {
     setCurrentJob(null);
     setStatus(null);
     setReport(null);
+    setStreamingMode(false);
+    setStreamingFile(null);
+    setStreamingOptions(null);
   };
 
   const handleReportUpdate = (reportData) => {
@@ -205,7 +224,15 @@ function App() {
         {!currentJob ? (
           <TranslationForm
             onTranslationStart={handleTranslationStart}
+            onStreamingStart={handleStreamingStart}
             userRole={userRole}
+          />
+        ) : streamingMode ? (
+          <StreamingTranslation
+            file={streamingFile}
+            options={streamingOptions}
+            onComplete={handleStreamingComplete}
+            onReset={handleReset}
           />
         ) : (
           <TranslationStatus

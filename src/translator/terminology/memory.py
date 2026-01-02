@@ -103,16 +103,6 @@ class TranslationMemory:
             raise ValueError(f"Invalid translation memory file: {self.path}")
         
         # Clean up stale entries (long entries with placeholders) from existing memory
-        # #region agent log
-        import json as json_module
-        log_path = "/Users/enrico/workspace/translator/.cursor/debug.log"
-        try:
-            total_entries_before = len(data)
-            with open(log_path, "a") as f:
-                f.write(json_module.dumps({"sessionId": "debug-session", "runId": "cleanup-check", "hypothesisId": "A", "location": "memory.py:73", "message": "Starting cleanup of memory entries", "data": {"total_entries_before": total_entries_before, "memory_file": str(self.path)}, "timestamp": __import__("time").time() * 1000}) + "\n")
-        except Exception:
-            pass
-        # #endregion
         cleaned_data = {}
         stale_count = 0
         for key, record_data in data.items():
@@ -148,14 +138,6 @@ class TranslationMemory:
             cleaned_data[key] = record_data
         
         # Save cleaned data if stale entries were removed
-        # #region agent log
-        try:
-            total_entries_after = len(cleaned_data)
-            with open(log_path, "a") as f:
-                f.write(json_module.dumps({"sessionId": "debug-session", "runId": "cleanup-check", "hypothesisId": "A", "location": "memory.py:106", "message": "Cleanup complete", "data": {"stale_count": stale_count, "total_entries_after": total_entries_after, "will_save": stale_count > 0}, "timestamp": __import__("time").time() * 1000}) + "\n")
-        except Exception:
-            pass
-        # #endregion
         if stale_count > 0:
             logger.info(f"Cleaned {stale_count} stale entries from memory (long entries with placeholders)")
             data = cleaned_data
@@ -163,22 +145,8 @@ class TranslationMemory:
             try:
                 cleaned_json = json.dumps(data, ensure_ascii=False, indent=2)
                 self.path.write_text(cleaned_json, encoding="utf-8")
-                # #region agent log
-                try:
-                    with open(log_path, "a") as f:
-                        f.write(json_module.dumps({"sessionId": "debug-session", "runId": "cleanup-check", "hypothesisId": "A", "location": "memory.py:118", "message": "Saved cleaned memory data", "data": {"entries_saved": len(data), "file_path": str(self.path)}, "timestamp": __import__("time").time() * 1000}) + "\n")
-                except Exception:
-                    pass
-                # #endregion
             except Exception as e:
                 logger.warning(f"Failed to save cleaned memory data: {e}")
-                # #region agent log
-                try:
-                    with open(log_path, "a") as f:
-                        f.write(json_module.dumps({"sessionId": "debug-session", "runId": "cleanup-check", "hypothesisId": "A", "location": "memory.py:123", "message": "Failed to save cleaned memory", "data": {"error": str(e)}, "timestamp": __import__("time").time() * 1000}) + "\n")
-                except Exception:
-                    pass
-                # #endregion
         
         # Load runtime records (these take precedence)
         records_loaded = 0
@@ -285,42 +253,18 @@ class TranslationMemory:
         # 1. Very long entries (> 1000 chars) - likely entire document sections
         # 2. Entries with many placeholders/underscores - likely form fields
         # 3. Entries that are mostly placeholders or whitespace
-        
-        # #region agent log
-        import json as json_module
-        log_path = "/Users/enrico/workspace/translator/.cursor/debug.log"
-        try:
-            with open(log_path, "a") as f:
-                f.write(json_module.dumps({"sessionId": "debug-session", "runId": "memory-record", "hypothesisId": "C", "location": "memory.py:257", "message": "memory.record() called", "data": {"source_len": len(source_text), "translated_len": len(translated_text), "source_lang": source_lang, "target_lang": target_lang}, "timestamp": __import__("time").time() * 1000}) + "\n")
-        except Exception:
-            pass
-        # #endregion
-        
+
         source_stripped = source_text.strip()
         translated_stripped = translated_text.strip()
         
         # Skip empty entries
         if not source_stripped or not translated_stripped:
-            # #region agent log
-            try:
-                with open(log_path, "a") as f:
-                    f.write(json_module.dumps({"sessionId": "debug-session", "runId": "memory-record", "hypothesisId": "C", "location": "memory.py:272", "message": "Skipping empty entry", "data": {"source_empty": not source_stripped, "translated_empty": not translated_stripped}, "timestamp": __import__("time").time() * 1000}) + "\n")
-            except Exception:
-                pass
-            # #endregion
             return None
         
         # Skip very long entries (likely document sections, not reusable phrases)
         # Exception: allow long entries when explicitly requested (e.g., entire document translations)
         MAX_MEMORY_ENTRY_LENGTH = 1000
         if not allow_long_entries and (len(source_stripped) > MAX_MEMORY_ENTRY_LENGTH or len(translated_stripped) > MAX_MEMORY_ENTRY_LENGTH):
-            # #region agent log
-            try:
-                with open(log_path, "a") as f:
-                    f.write(json_module.dumps({"sessionId": "debug-session", "runId": "memory-record", "hypothesisId": "C", "location": "memory.py:278", "message": "Skipping entry: too long", "data": {"source_len": len(source_stripped), "translated_len": len(translated_stripped), "max_length": MAX_MEMORY_ENTRY_LENGTH}, "timestamp": __import__("time").time() * 1000}) + "\n")
-            except Exception:
-                pass
-            # #endregion
             logger.debug(f"Skipping memory entry: too long ({len(source_stripped)}/{len(translated_stripped)} chars)")
             return None
         
@@ -329,13 +273,6 @@ class TranslationMemory:
         placeholder_chars = source_stripped.count('_') + source_stripped.count('□') + source_stripped.count('☐') + source_stripped.count('☑')
         placeholder_ratio = placeholder_chars / len(source_stripped) if source_stripped else 0
         if not allow_long_entries and placeholder_ratio > 0.1:  # More than 10% placeholder characters
-            # #region agent log
-            try:
-                with open(log_path, "a") as f:
-                    f.write(json_module.dumps({"sessionId": "debug-session", "runId": "memory-record", "hypothesisId": "C", "location": "memory.py:287", "message": "Skipping entry: too many placeholders", "data": {"placeholder_chars": placeholder_chars, "placeholder_ratio": placeholder_ratio, "threshold": 0.1}, "timestamp": __import__("time").time() * 1000}) + "\n")
-            except Exception:
-                pass
-            # #endregion
             logger.debug(f"Skipping memory entry: too many placeholders (ratio: {placeholder_ratio:.2f})")
             return None
         
@@ -343,24 +280,10 @@ class TranslationMemory:
         # Exception: allow whitespace when explicitly requested (e.g., entire document translations)
         non_whitespace_ratio = len(''.join(source_stripped.split())) / len(source_stripped) if source_stripped else 0
         if not allow_long_entries and non_whitespace_ratio < 0.3:  # Less than 30% actual content
-            # #region agent log
-            try:
-                with open(log_path, "a") as f:
-                    f.write(json_module.dumps({"sessionId": "debug-session", "runId": "memory-record", "hypothesisId": "C", "location": "memory.py:299", "message": "Skipping entry: too much whitespace", "data": {"non_whitespace_ratio": non_whitespace_ratio, "threshold": 0.3}, "timestamp": __import__("time").time() * 1000}) + "\n")
-            except Exception:
-                pass
-            # #endregion
             logger.debug(f"Skipping memory entry: too much whitespace (non-whitespace ratio: {non_whitespace_ratio:.2f})")
             return None
         
         # Entry passed all filters, save it
-        # #region agent log
-        try:
-            with open(log_path, "a") as f:
-                f.write(json_module.dumps({"sessionId": "debug-session", "runId": "memory-record", "hypothesisId": "C", "location": "memory.py:308", "message": "Saving memory entry (passed all filters)", "data": {"source_len": len(source_stripped), "translated_len": len(translated_stripped), "allow_long_entries": allow_long_entries}, "timestamp": __import__("time").time() * 1000}) + "\n")
-        except Exception:
-            pass
-        # #endregion
         record = TranslationRecord(
             source_text=source_stripped,
             translated_text=translated_stripped,
