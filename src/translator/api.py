@@ -13,7 +13,7 @@ from typing import Optional
 
 from fastapi import FastAPI, File, Form, HTTPException, Request, UploadFile, status
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, StreamingResponse
+from fastapi.responses import FileResponse, Response, StreamingResponse
 from pydantic import BaseModel
 
 from .claude_client import ClaudeTranslator
@@ -89,6 +89,9 @@ app.add_middleware(
 
 # Job storage - each job is completely isolated
 translation_jobs: dict[str, dict] = {}
+
+# Streaming PDF storage - stores PDFs from streaming translations
+streaming_pdfs: dict[str, dict] = {}
 
 # Request tracking to detect duplicates
 request_log: list[dict] = []
@@ -223,6 +226,7 @@ def _run_translation(job_id: str) -> None:
         target_lang = job["target_lang"]
         glossary_path_str = job.get("glossary_path")
         skip_memory = job.get("skip_memory", False)  # Default False means memory is enabled
+        preserve_formatting = job.get("preserve_formatting", False)  # Preserve PDF formatting
         custom_prompt = job.get("custom_prompt")
         user_role = job.get("user_role", "")
         
@@ -398,6 +402,7 @@ def _run_translation(job_id: str) -> None:
                 target_lang=target_lang,
                 progress_callback=update_progress,
                 skip_memory=skip_memory,
+                preserve_formatting=preserve_formatting,
                 reference_doc_pairs=reference_doc_pairs if reference_doc_pairs else None,
             )
             
@@ -903,6 +908,7 @@ async def start_translation(
     target_lang: str = Form("it"),
     use_glossary: bool = Form(False),
     skip_memory: bool = Form(False),  # Default False means memory is enabled
+    preserve_formatting: bool = Form(True),  # Preserve PDF formatting using PyMuPDF (default True for PDFs)
     custom_prompt: Optional[str] = Form(None),
     reference_doc: Optional[UploadFile] = File(None),
 ):
@@ -930,6 +936,11 @@ async def start_translation(
     file_content = await file.read()
     file_hash = hashlib.md5(file_content).hexdigest()
     file_suffix = Path(file.filename).suffix if file.filename else ".pdf"
+    
+    # Automatically enable preserve_formatting for PDFs
+    if file_suffix.lower() == ".pdf" and not preserve_formatting:
+        preserve_formatting = True
+        logger.info(f"[REQUEST {request_id}] Auto-enabled preserve_formatting for PDF file")
     
     logger.info(f"[REQUEST {request_id}] File size: {len(file_content):,} bytes")
     logger.info(f"[REQUEST {request_id}] File hash: {file_hash}")
@@ -1043,6 +1054,7 @@ async def start_translation(
         "glossary_path": glossary_path,
         "use_glossary": use_glossary,
         "skip_memory": skip_memory,
+        "preserve_formatting": preserve_formatting,
         "custom_prompt": custom_prompt,
         "user_role": user_role,  # Store user role for role-specific prompts
         "reference_doc_path": str(reference_doc_path) if reference_doc_path else None,
@@ -1121,6 +1133,32 @@ async def download_translation(job_id: str):
     )
 
 
+@app.get("/api/translate-stream/{session_id}/download")
+async def download_streaming_pdf(session_id: str):
+    """Download PDF from streaming translation."""
+    if session_id not in streaming_pdfs:
+        raise HTTPException(status_code=404, detail="Streaming PDF not found or expired")
+
+    pdf_data = streaming_pdfs[session_id]
+    pdf_bytes = pdf_data['pdf_bytes']
+    original_filename = pdf_data.get('filename', 'document.pdf')
+
+    # Generate output filename
+    base_name = Path(original_filename).stem
+    output_filename = f"{base_name}_translated.pdf"
+
+    logger.info(f"[DOWNLOAD STREAM {session_id}] Serving PDF from memory: {len(pdf_bytes):,} bytes")
+
+    return Response(
+        content=pdf_bytes,
+        media_type="application/pdf",
+        headers={
+            "Content-Disposition": f'attachment; filename="{output_filename}"',
+            "Content-Length": str(len(pdf_bytes)),
+        }
+    )
+
+
 @app.post("/api/translate-stream")
 async def translate_stream(
     request: Request,
@@ -1129,7 +1167,9 @@ async def translate_stream(
     target_lang: str = Form(...),
     use_glossary: bool = Form(True),
     skip_memory: bool = Form(False),
+    preserve_formatting: bool = Form(False),
     custom_prompt: Optional[str] = Form(None),
+    reference_doc: Optional[UploadFile] = File(None),
 ):
     """
     Stream translation results in real-time using Server-Sent Events (SSE).
@@ -1148,10 +1188,46 @@ async def translate_stream(
     file_content = await file.read()
     file_suffix = Path(file.filename).suffix if file.filename else ".txt"
 
+    # Generate session ID for this streaming translation
+    session_id = str(uuid.uuid4())
+    logger.info(f"[STREAM {session_id}] Starting streaming translation")
+
     # Create temp file
     with tempfile.NamedTemporaryFile(mode='wb', suffix=file_suffix, delete=False) as tmp_file:
         tmp_file.write(file_content)
         temp_path = Path(tmp_file.name)
+
+    # Process reference document if provided
+    reference_doc_pairs = None
+    reference_temp_path = None
+    if reference_doc:
+        try:
+            logger.info(f"[STREAM {session_id}] Processing reference document: {reference_doc.filename}")
+            ref_content = await reference_doc.read()
+            ref_suffix = Path(reference_doc.filename).suffix if reference_doc.filename else ".txt"
+
+            with tempfile.NamedTemporaryFile(mode='wb', suffix=ref_suffix, delete=False) as ref_tmp:
+                ref_tmp.write(ref_content)
+                reference_temp_path = Path(ref_tmp.name)
+
+            # Extract translation pairs from reference document
+            from .processing import _read_file_as_text
+            reference_text = _read_file_as_text(reference_temp_path)
+            reference_paragraphs = [p.strip() for p in reference_text.split("\n\n") if p.strip()]
+
+            # Build pairs dictionary (source -> target mapping)
+            # For now, use simple approach: alternate paragraphs as source-target pairs
+            reference_doc_pairs = {}
+            for i in range(0, len(reference_paragraphs) - 1, 2):
+                source_para = reference_paragraphs[i].strip()
+                target_para = reference_paragraphs[i + 1].strip() if i + 1 < len(reference_paragraphs) else None
+                if source_para and target_para:
+                    reference_doc_pairs[source_para] = target_para
+
+            logger.info(f"[STREAM {session_id}] Extracted {len(reference_doc_pairs)} translation pairs from reference doc")
+        except Exception as e:
+            logger.error(f"[STREAM {session_id}] Failed to process reference document: {e}", exc_info=True)
+            reference_doc_pairs = None
 
     try:
         # Read document text
@@ -1233,11 +1309,92 @@ async def translate_stream(
                     if not skip_memory:
                         memory.record(document_text, full_translation, source_lang, target_lang, allow_long_entries=True)
 
+                # Generate PDF with formatting preservation
+                logger.info(f"[STREAM {session_id}] Generating PDF...")
+                try:
+                    # Split translation into paragraphs for PDF generation
+                    translated_paragraphs = [p.strip() for p in full_translation.split("\n\n") if p.strip()]
+                    if not translated_paragraphs:
+                        translated_paragraphs = [p.strip() for p in full_translation.split("\n") if p.strip()]
+                    if not translated_paragraphs:
+                        translated_paragraphs = [full_translation]
+
+                    # Split source text into paragraphs
+                    source_paragraphs = [p.strip() for p in document_text.split("\n\n") if p.strip()]
+                    if not source_paragraphs:
+                        source_paragraphs = [p.strip() for p in document_text.split("\n") if p.strip()]
+                    if not source_paragraphs:
+                        source_paragraphs = [document_text]
+
+                    # Generate PDF based on preserve_formatting flag
+                    if preserve_formatting and file_suffix.lower() == ".pdf":
+                        logger.info(f"[STREAM {session_id}] Using PyMuPDF to preserve PDF formatting")
+                        try:
+                            import tempfile
+                            from .pdf_formatter import translate_pdf_advanced
+
+                            # Create temporary output file
+                            with tempfile.NamedTemporaryFile(mode='wb', suffix='.pdf', delete=False) as tmp_output:
+                                pdf_output_path = Path(tmp_output.name)
+
+                            # Translate PDF with formatting preservation
+                            translate_pdf_advanced(
+                                input_pdf_path=temp_path,
+                                output_pdf_path=pdf_output_path,
+                                paragraph_translations=translated_paragraphs,
+                            )
+
+                            # Read generated PDF into memory
+                            pdf_bytes = pdf_output_path.read_bytes()
+                            logger.info(f"[STREAM {session_id}] PDF generated with formatting preservation: {len(pdf_bytes):,} bytes")
+
+                            # Clean up temp file
+                            pdf_output_path.unlink(missing_ok=True)
+
+                        except Exception as e:
+                            logger.error(f"[STREAM {session_id}] Error preserving PDF formatting: {e}", exc_info=True)
+                            logger.warning(f"[STREAM {session_id}] Falling back to standard PDF generation")
+                            # Fall back to standard PDF generation
+                            from .pdf_writer import write_pdf_to_bytes
+                            pdf_bytes = write_pdf_to_bytes(
+                                translated_paragraphs=translated_paragraphs,
+                                title=f"Translated Document ({source_lang}->{target_lang})",
+                                source_paragraphs=source_paragraphs,
+                                source_lang=source_lang,
+                                target_lang=target_lang,
+                            )
+                            logger.info(f"[STREAM {session_id}] PDF generated (fallback): {len(pdf_bytes):,} bytes")
+                    else:
+                        # Standard PDF generation
+                        from .pdf_writer import write_pdf_to_bytes
+                        pdf_bytes = write_pdf_to_bytes(
+                            translated_paragraphs=translated_paragraphs,
+                            title=f"Translated Document ({source_lang}->{target_lang})",
+                            source_paragraphs=source_paragraphs,
+                            source_lang=source_lang,
+                            target_lang=target_lang,
+                        )
+                        logger.info(f"[STREAM {session_id}] PDF generated: {len(pdf_bytes):,} bytes")
+
+                    # Store PDF in memory for later download
+                    streaming_pdfs[session_id] = {
+                        'pdf_bytes': pdf_bytes,
+                        'filename': file.filename,
+                        'source_lang': source_lang,
+                        'target_lang': target_lang,
+                        'created_at': time.time(),
+                    }
+                    logger.info(f"[STREAM {session_id}] PDF stored for download")
+
+                except Exception as e:
+                    logger.error(f"[STREAM {session_id}] Failed to generate PDF: {e}", exc_info=True)
+
                 # Send completion event with metadata
                 completion_data = {
                     'type': 'done',
                     'message': 'Translation complete',
                     'full_text': full_translation,
+                    'session_id': session_id,  # Include session ID for PDF download
                     'stats': {
                         'used_memory': exact_match is not None,
                         'glossary_matches': len(glossary_matches),
@@ -1252,8 +1409,10 @@ async def translate_stream(
                 logger.error(f"Streaming error: {e}", exc_info=True)
                 yield f"data: {json.dumps({'type': 'error', 'message': str(e)})}\n\n"
             finally:
-                # Cleanup temp file
+                # Cleanup temp files
                 temp_path.unlink(missing_ok=True)
+                if reference_temp_path:
+                    reference_temp_path.unlink(missing_ok=True)
 
         return StreamingResponse(
             event_generator(),
@@ -1268,6 +1427,8 @@ async def translate_stream(
     except Exception as e:
         # Cleanup on error
         temp_path.unlink(missing_ok=True)
+        if reference_temp_path:
+            reference_temp_path.unlink(missing_ok=True)
         logger.error(f"Streaming setup error: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
 

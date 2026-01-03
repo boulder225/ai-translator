@@ -104,6 +104,7 @@ export const startTranslation = async (file, options) => {
   // skip_memory: true means skip, false means use memory
   // Pass it through directly (TranslationForm always provides it)
   formData.append('skip_memory', options.skip_memory ?? false);
+  formData.append('preserve_formatting', options.preserve_formatting ?? false);
 
   if (options.reference_doc) {
     formData.append('reference_doc', options.reference_doc);
@@ -129,6 +130,7 @@ export const startTranslationStreaming = async (file, options, onChunk, onComple
   formData.append('target_lang', options.target_lang || 'it');
   formData.append('use_glossary', options.use_glossary !== false);
   formData.append('skip_memory', options.skip_memory ?? false);
+  formData.append('preserve_formatting', options.preserve_formatting ?? false);
 
   if (options.reference_doc) {
     formData.append('reference_doc', options.reference_doc);
@@ -175,7 +177,7 @@ export const startTranslationStreaming = async (file, options, onChunk, onComple
           if (data.type === 'chunk' && onChunk) {
             onChunk(data.text);
           } else if (data.type === 'done' && onComplete) {
-            onComplete(data.full_text, data.message, data.stats);
+            onComplete(data.full_text, data.message, data.stats, data.session_id);
           } else if (data.type === 'error') {
             throw new Error(data.message);
           }
@@ -219,6 +221,32 @@ export const downloadTranslation = async (jobId) => {
   document.body.appendChild(link);
   link.click();
   link.remove();
+    window.URL.revokeObjectURL(url_blob);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const downloadStreamingPdf = async (sessionId) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/translate-stream/${sessionId}/download`, {
+      responseType: 'blob',
+    });
+
+    // Check if response is HTML (error page)
+    if (response.headers['content-type']?.includes('text/html')) {
+      const text = await response.data.text();
+      throw new Error('Server returned HTML instead of PDF. Check URL and endpoint.');
+    }
+
+    // Create download link
+    const url_blob = window.URL.createObjectURL(new Blob([response.data], { type: 'application/pdf' }));
+    const link = document.createElement('a');
+    link.href = url_blob;
+    link.setAttribute('download', `translated_streaming.pdf`);
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
     window.URL.revokeObjectURL(url_blob);
   } catch (error) {
     throw error;

@@ -539,10 +539,15 @@ def translate_file_to_memory(
     target_lang: str,
     progress_callback: ProgressCallback | None = None,
     skip_memory: bool = False,
+    preserve_formatting: bool = False,
     reference_doc_pairs: dict[str, str] | None = None,
 ) -> tuple[bytes, list[str], dict]:
     """
     Translate entire file in a single API call - no chunking, no paragraph splitting.
+
+    Args:
+        preserve_formatting: If True and input is PDF, preserve original formatting using PyMuPDF
+
     Returns: (pdf_bytes, translated_paragraphs, report_dict)
     """
     import hashlib
@@ -811,16 +816,58 @@ def translate_file_to_memory(
         # Last resort: entire text as one paragraph
         source_paragraphs = [document_text]
 
-    # Generate PDF in memory with source and translated content side by side
-    logger.info(f"[translate_file_to_memory] Generating PDF from {len(source_paragraphs)} source paragraphs and {len(translated_paragraphs)} translated paragraphs")
-    pdf_bytes = write_pdf_to_bytes(
-        translated_paragraphs=translated_paragraphs,
-        title=f"Translated Document ({source_lang}->{target_lang})",
-        source_paragraphs=source_paragraphs,
-        source_lang=source_lang,
-        target_lang=target_lang,
-    )
-    logger.info(f"[translate_file_to_memory] PDF generated: {len(pdf_bytes):,} bytes")
+    # Generate PDF in memory
+    # Choose PDF generation method based on preserve_formatting flag
+    if preserve_formatting and input_path.suffix.lower() == ".pdf":
+        # Use PyMuPDF to preserve original formatting
+        logger.info(f"[translate_file_to_memory] Using PyMuPDF to preserve PDF formatting")
+        logger.info(f"[translate_file_to_memory] Input PDF: {input_path}")
+
+        try:
+            import tempfile
+            from .pdf_formatter import translate_pdf_advanced
+
+            # Create temporary output file
+            with tempfile.NamedTemporaryFile(mode='wb', suffix='.pdf', delete=False) as tmp_output:
+                output_path = Path(tmp_output.name)
+
+            # Translate PDF with formatting preservation
+            translate_pdf_advanced(
+                input_pdf_path=input_path,
+                output_pdf_path=output_path,
+                paragraph_translations=translated_paragraphs,
+            )
+
+            # Read generated PDF into memory
+            pdf_bytes = output_path.read_bytes()
+            logger.info(f"[translate_file_to_memory] PDF generated with formatting preservation: {len(pdf_bytes):,} bytes")
+
+            # Clean up temp file
+            output_path.unlink(missing_ok=True)
+
+        except Exception as e:
+            logger.error(f"[translate_file_to_memory] Error preserving PDF formatting: {e}", exc_info=True)
+            logger.warning(f"[translate_file_to_memory] Falling back to standard PDF generation")
+            # Fall back to standard PDF generation
+            pdf_bytes = write_pdf_to_bytes(
+                translated_paragraphs=translated_paragraphs,
+                title=f"Translated Document ({source_lang}->{target_lang})",
+                source_paragraphs=source_paragraphs,
+                source_lang=source_lang,
+                target_lang=target_lang,
+            )
+            logger.info(f"[translate_file_to_memory] PDF generated (fallback): {len(pdf_bytes):,} bytes")
+    else:
+        # Standard PDF generation with side-by-side layout
+        logger.info(f"[translate_file_to_memory] Generating standard PDF from {len(source_paragraphs)} source paragraphs and {len(translated_paragraphs)} translated paragraphs")
+        pdf_bytes = write_pdf_to_bytes(
+            translated_paragraphs=translated_paragraphs,
+            title=f"Translated Document ({source_lang}->{target_lang})",
+            source_paragraphs=source_paragraphs,
+            source_lang=source_lang,
+            target_lang=target_lang,
+        )
+        logger.info(f"[translate_file_to_memory] PDF generated: {len(pdf_bytes):,} bytes")
 
     # Build report
     report = {

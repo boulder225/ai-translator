@@ -10,6 +10,7 @@ function TranslationForm({ onTranslationStart, onStreamingStart, userRole }) {
   const [useGlossary, setUseGlossary] = useState(true);
   const [useMemory, setUseMemory] = useState(true);
   const [useStreaming, setUseStreaming] = useState(true);
+  const [preserveFormatting, setPreserveFormatting] = useState(false);
   const [customPrompt, setCustomPrompt] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -341,6 +342,7 @@ function TranslationForm({ onTranslationStart, onStreamingStart, userRole }) {
         target_lang: targetLang,
         use_glossary: useGlossary,
         skip_memory: !useMemory,
+        preserve_formatting: preserveFormatting,
         custom_prompt: customPrompt || null,
         reference_doc: referenceDoc || null,
       };
@@ -591,6 +593,26 @@ function TranslationForm({ onTranslationStart, onStreamingStart, userRole }) {
                 </svg>
                 View memory
               </button>
+            </div>
+
+            <div className="toolbar-item">
+              <div className="toolbar-toggle">
+                <label htmlFor="preserve_formatting" className="toolbar-toggle-label">
+                  <input
+                    type="checkbox"
+                    id="preserve_formatting"
+                    checked={preserveFormatting}
+                    onChange={(e) => setPreserveFormatting(e.target.checked)}
+                    disabled={loading}
+                    className="toolbar-toggle-input"
+                  />
+                  <span className="toolbar-toggle-slider"></span>
+                  <span className="toolbar-toggle-text">Preserve PDF Formatting</span>
+                </label>
+              </div>
+              <p className="toolbar-help-text">
+                Preserves original fonts, colors, and layout in PDF files
+              </p>
             </div>
           </div>
         </div>

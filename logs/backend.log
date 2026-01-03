@@ -1,983 +1,810 @@
 INFO:     Will watch for changes in these directories: ['/Users/enrico/workspace/translator']
 INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
-INFO:     Started reloader process [61360] using WatchFiles
-2026-01-01 17:46:02 - src.translator.api - INFO - Logging initialized. Log file: /Users/enrico/workspace/translator/logs/backend.log
-INFO:     Started server process [61363]
+INFO:     Started reloader process [98546] using WatchFiles
+2026-01-03 17:58:24 - src.translator.api - INFO - Logging initialized. Log file: /Users/enrico/workspace/translator/logs/backend.log
+INFO:     Started server process [98549]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
-2026-01-01 17:46:05 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2026-01-01 17:46:05 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2026-01-01 17:46:05 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
+2026-01-03 17:58:56 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
+2026-01-03 17:58:56 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
+2026-01-03 17:58:56 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
 [prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
 [prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:50558 - "GET /api/prompt HTTP/1.1" 200 OK
-2026-01-01 17:46:05 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2026-01-01 17:46:05 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2026-01-01 17:46:05 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
+INFO:     127.0.0.1:58494 - "GET /api/prompt HTTP/1.1" 200 OK
+2026-01-03 17:58:56 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
+2026-01-03 17:58:56 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
+2026-01-03 17:58:56 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
 [prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:50559 - "GET /api/prompt HTTP/1.1" 200 OK
-2026-01-01 17:46:29 - src.translator.api - INFO - Detected language: fr (prob: 1.00) -> fr
-INFO:     127.0.0.1:50570 - "POST /api/detect-language HTTP/1.1" 200 OK
-2026-01-01 17:46:31 - src.translator.api - INFO - ================================================================================
-2026-01-01 17:46:31 - src.translator.api - INFO - [REQUEST 313a5725] ===== NEW TRANSLATION REQUEST =====
-2026-01-01 17:46:31 - src.translator.api - INFO - [REQUEST 313a5725] Timestamp: 1767285991.7466948
-2026-01-01 17:46:31 - src.translator.api - INFO - [REQUEST 313a5725] File name: OBJET DU BAIL4.txt
-2026-01-01 17:46:31 - src.translator.api - INFO - [REQUEST 313a5725] Source: fr -> Target: it
-2026-01-01 17:46:31 - src.translator.api - INFO - [REQUEST 313a5725] File size: 129 bytes
-2026-01-01 17:46:31 - src.translator.api - INFO - [REQUEST 313a5725] File hash: 6c27678b169985646fa3b971e35c8042
-2026-01-01 17:46:31 - src.translator.api - INFO - [REQUEST 313a5725] First 200 bytes: b"\n\n2. OBJET DU BAIL\n\n\xe2\x98\x90 Appartement de ______ pi\xc3\xa8ces  \n\xe2\x98\x90 ______ chambre(s) meubl\xc3\xa9e(s)\n\nAdresse de l'immeuble: [\xc3\x80 compl\xc3\xa9ter]"
-2026-01-01 17:46:31 - src.translator.api - INFO - [REQUEST 313a5725] Use glossary: True
-2026-01-01 17:46:31 - src.translator.api - INFO - [REQUEST 313a5725] Using default glossary: glossary/glossary.csv
-2026-01-01 17:46:31 - src.translator.api - INFO - [REQUEST 313a5725] Generated job_id: 69dd944e-b771-4673-8ea1-4af9b8896e6a
-2026-01-01 17:46:31 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: Created isolated input file: input_69dd944e-b771-4673-8ea1-4af9b8896e6a_cmua0dnt.txt
-2026-01-01 17:46:31 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: File hash: 6c27678b16998564...
-2026-01-01 17:46:31 - src.translator.api - INFO - [REQUEST 313a5725] Job 69dd944e-b771-4673-8ea1-4af9b8896e6a stored in translation_jobs
-2026-01-01 17:46:31 - src.translator.api - INFO - [REQUEST 313a5725] Total active jobs: 1
-2026-01-01 17:46:31 - src.translator.api - INFO - ================================================================================
-2026-01-01 17:46:31 - src.translator.api - INFO - [REQUEST 313a5725] Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: Translation thread started
-2026-01-01 17:46:31 - src.translator.api - INFO - [TRANSLATION 69dd944e-b771-4673-8ea1-4af9b8896e6a] ===== STARTING TRANSLATION THREAD =====
-2026-01-01 17:46:31 - src.translator.api - INFO - [REQUEST 313a5725] ===== REQUEST PROCESSING COMPLETE =====
-2026-01-01 17:46:31 - src.translator.api - INFO - [TRANSLATION 69dd944e-b771-4673-8ea1-4af9b8896e6a] Job data from storage:
-2026-01-01 17:46:31 - src.translator.api - INFO - ================================================================================
-2026-01-01 17:46:31 - src.translator.api - INFO - [TRANSLATION 69dd944e-b771-4673-8ea1-4af9b8896e6a]   - File hash: 6c27678b169985646fa3b971e35c8042
-INFO:     127.0.0.1:50572 - "POST /api/translate HTTP/1.1" 202 Accepted
-2026-01-01 17:46:31 - src.translator.api - INFO - [TRANSLATION 69dd944e-b771-4673-8ea1-4af9b8896e6a]   - Input path: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_69dd944e-b771-4673-8ea1-4af9b8896e6a_cmua0dnt.txt
-2026-01-01 17:46:31 - src.translator.api - INFO - [TRANSLATION 69dd944e-b771-4673-8ea1-4af9b8896e6a]   - Source: fr -> Target: it
-2026-01-01 17:46:31 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: [FILE VERIFICATION] Opening file: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_69dd944e-b771-4673-8ea1-4af9b8896e6a_cmua0dnt.txt
-2026-01-01 17:46:31 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: [FILE VERIFICATION] File absolute path: /private/var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_69dd944e-b771-4673-8ea1-4af9b8896e6a_cmua0dnt.txt
-2026-01-01 17:46:31 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: [FILE VERIFICATION] File exists: True
-2026-01-01 17:46:31 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: [FILE VERIFICATION] Read 129 bytes from file
-2026-01-01 17:46:31 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: [FILE VERIFICATION] Expected hash: 6c27678b169985646fa3b971e35c8042
-2026-01-01 17:46:31 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: [FILE VERIFICATION] Actual hash: 6c27678b169985646fa3b971e35c8042
-2026-01-01 17:46:31 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: [FILE VERIFICATION] First 100 bytes: b'\n\n2. OBJET DU BAIL\n\n\xe2\x98\x90 Appartement de ______ pi\xc3\xa8ces  \n\xe2\x98\x90 ______ chambre(s) meubl\xc3\xa9e(s)\n\nAdresse d'
-2026-01-01 17:46:31 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: [FILE VERIFICATION] Hash verified successfully
-2026-01-01 17:46:31 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: [FILE VERIFICATION] File: input_69dd944e-b771-4673-8ea1-4af9b8896e6a_cmua0dnt.txt, Size: 129 bytes
-2026-01-01 17:46:31 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: Created isolated temp directory: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/translation_69dd944e-b771-4673-8ea1-4af9b8896e6a_qbisx36h
-2026-01-01 17:46:31 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: Loading glossary from glossary/glossary.csv (file will be read fresh)
-2026-01-01 17:46:31 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: Loaded glossary 'glossary' with 1352 entries
-INFO:     127.0.0.1:50574 - "GET /api/translate/69dd944e-b771-4673-8ea1-4af9b8896e6a/status HTTP/1.1" 200 OK
-2026-01-01 17:46:31 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: Using shared translation memory from /Users/enrico/workspace/translator/data/memory.json
-2026-01-01 17:46:31 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: Memory contains 0 existing records
-2026-01-01 17:46:31 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: Using custom prompt provided by user
-2026-01-01 17:46:31 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: [PRE-TRANSLATE] About to call translate_file_to_memory
-2026-01-01 17:46:31 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: [PRE-TRANSLATE] Input path: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_69dd944e-b771-4673-8ea1-4af9b8896e6a_cmua0dnt.txt
-2026-01-01 17:46:31 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: [PRE-TRANSLATE] Input path absolute: /private/var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_69dd944e-b771-4673-8ea1-4af9b8896e6a_cmua0dnt.txt
-2026-01-01 17:46:31 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: [PRE-TRANSLATE] Input file exists: True
-2026-01-01 17:46:31 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: [PRE-TRANSLATE] Final verification - Hash: 6c27678b169985646fa3b971e35c8042
-2026-01-01 17:46:31 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: [PRE-TRANSLATE] Expected hash: 6c27678b169985646fa3b971e35c8042
-2026-01-01 17:46:31 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: [PRE-TRANSLATE] File verified, calling translate_file_to_memory
-2026-01-01 17:46:31 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: [PRE-TRANSLATE] Source lang: fr, Target lang: it
-2026-01-01 17:46:31 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: Stored 3 original paragraphs
-2026-01-01 17:46:31 - src.translator.processing - INFO - [translate_file_to_memory] ===== STARTING SINGLE-SHOT TRANSLATION =====
-2026-01-01 17:46:31 - src.translator.processing - INFO - [translate_file_to_memory] Input path: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_69dd944e-b771-4673-8ea1-4af9b8896e6a_cmua0dnt.txt
-2026-01-01 17:46:31 - src.translator.processing - INFO - [translate_file_to_memory] Absolute path: /private/var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_69dd944e-b771-4673-8ea1-4af9b8896e6a_cmua0dnt.txt
-2026-01-01 17:46:31 - src.translator.processing - INFO - [translate_file_to_memory] File hash: 6c27678b169985646fa3b971e35c8042
-2026-01-01 17:46:31 - src.translator.processing - INFO - [translate_file_to_memory] File size: 129 bytes
-2026-01-01 17:46:31 - src.translator.processing - INFO - [translate_file_to_memory] Reading entire file as text...
-2026-01-01 17:46:31 - src.translator.processing - INFO - [_read_file_as_text] Reading entire file as text: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_69dd944e-b771-4673-8ea1-4af9b8896e6a_cmua0dnt.txt
-2026-01-01 17:46:31 - src.translator.processing - INFO - [_read_file_as_text] File type: .txt
-2026-01-01 17:46:31 - src.translator.processing - INFO - [_read_file_as_text] File hash: 6c27678b169985646fa3b971e35c8042
-2026-01-01 17:46:31 - src.translator.processing - INFO - [_read_file_as_text] File size: 129 bytes
-2026-01-01 17:46:31 - src.translator.processing - INFO - [_read_file_as_text] Extracted text length: 121 characters
-2026-01-01 17:46:31 - src.translator.processing - INFO - [_read_file_as_text] First 200 chars: 
-
-2. OBJET DU BAIL
-
-☐ Appartement de ______ pièces  
-☐ ______ chambre(s) meublée(s)
-
-Adresse de l'immeuble: [À compléter]...
-2026-01-01 17:46:31 - src.translator.processing - INFO - [translate_file_to_memory] Looking up glossary matches...
-2026-01-01 17:46:31 - src.translator.processing - INFO - [translate_file_to_memory] Found 1 glossary matches (after filtering reference doc conflicts)
-2026-01-01 17:46:31 - src.translator.processing - INFO - [translate_file_to_memory] ===== STEP 1: CHECKING TRANSLATION MEMORY =====
-2026-01-01 17:46:31 - src.translator.processing - INFO - [translate_file_to_memory] Memory enabled (skip_memory=False), checking for existing translation...
-2026-01-01 17:46:31 - src.translator.processing - INFO - [translate_file_to_memory] Document length: 121 characters
-2026-01-01 17:46:31 - src.translator.processing - INFO - [translate_file_to_memory] ⚠️ STEP 1 RESULT: No memory matches found (threshold: 95%)
-2026-01-01 17:46:31 - src.translator.processing - INFO - [translate_file_to_memory] ⚠️ Will proceed to STEP 2: Query Claude API
-2026-01-01 17:46:31 - src.translator.processing - INFO - [translate_file_to_memory] Found 0 memory hits for Claude context (threshold: 80%)
-2026-01-01 17:46:31 - src.translator.processing - INFO - [translate_file_to_memory] ===== STEP 2: QUERYING CLAUDE API =====
-2026-01-01 17:46:31 - src.translator.processing - INFO - [translate_file_to_memory] Sending entire document to Claude API (single call)
-2026-01-01 17:46:31 - src.translator.processing - INFO - [translate_file_to_memory] Document length: 121 characters
-2026-01-01 17:46:31 - src.translator.processing - INFO - [translate_file_to_memory] Glossary matches: 1
-2026-01-01 17:46:31 - src.translator.processing - INFO - [translate_file_to_memory] Memory hits for context: 0
-2026-01-01 17:46:31 - src.translator.claude_client - INFO - ================================================================================
-2026-01-01 17:46:31 - src.translator.claude_client - INFO - 🚀 CLAUDE API REQUEST - ENTIRE DOCUMENT (SINGLE SHOT)
-2026-01-01 17:46:31 - src.translator.claude_client - INFO - ================================================================================
-2026-01-01 17:46:31 - src.translator.claude_client - INFO - Model: claude-sonnet-4-5-20250929
-2026-01-01 17:46:31 - src.translator.claude_client - INFO - Max tokens: 8192
-2026-01-01 17:46:31 - src.translator.claude_client - INFO - Document length: 121 characters
-2026-01-01 17:46:31 - src.translator.claude_client - INFO - Total prompt length: 12,017 characters (~3,004 tokens)
-2026-01-01 17:46:31 - src.translator.claude_client - INFO - Source language: fr -> Target language: it
-2026-01-01 17:46:31 - src.translator.claude_client - INFO - Glossary entries: 1
-2026-01-01 17:46:31 - src.translator.claude_client - INFO - Memory entries: 0
-2026-01-01 17:46:31 - src.translator.claude_client - INFO - --------------------------------------------------------------------------------
-2026-01-01 17:46:31 - src.translator.claude_client - INFO - 📝 DOCUMENT PREVIEW (first 500 chars):
-2026-01-01 17:46:31 - src.translator.claude_client - INFO - 
-
-2. OBJET DU BAIL
-
-☐ Appartement de ______ pièces  
-☐ ______ chambre(s) meublée(s)
-
-Adresse de l'immeuble: [À compléter]...
-2026-01-01 17:46:31 - src.translator.claude_client - INFO - --------------------------------------------------------------------------------
-2026-01-01 17:46:31 - src.translator.claude_client - INFO - ⏱️  Sending entire document to Claude API in single call...
-INFO:     127.0.0.1:50577 - "GET /api/translate/69dd944e-b771-4673-8ea1-4af9b8896e6a/status HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50579 - "GET /api/translate/69dd944e-b771-4673-8ea1-4af9b8896e6a/status HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50581 - "GET /api/translate/69dd944e-b771-4673-8ea1-4af9b8896e6a/status HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50584 - "GET /api/translate/69dd944e-b771-4673-8ea1-4af9b8896e6a/status HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50586 - "GET /api/translate/69dd944e-b771-4673-8ea1-4af9b8896e6a/status HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50589 - "GET /api/translate/69dd944e-b771-4673-8ea1-4af9b8896e6a/status HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50592 - "GET /api/translate/69dd944e-b771-4673-8ea1-4af9b8896e6a/status HTTP/1.1" 200 OK
-2026-01-01 17:46:52 - httpx - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
-2026-01-01 17:46:52 - src.translator.claude_client - INFO - ================================================================================
-2026-01-01 17:46:52 - src.translator.claude_client - INFO - ✅ CLAUDE API RESPONSE RECEIVED
-2026-01-01 17:46:52 - src.translator.claude_client - INFO - ================================================================================
-2026-01-01 17:46:52 - src.translator.claude_client - INFO - ⏱️  Request duration: 20.21 seconds (0.34 minutes)
-2026-01-01 17:46:52 - src.translator.claude_client - INFO - 📊 Response length: 2,559 characters
-2026-01-01 17:46:52 - src.translator.claude_client - INFO - 📈 Token usage:
-2026-01-01 17:46:52 - src.translator.claude_client - INFO -   - Input tokens: 3819
-2026-01-01 17:46:52 - src.translator.claude_client - INFO -   - Output tokens: 814
-2026-01-01 17:46:52 - src.translator.claude_client - INFO - 📝 TRANSLATION PREVIEW (first 500 chars):
-2026-01-01 17:46:52 - src.translator.claude_client - INFO - # TRADUZIONE
-
-## 2. OGGETTO DELLA LOCAZIONE
-
-☐ Localino di ______ locali  
-☐ ______ camera/e ammobiliata/e
-
-Indirizzo dell'immobile: [Da completare]
-
----
-
-## TABELLA COMPARATIVA
-
-| Originale | Traduzione | Spiegazione | Fonte |
-|-----------|------------|-------------|-------|
-| OBJET DU BAIL | OGGETTO DELLA LOCAZIONE | "Objet du bail" è formula standard nei contratti di locazione svizzeri. In italiano di Svizzera si usa "oggetto della locazione" (non "oggetto del contratto" o "immobile locato")....
-2026-01-01 17:46:52 - src.translator.claude_client - INFO - ================================================================================
-2026-01-01 17:46:52 - src.translator.processing - INFO - [translate_file_to_memory] ✅ STEP 2 RESULT: Claude API translation completed in 20.21s
-2026-01-01 17:46:52 - src.translator.processing - INFO - [translate_file_to_memory] Translated length: 2,559 characters
-2026-01-01 17:46:52 - src.translator.processing - INFO - [translate_file_to_memory] ===== STEP 3: STORING TRANSLATION IN MEMORY =====
-2026-01-01 17:46:52 - src.translator.processing - INFO - [translate_file_to_memory] Storing translation in memory for future use...
-2026-01-01 17:46:52 - src.translator.processing - INFO - [translate_file_to_memory] Source text length: 121 characters
-2026-01-01 17:46:52 - src.translator.processing - INFO - [translate_file_to_memory] Translated text length: 2,559 characters
-2026-01-01 17:46:52 - src.translator.processing - INFO - [translate_file_to_memory] ✅ STEP 3 RESULT: Translation stored in memory successfully
-2026-01-01 17:46:52 - src.translator.processing - INFO - [translate_file_to_memory] Memory file: /Users/enrico/workspace/translator/data/memory.json
-2026-01-01 17:46:52 - src.translator.processing - INFO - [translate_file_to_memory] Total records in memory: 1
-2026-01-01 17:46:52 - src.translator.processing - INFO - [translate_file_to_memory] Translation complete: 20.21s
-2026-01-01 17:46:52 - src.translator.processing - INFO - [translate_file_to_memory] Translated length: 2,559 characters
-2026-01-01 17:46:52 - src.translator.glossary_enricher - INFO - [apply_glossary_with_highlighting] Applying glossary: glossary
-2026-01-01 17:46:52 - src.translator.glossary_enricher - INFO - [apply_glossary_with_highlighting] Translated text length: 2559
-2026-01-01 17:46:52 - src.translator.glossary_enricher - INFO - [apply_glossary_with_highlighting] Applied 10 glossary terms
-2026-01-01 17:46:52 - src.translator.glossary_enricher - INFO - [apply_glossary_with_highlighting] Breakdown: 10 translation matches, 0 source replacements
-2026-01-01 17:46:52 - src.translator.processing - INFO - [translate_file_to_memory] Glossary enrichment: 10 terms highlighted (after filtering reference doc)
-2026-01-01 17:46:52 - src.translator.glossary_enricher - INFO - [apply_memory_with_highlighting] Applying translation memory
-2026-01-01 17:46:52 - src.translator.glossary_enricher - INFO - [apply_memory_with_highlighting] Translated text length: 2769
-2026-01-01 17:46:52 - src.translator.glossary_enricher - INFO - [apply_memory_with_highlighting] Found 1 memory records for fr->it
-2026-01-01 17:46:52 - src.translator.glossary_enricher - INFO - [apply_memory_with_highlighting] Applied 0 memory terms
-2026-01-01 17:46:52 - src.translator.processing - INFO - [translate_file_to_memory] Memory enrichment: 0 terms highlighted
-2026-01-01 17:46:52 - src.translator.processing - INFO - [translate_file_to_memory] Generating PDF from 3 source paragraphs and 13 translated paragraphs
-2026-01-01 17:46:52 - src.translator.pdf_writer - INFO - [write_pdf_to_bytes] Creating two-column layout with 3 source paragraphs and 13 translated paragraphs
-2026-01-01 17:46:52 - src.translator.processing - INFO - [translate_file_to_memory] PDF generated: 4,882 bytes
-2026-01-01 17:46:52 - src.translator.api - INFO - [TRANSLATION 69dd944e-b771-4673-8ea1-4af9b8896e6a] Translation complete
-2026-01-01 17:46:52 - src.translator.api - INFO - [TRANSLATION 69dd944e-b771-4673-8ea1-4af9b8896e6a] PDF generated in memory: 4,882 bytes
-2026-01-01 17:46:52 - src.translator.api - INFO - [TRANSLATION 69dd944e-b771-4673-8ea1-4af9b8896e6a] Original paragraphs: 3
-2026-01-01 17:46:52 - src.translator.api - INFO - [TRANSLATION 69dd944e-b771-4673-8ea1-4af9b8896e6a] Translated paragraphs: 13
-2026-01-01 17:46:52 - src.translator.api - INFO - [TRANSLATION 69dd944e-b771-4673-8ea1-4af9b8896e6a] Status updated to completed
-2026-01-01 17:46:52 - src.translator.api - INFO - [TRANSLATION 69dd944e-b771-4673-8ea1-4af9b8896e6a] Final job hash: 6c27678b169985646fa3b971e35c8042
-2026-01-01 17:46:52 - src.translator.api - INFO - [TRANSLATION 69dd944e-b771-4673-8ea1-4af9b8896e6a] ===== TRANSLATION COMPLETE =====
-2026-01-01 17:46:52 - src.translator.api - INFO - ================================================================================
-2026-01-01 17:46:52 - src.translator.api - INFO - Job 69dd944e-b771-4673-8ea1-4af9b8896e6a: Cleaned up input file
-INFO:     127.0.0.1:50594 - "GET /api/translate/69dd944e-b771-4673-8ea1-4af9b8896e6a/status HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50596 - "GET /api/translate/69dd944e-b771-4673-8ea1-4af9b8896e6a/report HTTP/1.1" 200 OK
-2026-01-01 17:47:34 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2026-01-01 17:47:34 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2026-01-01 17:47:34 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
+INFO:     127.0.0.1:58495 - "GET /api/prompt HTTP/1.1" 200 OK
+2026-01-03 17:59:09 - src.translator.api - INFO - Detected language: de (prob: 1.00) -> de
+INFO:     127.0.0.1:58508 - "POST /api/detect-language HTTP/1.1" 200 OK
+2026-01-03 17:59:34 - src.translator.api - INFO - [STREAM b5cd9f7e-ebb2-426c-b946-6ed1ebf5c91d] Starting streaming translation
+2026-01-03 17:59:34 - src.translator.processing - INFO - [_read_file_as_text] Reading entire file as text: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/tmppja1rpk_.pdf
+2026-01-03 17:59:34 - src.translator.processing - INFO - [_read_file_as_text] File type: .pdf
+2026-01-03 17:59:34 - src.translator.processing - INFO - [_read_file_as_text] File hash: 5d8bac2b5f3b93e3a8a4d7373852e903
+2026-01-03 17:59:34 - src.translator.processing - INFO - [_read_file_as_text] File size: 187,007 bytes
+2026-01-03 17:59:34 - src.translator.processing - INFO - [_read_file_as_text] Extracted text length: 457 characters
+2026-01-03 17:59:34 - src.translator.processing - INFO - [_read_file_as_text] First 200 chars: Umsatzdetails
+www.commerzbank.de
+IBAN: DE49 1008 0000 0272 7699 00 | 0-Euro-Konto
+BIC: DRESDEFF100
+Kontowährung: EUR
+Kontoinhaber: Enrico Mariotti
+Buchungstag: 2024-09-06
+Umsatzart: Überweisung
+Erik I...
+INFO:     127.0.0.1:58540 - "POST /api/translate-stream HTTP/1.1" 200 OK
+2026-01-03 17:59:34 - src.translator.api - INFO - [STREAM a3479b07-8340-4fe5-9e95-922fce1ab529] Starting streaming translation
+2026-01-03 17:59:34 - src.translator.processing - INFO - [_read_file_as_text] Reading entire file as text: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/tmpx1lum855.pdf
+2026-01-03 17:59:34 - src.translator.processing - INFO - [_read_file_as_text] File type: .pdf
+2026-01-03 17:59:34 - src.translator.processing - INFO - [_read_file_as_text] File hash: 5d8bac2b5f3b93e3a8a4d7373852e903
+2026-01-03 17:59:34 - src.translator.processing - INFO - [_read_file_as_text] File size: 187,007 bytes
+2026-01-03 17:59:34 - src.translator.processing - INFO - [_read_file_as_text] Extracted text length: 457 characters
+2026-01-03 17:59:34 - src.translator.processing - INFO - [_read_file_as_text] First 200 chars: Umsatzdetails
+www.commerzbank.de
+IBAN: DE49 1008 0000 0272 7699 00 | 0-Euro-Konto
+BIC: DRESDEFF100
+Kontowährung: EUR
+Kontoinhaber: Enrico Mariotti
+Buchungstag: 2024-09-06
+Umsatzart: Überweisung
+Erik I...
+INFO:     127.0.0.1:58543 - "POST /api/translate-stream HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58544 - "GET /api/translate/streaming/status HTTP/1.1" 404 Not Found
+2026-01-03 17:59:36 - src.translator.api - INFO - [STREAM b5cd9f7e-ebb2-426c-b946-6ed1ebf5c91d] Generating PDF...
+2026-01-03 17:59:36 - src.translator.pdf_writer - INFO - [write_pdf_to_bytes] Creating two-column layout with 1 source paragraphs and 18 translated paragraphs
+2026-01-03 17:59:36 - src.translator.api - INFO - [STREAM b5cd9f7e-ebb2-426c-b946-6ed1ebf5c91d] PDF generated: 7,791 bytes
+2026-01-03 17:59:36 - src.translator.api - INFO - [STREAM b5cd9f7e-ebb2-426c-b946-6ed1ebf5c91d] PDF stored for download
+2026-01-03 17:59:36 - src.translator.api - INFO - [STREAM a3479b07-8340-4fe5-9e95-922fce1ab529] Generating PDF...
+2026-01-03 17:59:36 - src.translator.pdf_writer - INFO - [write_pdf_to_bytes] Creating two-column layout with 1 source paragraphs and 18 translated paragraphs
+2026-01-03 17:59:36 - src.translator.api - INFO - [STREAM a3479b07-8340-4fe5-9e95-922fce1ab529] PDF generated: 7,791 bytes
+2026-01-03 17:59:36 - src.translator.api - INFO - [STREAM a3479b07-8340-4fe5-9e95-922fce1ab529] PDF stored for download
+INFO:     127.0.0.1:58546 - "GET /api/glossary/glossary/content HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58548 - "GET /api/glossary/glossary/content HTTP/1.1" 200 OK
+2026-01-03 17:59:39 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
+2026-01-03 17:59:39 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
+2026-01-03 17:59:39 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
 [prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:50604 - "GET /api/prompt HTTP/1.1" 200 OK
-2026-01-01 17:47:34 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2026-01-01 17:47:34 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2026-01-01 17:47:34 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
+INFO:     127.0.0.1:58555 - "GET /api/prompt HTTP/1.1" 200 OK
+2026-01-03 17:59:39 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
+2026-01-03 17:59:39 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
+2026-01-03 17:59:39 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
 [prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:50606 - "GET /api/prompt HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50608 - "GET /api/memory/content HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50613 - "GET /api/memory/content HTTP/1.1" 200 OK
-2026-01-01 17:48:51 - src.translator.api - INFO - Detected language: fr (prob: 1.00) -> fr
-INFO:     127.0.0.1:50651 - "POST /api/detect-language HTTP/1.1" 200 OK
-2026-01-01 17:48:55 - src.translator.api - INFO - ================================================================================
-2026-01-01 17:48:55 - src.translator.api - INFO - [REQUEST 3eb7c8b8] ===== NEW TRANSLATION REQUEST =====
-2026-01-01 17:48:55 - src.translator.api - INFO - [REQUEST 3eb7c8b8] Timestamp: 1767286135.324521
-2026-01-01 17:48:55 - src.translator.api - INFO - [REQUEST 3eb7c8b8] File name: OBJET DU BAIL4.txt
-2026-01-01 17:48:55 - src.translator.api - INFO - [REQUEST 3eb7c8b8] Source: fr -> Target: it
-2026-01-01 17:48:55 - src.translator.api - INFO - [REQUEST 3eb7c8b8] File size: 129 bytes
-2026-01-01 17:48:55 - src.translator.api - INFO - [REQUEST 3eb7c8b8] File hash: 6c27678b169985646fa3b971e35c8042
-2026-01-01 17:48:55 - src.translator.api - INFO - [REQUEST 3eb7c8b8] First 200 bytes: b"\n\n2. OBJET DU BAIL\n\n\xe2\x98\x90 Appartement de ______ pi\xc3\xa8ces  \n\xe2\x98\x90 ______ chambre(s) meubl\xc3\xa9e(s)\n\nAdresse de l'immeuble: [\xc3\x80 compl\xc3\xa9ter]"
-2026-01-01 17:48:55 - src.translator.api - INFO - [REQUEST 3eb7c8b8] Use glossary: True
-2026-01-01 17:48:55 - src.translator.api - INFO - [REQUEST 3eb7c8b8] Using default glossary: glossary/glossary.csv
-2026-01-01 17:48:55 - src.translator.api - INFO - [REQUEST 3eb7c8b8] Generated job_id: e1836b96-7022-4c6b-b661-71071fd80d12
-2026-01-01 17:48:55 - src.translator.api - INFO - Job e1836b96-7022-4c6b-b661-71071fd80d12: Created isolated input file: input_e1836b96-7022-4c6b-b661-71071fd80d12_muax90cb.txt
-2026-01-01 17:48:55 - src.translator.api - INFO - Job e1836b96-7022-4c6b-b661-71071fd80d12: File hash: 6c27678b16998564...
-2026-01-01 17:48:55 - src.translator.api - INFO - [REQUEST 3eb7c8b8] Job e1836b96-7022-4c6b-b661-71071fd80d12 stored in translation_jobs
-2026-01-01 17:48:55 - src.translator.api - INFO - [REQUEST 3eb7c8b8] Total active jobs: 1
-2026-01-01 17:48:55 - src.translator.api - INFO - ================================================================================
-2026-01-01 17:48:55 - src.translator.api - INFO - [TRANSLATION e1836b96-7022-4c6b-b661-71071fd80d12] ===== STARTING TRANSLATION THREAD =====
-2026-01-01 17:48:55 - src.translator.api - INFO - [TRANSLATION e1836b96-7022-4c6b-b661-71071fd80d12] Job data from storage:
-2026-01-01 17:48:55 - src.translator.api - INFO - [TRANSLATION e1836b96-7022-4c6b-b661-71071fd80d12]   - File hash: 6c27678b169985646fa3b971e35c8042
-2026-01-01 17:48:55 - src.translator.api - INFO - [TRANSLATION e1836b96-7022-4c6b-b661-71071fd80d12]   - Input path: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_e1836b96-7022-4c6b-b661-71071fd80d12_muax90cb.txt
-2026-01-01 17:48:55 - src.translator.api - INFO - [TRANSLATION e1836b96-7022-4c6b-b661-71071fd80d12]   - Source: fr -> Target: it
-2026-01-01 17:48:55 - src.translator.api - INFO - [REQUEST 3eb7c8b8] Job e1836b96-7022-4c6b-b661-71071fd80d12: Translation thread started
-2026-01-01 17:48:55 - src.translator.api - INFO - [REQUEST 3eb7c8b8] ===== REQUEST PROCESSING COMPLETE =====
-2026-01-01 17:48:55 - src.translator.api - INFO - ================================================================================
-INFO:     127.0.0.1:50653 - "POST /api/translate HTTP/1.1" 202 Accepted
-2026-01-01 17:48:55 - src.translator.api - INFO - Job e1836b96-7022-4c6b-b661-71071fd80d12: [FILE VERIFICATION] Opening file: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_e1836b96-7022-4c6b-b661-71071fd80d12_muax90cb.txt
-2026-01-01 17:48:55 - src.translator.api - INFO - Job e1836b96-7022-4c6b-b661-71071fd80d12: [FILE VERIFICATION] File absolute path: /private/var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_e1836b96-7022-4c6b-b661-71071fd80d12_muax90cb.txt
-2026-01-01 17:48:55 - src.translator.api - INFO - Job e1836b96-7022-4c6b-b661-71071fd80d12: [FILE VERIFICATION] File exists: True
-2026-01-01 17:48:55 - src.translator.api - INFO - Job e1836b96-7022-4c6b-b661-71071fd80d12: [FILE VERIFICATION] Read 129 bytes from file
-2026-01-01 17:48:55 - src.translator.api - INFO - Job e1836b96-7022-4c6b-b661-71071fd80d12: [FILE VERIFICATION] Expected hash: 6c27678b169985646fa3b971e35c8042
-2026-01-01 17:48:55 - src.translator.api - INFO - Job e1836b96-7022-4c6b-b661-71071fd80d12: [FILE VERIFICATION] Actual hash: 6c27678b169985646fa3b971e35c8042
-2026-01-01 17:48:55 - src.translator.api - INFO - Job e1836b96-7022-4c6b-b661-71071fd80d12: [FILE VERIFICATION] First 100 bytes: b'\n\n2. OBJET DU BAIL\n\n\xe2\x98\x90 Appartement de ______ pi\xc3\xa8ces  \n\xe2\x98\x90 ______ chambre(s) meubl\xc3\xa9e(s)\n\nAdresse d'
-2026-01-01 17:48:55 - src.translator.api - INFO - Job e1836b96-7022-4c6b-b661-71071fd80d12: [FILE VERIFICATION] Hash verified successfully
-2026-01-01 17:48:55 - src.translator.api - INFO - Job e1836b96-7022-4c6b-b661-71071fd80d12: [FILE VERIFICATION] File: input_e1836b96-7022-4c6b-b661-71071fd80d12_muax90cb.txt, Size: 129 bytes
-2026-01-01 17:48:55 - src.translator.api - INFO - Job e1836b96-7022-4c6b-b661-71071fd80d12: Created isolated temp directory: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/translation_e1836b96-7022-4c6b-b661-71071fd80d12_i7opryyr
-2026-01-01 17:48:55 - src.translator.api - INFO - Job e1836b96-7022-4c6b-b661-71071fd80d12: Loading glossary from glossary/glossary.csv (file will be read fresh)
-2026-01-01 17:48:55 - src.translator.api - INFO - Job e1836b96-7022-4c6b-b661-71071fd80d12: Loaded glossary 'glossary' with 1352 entries
-INFO:     127.0.0.1:50655 - "GET /api/translate/e1836b96-7022-4c6b-b661-71071fd80d12/status HTTP/1.1" 200 OK
-2026-01-01 17:48:55 - src.translator.api - INFO - Job e1836b96-7022-4c6b-b661-71071fd80d12: Using shared translation memory from /Users/enrico/workspace/translator/data/memory.json
-2026-01-01 17:48:55 - src.translator.api - INFO - Job e1836b96-7022-4c6b-b661-71071fd80d12: Memory contains 1 existing records
-2026-01-01 17:48:55 - src.translator.api - INFO - Job e1836b96-7022-4c6b-b661-71071fd80d12: Using custom prompt provided by user
-2026-01-01 17:48:55 - src.translator.api - INFO - Job e1836b96-7022-4c6b-b661-71071fd80d12: [PRE-TRANSLATE] About to call translate_file_to_memory
-2026-01-01 17:48:55 - src.translator.api - INFO - Job e1836b96-7022-4c6b-b661-71071fd80d12: [PRE-TRANSLATE] Input path: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_e1836b96-7022-4c6b-b661-71071fd80d12_muax90cb.txt
-2026-01-01 17:48:55 - src.translator.api - INFO - Job e1836b96-7022-4c6b-b661-71071fd80d12: [PRE-TRANSLATE] Input path absolute: /private/var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_e1836b96-7022-4c6b-b661-71071fd80d12_muax90cb.txt
-2026-01-01 17:48:55 - src.translator.api - INFO - Job e1836b96-7022-4c6b-b661-71071fd80d12: [PRE-TRANSLATE] Input file exists: True
-2026-01-01 17:48:55 - src.translator.api - INFO - Job e1836b96-7022-4c6b-b661-71071fd80d12: [PRE-TRANSLATE] Final verification - Hash: 6c27678b169985646fa3b971e35c8042
-2026-01-01 17:48:55 - src.translator.api - INFO - Job e1836b96-7022-4c6b-b661-71071fd80d12: [PRE-TRANSLATE] Expected hash: 6c27678b169985646fa3b971e35c8042
-2026-01-01 17:48:55 - src.translator.api - INFO - Job e1836b96-7022-4c6b-b661-71071fd80d12: [PRE-TRANSLATE] File verified, calling translate_file_to_memory
-2026-01-01 17:48:55 - src.translator.api - INFO - Job e1836b96-7022-4c6b-b661-71071fd80d12: [PRE-TRANSLATE] Source lang: fr, Target lang: it
-2026-01-01 17:48:55 - src.translator.api - INFO - Job e1836b96-7022-4c6b-b661-71071fd80d12: Stored 3 original paragraphs
-2026-01-01 17:48:55 - src.translator.processing - INFO - [translate_file_to_memory] ===== STARTING SINGLE-SHOT TRANSLATION =====
-2026-01-01 17:48:55 - src.translator.processing - INFO - [translate_file_to_memory] Input path: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_e1836b96-7022-4c6b-b661-71071fd80d12_muax90cb.txt
-2026-01-01 17:48:55 - src.translator.processing - INFO - [translate_file_to_memory] Absolute path: /private/var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_e1836b96-7022-4c6b-b661-71071fd80d12_muax90cb.txt
-2026-01-01 17:48:55 - src.translator.processing - INFO - [translate_file_to_memory] File hash: 6c27678b169985646fa3b971e35c8042
-2026-01-01 17:48:55 - src.translator.processing - INFO - [translate_file_to_memory] File size: 129 bytes
-2026-01-01 17:48:55 - src.translator.processing - INFO - [translate_file_to_memory] Reading entire file as text...
-2026-01-01 17:48:55 - src.translator.processing - INFO - [_read_file_as_text] Reading entire file as text: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_e1836b96-7022-4c6b-b661-71071fd80d12_muax90cb.txt
-2026-01-01 17:48:55 - src.translator.processing - INFO - [_read_file_as_text] File type: .txt
-2026-01-01 17:48:55 - src.translator.processing - INFO - [_read_file_as_text] File hash: 6c27678b169985646fa3b971e35c8042
-2026-01-01 17:48:55 - src.translator.processing - INFO - [_read_file_as_text] File size: 129 bytes
-2026-01-01 17:48:55 - src.translator.processing - INFO - [_read_file_as_text] Extracted text length: 121 characters
-2026-01-01 17:48:55 - src.translator.processing - INFO - [_read_file_as_text] First 200 chars: 
-
-2. OBJET DU BAIL
-
-☐ Appartement de ______ pièces  
-☐ ______ chambre(s) meublée(s)
-
-Adresse de l'immeuble: [À compléter]...
-2026-01-01 17:48:55 - src.translator.processing - INFO - [translate_file_to_memory] Looking up glossary matches...
-2026-01-01 17:48:55 - src.translator.processing - INFO - [translate_file_to_memory] Found 1 glossary matches (after filtering reference doc conflicts)
-2026-01-01 17:48:55 - src.translator.processing - INFO - [translate_file_to_memory] ===== STEP 1: CHECKING TRANSLATION MEMORY =====
-2026-01-01 17:48:55 - src.translator.processing - INFO - [translate_file_to_memory] Memory enabled (skip_memory=False), checking for existing translation...
-2026-01-01 17:48:55 - src.translator.processing - INFO - [translate_file_to_memory] Document length: 121 characters
-2026-01-01 17:48:55 - src.translator.processing - INFO - [translate_file_to_memory] Found memory match with similarity: 100.0%
-2026-01-01 17:48:55 - src.translator.processing - INFO - [translate_file_to_memory] Memory source preview: 2. OBJET DU BAIL
-
-☐ Appartement de ______ pièces  
-☐ ______ chambre(s) meublée(s)
-
-Adresse de l'immeuble: [À compléter]...
-2026-01-01 17:48:55 - src.translator.processing - INFO - [translate_file_to_memory] Memory translation preview: # TRADUZIONE
-
-## 2. OGGETTO DELLA LOCAZIONE
-
-☐ Localino di ______ locali  
-☐ ______ camera/e ammobiliata/e
-
-Indirizzo dell'immobile: [Da completare]
-
-...
-2026-01-01 17:48:55 - src.translator.processing - INFO - [translate_file_to_memory] ✅ STEP 1 RESULT: Using translation from memory (similarity: 100.0%)
-2026-01-01 17:48:55 - src.translator.processing - INFO - [translate_file_to_memory] ✅ No Claude API call needed - translation retrieved from memory
-2026-01-01 17:48:55 - src.translator.processing - INFO - [translate_file_to_memory] ===== STEP 2: SKIPPED (using memory translation) =====
-2026-01-01 17:48:55 - src.translator.processing - INFO - [translate_file_to_memory] No Claude API call needed - translation retrieved from memory
-2026-01-01 17:48:55 - src.translator.processing - INFO - [translate_file_to_memory] ===== STEP 3: SKIPPED (translation already in memory) =====
-2026-01-01 17:48:55 - src.translator.processing - INFO - [translate_file_to_memory] Translation already exists in memory, no need to store again
-2026-01-01 17:48:55 - src.translator.processing - INFO - [translate_file_to_memory] Translation complete: 0.10s
-2026-01-01 17:48:55 - src.translator.processing - INFO - [translate_file_to_memory] Translated length: 2,559 characters
-2026-01-01 17:48:55 - src.translator.glossary_enricher - INFO - [apply_glossary_with_highlighting] Applying glossary: glossary
-2026-01-01 17:48:55 - src.translator.glossary_enricher - INFO - [apply_glossary_with_highlighting] Translated text length: 2559
-2026-01-01 17:48:55 - src.translator.glossary_enricher - INFO - [apply_glossary_with_highlighting] Applied 10 glossary terms
-2026-01-01 17:48:55 - src.translator.glossary_enricher - INFO - [apply_glossary_with_highlighting] Breakdown: 10 translation matches, 0 source replacements
-2026-01-01 17:48:55 - src.translator.processing - INFO - [translate_file_to_memory] Glossary enrichment: 10 terms highlighted (after filtering reference doc)
-2026-01-01 17:48:55 - src.translator.glossary_enricher - INFO - [apply_memory_with_highlighting] Applying translation memory
-2026-01-01 17:48:55 - src.translator.glossary_enricher - INFO - [apply_memory_with_highlighting] Translated text length: 2769
-2026-01-01 17:48:55 - src.translator.glossary_enricher - INFO - [apply_memory_with_highlighting] Found 1 memory records for fr->it
-2026-01-01 17:48:55 - src.translator.glossary_enricher - INFO - [apply_memory_with_highlighting] Applied 0 memory terms
-2026-01-01 17:48:55 - src.translator.processing - INFO - [translate_file_to_memory] Memory enrichment: 0 terms highlighted
-2026-01-01 17:48:55 - src.translator.processing - INFO - [translate_file_to_memory] Generating PDF from 3 source paragraphs and 13 translated paragraphs
-2026-01-01 17:48:55 - src.translator.pdf_writer - INFO - [write_pdf_to_bytes] Creating two-column layout with 3 source paragraphs and 13 translated paragraphs
-2026-01-01 17:48:55 - src.translator.processing - INFO - [translate_file_to_memory] PDF generated: 4,882 bytes
-2026-01-01 17:48:55 - src.translator.api - INFO - [TRANSLATION e1836b96-7022-4c6b-b661-71071fd80d12] Translation complete
-2026-01-01 17:48:55 - src.translator.api - INFO - [TRANSLATION e1836b96-7022-4c6b-b661-71071fd80d12] PDF generated in memory: 4,882 bytes
-2026-01-01 17:48:55 - src.translator.api - INFO - [TRANSLATION e1836b96-7022-4c6b-b661-71071fd80d12] Original paragraphs: 3
-2026-01-01 17:48:55 - src.translator.api - INFO - [TRANSLATION e1836b96-7022-4c6b-b661-71071fd80d12] Translated paragraphs: 13
-2026-01-01 17:48:55 - src.translator.api - INFO - [TRANSLATION e1836b96-7022-4c6b-b661-71071fd80d12] Status updated to completed
-2026-01-01 17:48:55 - src.translator.api - INFO - [TRANSLATION e1836b96-7022-4c6b-b661-71071fd80d12] Final job hash: 6c27678b169985646fa3b971e35c8042
-2026-01-01 17:48:55 - src.translator.api - INFO - [TRANSLATION e1836b96-7022-4c6b-b661-71071fd80d12] ===== TRANSLATION COMPLETE =====
-2026-01-01 17:48:55 - src.translator.api - INFO - ================================================================================
-2026-01-01 17:48:55 - src.translator.api - INFO - Job e1836b96-7022-4c6b-b661-71071fd80d12: Cleaned up input file
-INFO:     127.0.0.1:50659 - "GET /api/translate/e1836b96-7022-4c6b-b661-71071fd80d12/status HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50661 - "GET /api/translate/e1836b96-7022-4c6b-b661-71071fd80d12/report HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50745 - "GET /api/translate/e1836b96-7022-4c6b-b661-71071fd80d12/text HTTP/1.1" 200 OK
-2026-01-01 17:57:21 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2026-01-01 17:57:21 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2026-01-01 17:57:21 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
+INFO:     127.0.0.1:58557 - "GET /api/prompt HTTP/1.1" 200 OK
+2026-01-03 17:59:45 - src.translator.api - INFO - Detected language: de (prob: 1.00) -> de
+INFO:     127.0.0.1:58562 - "POST /api/detect-language HTTP/1.1" 200 OK
+2026-01-03 18:00:02 - src.translator.api - INFO - [STREAM cfa46537-33b1-46e6-ade4-fc8a4f862add] Starting streaming translation
+2026-01-03 18:00:02 - src.translator.processing - INFO - [_read_file_as_text] Reading entire file as text: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/tmpm8ybnqfq.pdf
+2026-01-03 18:00:02 - src.translator.processing - INFO - [_read_file_as_text] File type: .pdf
+2026-01-03 18:00:02 - src.translator.processing - INFO - [_read_file_as_text] File hash: 5d8bac2b5f3b93e3a8a4d7373852e903
+2026-01-03 18:00:02 - src.translator.processing - INFO - [_read_file_as_text] File size: 187,007 bytes
+2026-01-03 18:00:02 - src.translator.processing - INFO - [_read_file_as_text] Extracted text length: 457 characters
+2026-01-03 18:00:02 - src.translator.processing - INFO - [_read_file_as_text] First 200 chars: Umsatzdetails
+www.commerzbank.de
+IBAN: DE49 1008 0000 0272 7699 00 | 0-Euro-Konto
+BIC: DRESDEFF100
+Kontowährung: EUR
+Kontoinhaber: Enrico Mariotti
+Buchungstag: 2024-09-06
+Umsatzart: Überweisung
+Erik I...
+INFO:     127.0.0.1:58580 - "POST /api/translate-stream HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58583 - "GET /api/translate/streaming/status HTTP/1.1" 404 Not Found
+2026-01-03 18:00:02 - src.translator.api - INFO - [STREAM 2c843aff-2425-48dc-801a-d044fae41417] Starting streaming translation
+2026-01-03 18:00:02 - src.translator.processing - INFO - [_read_file_as_text] Reading entire file as text: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/tmp71w91bwk.pdf
+2026-01-03 18:00:02 - src.translator.processing - INFO - [_read_file_as_text] File type: .pdf
+2026-01-03 18:00:02 - src.translator.processing - INFO - [_read_file_as_text] File hash: 5d8bac2b5f3b93e3a8a4d7373852e903
+2026-01-03 18:00:02 - src.translator.processing - INFO - [_read_file_as_text] File size: 187,007 bytes
+2026-01-03 18:00:02 - src.translator.processing - INFO - [_read_file_as_text] Extracted text length: 457 characters
+2026-01-03 18:00:02 - src.translator.processing - INFO - [_read_file_as_text] First 200 chars: Umsatzdetails
+www.commerzbank.de
+IBAN: DE49 1008 0000 0272 7699 00 | 0-Euro-Konto
+BIC: DRESDEFF100
+Kontowährung: EUR
+Kontoinhaber: Enrico Mariotti
+Buchungstag: 2024-09-06
+Umsatzart: Überweisung
+Erik I...
+INFO:     127.0.0.1:58584 - "POST /api/translate-stream HTTP/1.1" 200 OK
+2026-01-03 18:00:03 - src.translator.api - INFO - [STREAM cfa46537-33b1-46e6-ade4-fc8a4f862add] Generating PDF...
+2026-01-03 18:00:03 - src.translator.api - INFO - [STREAM cfa46537-33b1-46e6-ade4-fc8a4f862add] Using PyMuPDF to preserve PDF formatting
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Translating PDF with formatting preservation
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Input: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/tmpm8ybnqfq.pdf
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Output: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/tmpii2foeeo.pdf
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Number of translated paragraphs: 18
+2026-01-03 18:00:03 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] Reading PDF: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/tmpm8ybnqfq.pdf
+2026-01-03 18:00:03 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] Absolute path: /private/var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/tmpm8ybnqfq.pdf
+2026-01-03 18:00:03 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] File hash: 5d8bac2b5f3b93e3a8a4d7373852e903
+2026-01-03 18:00:03 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] File size: 187,007 bytes
+2026-01-03 18:00:03 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] PDF opened, pages: 1
+2026-01-03 18:00:03 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] First page first chunk: Umsatzdetails
+www.commerzbank.de
+IBAN: DE49 1008 0000 0272 7699 00 | 0-Euro-Konto
+BIC: DRESDEFF100
+K...
+2026-01-03 18:00:03 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] Extracted 1 paragraphs
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Extracted 1 original paragraphs from PDF
+2026-01-03 18:00:03 - src.translator.pdf_formatter - WARNING - Paragraph count mismatch: 1 original vs 18 translated
+2026-01-03 18:00:03 - src.translator.pdf_formatter - WARNING - Will attempt to map paragraphs by position
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Opened PDF with 1 pages
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Processing page 1
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Page 1: Found 11 paragraph groups
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Page 1: Starting with translation_idx=0, total translations=18
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Page 1: Re-inserting 11 translated paragraphs
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Page 1: Inserting translation 0: '# TRADUZIONE...' (font: Arial, size: 14.0)
+2026-01-03 18:00:03 - src.translator.pdf_formatter - WARNING - Page 1: insert_textbox overflow (rc=-7.8), trying insert_text
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Page 1: Successfully inserted text using insert_text
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Page 1: Inserting translation 1: '## Testo tradotto...' (font: Arial Bold, size: 7.5)
+2026-01-03 18:00:03 - src.translator.pdf_formatter - WARNING - Page 1: insert_textbox overflow (rc=-3.4), trying insert_text
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Page 1: Successfully inserted text using insert_text
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Page 1: Inserting translation 2: '**Dettagli delle transazioni**  
+www.commerzbank.d...' (font: Arial Bold, size: 7.5)
+2026-01-03 18:00:03 - src.translator.pdf_formatter - WARNING - Page 1: insert_textbox overflow (rc=-189.6), trying insert_text
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Page 1: Successfully inserted text using insert_text
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Page 1: Inserting translation 3: '---...' (font: Arial, size: 7.5)
+2026-01-03 18:00:03 - src.translator.pdf_formatter - WARNING - Page 1: insert_textbox overflow (rc=-3.6), trying insert_text
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Page 1: Successfully inserted text using insert_text
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Page 1: Inserting translation 4: '## TABELLA COMPARATIVA E NOTE...' (font: Arial, size: 7.5)
+2026-01-03 18:00:03 - src.translator.pdf_formatter - WARNING - Page 1: insert_textbox overflow (rc=-3.6), trying insert_text
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Page 1: Successfully inserted text using insert_text
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Page 1: Inserting translation 5: '| **Originale (DE)** | **Traduzione (IT)** | **Spi...' (font: Arial, size: 7.5)
+2026-01-03 18:00:03 - src.translator.pdf_formatter - WARNING - Page 1: insert_textbox overflow (rc=-457.0), trying insert_text
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Page 1: Successfully inserted text using insert_text
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Page 1: Inserting translation 6: '---...' (font: Arial, size: 7.5)
+2026-01-03 18:00:03 - src.translator.pdf_formatter - WARNING - Page 1: insert_textbox overflow (rc=-2.6), trying insert_text
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Page 1: Successfully inserted text using insert_text
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Page 1: Inserting translation 7: '## NOTE METODOLOGICHE E CONTESTUALI...' (font: Arial, size: 7.5)
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Page 1: Successfully inserted text using insert_textbox (rc=5.5)
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Page 1: Inserting translation 8: '### 1. **Natura del documento**
+Questo è un **estr...' (font: Arial, size: 7.5)
+2026-01-03 18:00:03 - src.translator.pdf_formatter - WARNING - Page 1: insert_textbox overflow (rc=-94.9), trying insert_text
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Page 1: Successfully inserted text using insert_text
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Page 1: Inserting translation 9: '### 2. **Scelte terminologiche bancarie**
+- **"Ums...' (font: Arial Bold, size: 7.5)
+2026-01-03 18:00:03 - src.translator.pdf_formatter - WARNING - Page 1: insert_textbox overflow (rc=-138.0), trying insert_text
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Page 1: Successfully inserted text using insert_text
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Page 1: Inserting translation 10: '### 3. **Elementi invariati**
+- **IBAN, BIC, codic...' (font: Arial, size: 6.0)
+2026-01-03 18:00:03 - src.translator.pdf_formatter - WARNING - Page 1: insert_textbox overflow (rc=-1042.2), trying insert_text
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Page 1: Successfully inserted text using insert_text
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Saved translated PDF with preserved formatting to /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/tmpii2foeeo.pdf
+2026-01-03 18:00:03 - src.translator.api - INFO - [STREAM cfa46537-33b1-46e6-ade4-fc8a4f862add] PDF generated with formatting preservation: 197,189 bytes
+2026-01-03 18:00:03 - src.translator.api - INFO - [STREAM cfa46537-33b1-46e6-ade4-fc8a4f862add] PDF stored for download
+2026-01-03 18:00:03 - src.translator.api - INFO - [STREAM 2c843aff-2425-48dc-801a-d044fae41417] Generating PDF...
+2026-01-03 18:00:03 - src.translator.api - INFO - [STREAM 2c843aff-2425-48dc-801a-d044fae41417] Using PyMuPDF to preserve PDF formatting
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Translating PDF with formatting preservation
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Input: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/tmp71w91bwk.pdf
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Output: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/tmp1eooek80.pdf
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Number of translated paragraphs: 18
+2026-01-03 18:00:03 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] Reading PDF: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/tmp71w91bwk.pdf
+2026-01-03 18:00:03 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] Absolute path: /private/var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/tmp71w91bwk.pdf
+2026-01-03 18:00:03 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] File hash: 5d8bac2b5f3b93e3a8a4d7373852e903
+2026-01-03 18:00:03 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] File size: 187,007 bytes
+2026-01-03 18:00:03 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] PDF opened, pages: 1
+2026-01-03 18:00:03 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] First page first chunk: Umsatzdetails
+www.commerzbank.de
+IBAN: DE49 1008 0000 0272 7699 00 | 0-Euro-Konto
+BIC: DRESDEFF100
+K...
+2026-01-03 18:00:03 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] Extracted 1 paragraphs
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Extracted 1 original paragraphs from PDF
+2026-01-03 18:00:03 - src.translator.pdf_formatter - WARNING - Paragraph count mismatch: 1 original vs 18 translated
+2026-01-03 18:00:03 - src.translator.pdf_formatter - WARNING - Will attempt to map paragraphs by position
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Opened PDF with 1 pages
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Processing page 1
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Page 1: Found 11 paragraph groups
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Page 1: Starting with translation_idx=0, total translations=18
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Page 1: Re-inserting 11 translated paragraphs
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Page 1: Inserting translation 0: '# TRADUZIONE...' (font: Arial, size: 14.0)
+2026-01-03 18:00:03 - src.translator.pdf_formatter - WARNING - Page 1: insert_textbox overflow (rc=-7.8), trying insert_text
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Page 1: Successfully inserted text using insert_text
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Page 1: Inserting translation 1: '## Testo tradotto...' (font: Arial Bold, size: 7.5)
+2026-01-03 18:00:03 - src.translator.pdf_formatter - WARNING - Page 1: insert_textbox overflow (rc=-3.4), trying insert_text
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Page 1: Successfully inserted text using insert_text
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Page 1: Inserting translation 2: '**Dettagli delle transazioni**  
+www.commerzbank.d...' (font: Arial Bold, size: 7.5)
+2026-01-03 18:00:03 - src.translator.pdf_formatter - WARNING - Page 1: insert_textbox overflow (rc=-189.6), trying insert_text
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Page 1: Successfully inserted text using insert_text
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Page 1: Inserting translation 3: '---...' (font: Arial, size: 7.5)
+2026-01-03 18:00:03 - src.translator.pdf_formatter - WARNING - Page 1: insert_textbox overflow (rc=-3.6), trying insert_text
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Page 1: Successfully inserted text using insert_text
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Page 1: Inserting translation 4: '## TABELLA COMPARATIVA E NOTE...' (font: Arial, size: 7.5)
+2026-01-03 18:00:03 - src.translator.pdf_formatter - WARNING - Page 1: insert_textbox overflow (rc=-3.6), trying insert_text
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Page 1: Successfully inserted text using insert_text
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Page 1: Inserting translation 5: '| **Originale (DE)** | **Traduzione (IT)** | **Spi...' (font: Arial, size: 7.5)
+2026-01-03 18:00:03 - src.translator.pdf_formatter - WARNING - Page 1: insert_textbox overflow (rc=-457.0), trying insert_text
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Page 1: Successfully inserted text using insert_text
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Page 1: Inserting translation 6: '---...' (font: Arial, size: 7.5)
+2026-01-03 18:00:03 - src.translator.pdf_formatter - WARNING - Page 1: insert_textbox overflow (rc=-2.6), trying insert_text
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Page 1: Successfully inserted text using insert_text
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Page 1: Inserting translation 7: '## NOTE METODOLOGICHE E CONTESTUALI...' (font: Arial, size: 7.5)
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Page 1: Successfully inserted text using insert_textbox (rc=5.5)
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Page 1: Inserting translation 8: '### 1. **Natura del documento**
+Questo è un **estr...' (font: Arial, size: 7.5)
+2026-01-03 18:00:03 - src.translator.pdf_formatter - WARNING - Page 1: insert_textbox overflow (rc=-94.9), trying insert_text
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Page 1: Successfully inserted text using insert_text
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Page 1: Inserting translation 9: '### 2. **Scelte terminologiche bancarie**
+- **"Ums...' (font: Arial Bold, size: 7.5)
+2026-01-03 18:00:03 - src.translator.pdf_formatter - WARNING - Page 1: insert_textbox overflow (rc=-138.0), trying insert_text
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Page 1: Successfully inserted text using insert_text
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Page 1: Inserting translation 10: '### 3. **Elementi invariati**
+- **IBAN, BIC, codic...' (font: Arial, size: 6.0)
+2026-01-03 18:00:03 - src.translator.pdf_formatter - WARNING - Page 1: insert_textbox overflow (rc=-1042.2), trying insert_text
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Page 1: Successfully inserted text using insert_text
+2026-01-03 18:00:03 - src.translator.pdf_formatter - INFO - Saved translated PDF with preserved formatting to /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/tmp1eooek80.pdf
+2026-01-03 18:00:03 - src.translator.api - INFO - [STREAM 2c843aff-2425-48dc-801a-d044fae41417] PDF generated with formatting preservation: 197,189 bytes
+2026-01-03 18:00:03 - src.translator.api - INFO - [STREAM 2c843aff-2425-48dc-801a-d044fae41417] PDF stored for download
+INFO:     127.0.0.1:58591 - "GET /api/glossary/glossary/content HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58593 - "GET /api/glossary/glossary/content HTTP/1.1" 200 OK
+2026-01-03 18:00:19 - src.translator.api - INFO - [DOWNLOAD STREAM 2c843aff-2425-48dc-801a-d044fae41417] Serving PDF from memory: 197,189 bytes
+INFO:     127.0.0.1:58606 - "GET /api/translate-stream/2c843aff-2425-48dc-801a-d044fae41417/download HTTP/1.1" 200 OK
+2026-01-03 18:07:05 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
+2026-01-03 18:07:05 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
+2026-01-03 18:07:05 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
 [prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:50751 - "GET /api/prompt HTTP/1.1" 200 OK
-2026-01-01 17:57:21 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2026-01-01 17:57:21 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2026-01-01 17:57:21 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
+INFO:     127.0.0.1:59127 - "GET /api/prompt HTTP/1.1" 200 OK
+2026-01-03 18:07:05 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
+2026-01-03 18:07:05 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
+2026-01-03 18:07:05 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
 [prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:50753 - "GET /api/prompt HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50757 - "GET /api/glossary/glossary/content HTTP/1.1" 200 OK
-2026-01-01 17:57:45 - src.translator.api - INFO - Updated glossary glossary with 1352 entries
-INFO:     127.0.0.1:50760 - "PUT /api/glossary/glossary/content HTTP/1.1" 200 OK
-2026-01-01 17:57:58 - src.translator.api - INFO - Updated glossary glossary with 1352 entries
-INFO:     127.0.0.1:50764 - "PUT /api/glossary/glossary/content HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50778 - "GET /api/memory/content HTTP/1.1" 200 OK
-2026-01-01 17:58:37 - src.translator.api - INFO - Updated memory with 0 entries
-INFO:     127.0.0.1:50780 - "PUT /api/memory/content HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50782 - "GET /api/memory/content HTTP/1.1" 200 OK
-2026-01-01 17:58:59 - src.translator.api - INFO - Detected language: fr (prob: 1.00) -> fr
-INFO:     127.0.0.1:50801 - "POST /api/detect-language HTTP/1.1" 200 OK
-2026-01-01 17:59:01 - src.translator.api - INFO - ================================================================================
-2026-01-01 17:59:01 - src.translator.api - INFO - [REQUEST f71bed38] ===== NEW TRANSLATION REQUEST =====
-2026-01-01 17:59:01 - src.translator.api - INFO - [REQUEST f71bed38] Timestamp: 1767286741.8753479
-2026-01-01 17:59:01 - src.translator.api - INFO - [REQUEST f71bed38] File name: OBJET DU BAIL4.txt
-2026-01-01 17:59:01 - src.translator.api - INFO - [REQUEST f71bed38] Source: fr -> Target: it
-2026-01-01 17:59:01 - src.translator.api - INFO - [REQUEST f71bed38] File size: 129 bytes
-2026-01-01 17:59:01 - src.translator.api - INFO - [REQUEST f71bed38] File hash: 6c27678b169985646fa3b971e35c8042
-2026-01-01 17:59:01 - src.translator.api - INFO - [REQUEST f71bed38] First 200 bytes: b"\n\n2. OBJET DU BAIL\n\n\xe2\x98\x90 Appartement de ______ pi\xc3\xa8ces  \n\xe2\x98\x90 ______ chambre(s) meubl\xc3\xa9e(s)\n\nAdresse de l'immeuble: [\xc3\x80 compl\xc3\xa9ter]"
-2026-01-01 17:59:01 - src.translator.api - INFO - [REQUEST f71bed38] Use glossary: True
-2026-01-01 17:59:01 - src.translator.api - INFO - [REQUEST f71bed38] Using default glossary: glossary/glossary.csv
-2026-01-01 17:59:01 - src.translator.api - INFO - [REQUEST f71bed38] Generated job_id: d9be72c3-797e-4b47-9ce8-4e0a403902c0
-2026-01-01 17:59:01 - src.translator.api - INFO - Job d9be72c3-797e-4b47-9ce8-4e0a403902c0: Created isolated input file: input_d9be72c3-797e-4b47-9ce8-4e0a403902c0_mb1by_oz.txt
-2026-01-01 17:59:01 - src.translator.api - INFO - Job d9be72c3-797e-4b47-9ce8-4e0a403902c0: File hash: 6c27678b16998564...
-2026-01-01 17:59:01 - src.translator.api - INFO - [REQUEST f71bed38] Job d9be72c3-797e-4b47-9ce8-4e0a403902c0 stored in translation_jobs
-2026-01-01 17:59:01 - src.translator.api - INFO - [REQUEST f71bed38] Total active jobs: 1
-2026-01-01 17:59:01 - src.translator.api - INFO - ================================================================================
-2026-01-01 17:59:01 - src.translator.api - INFO - [REQUEST f71bed38] Job d9be72c3-797e-4b47-9ce8-4e0a403902c0: Translation thread started
-2026-01-01 17:59:01 - src.translator.api - INFO - [TRANSLATION d9be72c3-797e-4b47-9ce8-4e0a403902c0] ===== STARTING TRANSLATION THREAD =====
-2026-01-01 17:59:01 - src.translator.api - INFO - [REQUEST f71bed38] ===== REQUEST PROCESSING COMPLETE =====
-2026-01-01 17:59:01 - src.translator.api - INFO - [TRANSLATION d9be72c3-797e-4b47-9ce8-4e0a403902c0] Job data from storage:
-2026-01-01 17:59:01 - src.translator.api - INFO - ================================================================================
-2026-01-01 17:59:01 - src.translator.api - INFO - [TRANSLATION d9be72c3-797e-4b47-9ce8-4e0a403902c0]   - File hash: 6c27678b169985646fa3b971e35c8042
-INFO:     127.0.0.1:50808 - "POST /api/translate HTTP/1.1" 202 Accepted
-2026-01-01 17:59:01 - src.translator.api - INFO - [TRANSLATION d9be72c3-797e-4b47-9ce8-4e0a403902c0]   - Input path: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_d9be72c3-797e-4b47-9ce8-4e0a403902c0_mb1by_oz.txt
-2026-01-01 17:59:01 - src.translator.api - INFO - [TRANSLATION d9be72c3-797e-4b47-9ce8-4e0a403902c0]   - Source: fr -> Target: it
-2026-01-01 17:59:01 - src.translator.api - INFO - Job d9be72c3-797e-4b47-9ce8-4e0a403902c0: [FILE VERIFICATION] Opening file: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_d9be72c3-797e-4b47-9ce8-4e0a403902c0_mb1by_oz.txt
-2026-01-01 17:59:01 - src.translator.api - INFO - Job d9be72c3-797e-4b47-9ce8-4e0a403902c0: [FILE VERIFICATION] File absolute path: /private/var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_d9be72c3-797e-4b47-9ce8-4e0a403902c0_mb1by_oz.txt
-2026-01-01 17:59:01 - src.translator.api - INFO - Job d9be72c3-797e-4b47-9ce8-4e0a403902c0: [FILE VERIFICATION] File exists: True
-2026-01-01 17:59:01 - src.translator.api - INFO - Job d9be72c3-797e-4b47-9ce8-4e0a403902c0: [FILE VERIFICATION] Read 129 bytes from file
-2026-01-01 17:59:01 - src.translator.api - INFO - Job d9be72c3-797e-4b47-9ce8-4e0a403902c0: [FILE VERIFICATION] Expected hash: 6c27678b169985646fa3b971e35c8042
-2026-01-01 17:59:01 - src.translator.api - INFO - Job d9be72c3-797e-4b47-9ce8-4e0a403902c0: [FILE VERIFICATION] Actual hash: 6c27678b169985646fa3b971e35c8042
-2026-01-01 17:59:01 - src.translator.api - INFO - Job d9be72c3-797e-4b47-9ce8-4e0a403902c0: [FILE VERIFICATION] First 100 bytes: b'\n\n2. OBJET DU BAIL\n\n\xe2\x98\x90 Appartement de ______ pi\xc3\xa8ces  \n\xe2\x98\x90 ______ chambre(s) meubl\xc3\xa9e(s)\n\nAdresse d'
-2026-01-01 17:59:01 - src.translator.api - INFO - Job d9be72c3-797e-4b47-9ce8-4e0a403902c0: [FILE VERIFICATION] Hash verified successfully
-2026-01-01 17:59:01 - src.translator.api - INFO - Job d9be72c3-797e-4b47-9ce8-4e0a403902c0: [FILE VERIFICATION] File: input_d9be72c3-797e-4b47-9ce8-4e0a403902c0_mb1by_oz.txt, Size: 129 bytes
-2026-01-01 17:59:01 - src.translator.api - INFO - Job d9be72c3-797e-4b47-9ce8-4e0a403902c0: Created isolated temp directory: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/translation_d9be72c3-797e-4b47-9ce8-4e0a403902c0_zngadh1j
-2026-01-01 17:59:01 - src.translator.api - INFO - Job d9be72c3-797e-4b47-9ce8-4e0a403902c0: Loading glossary from glossary/glossary.csv (file will be read fresh)
-INFO:     127.0.0.1:50810 - "GET /api/translate/d9be72c3-797e-4b47-9ce8-4e0a403902c0/status HTTP/1.1" 200 OK
-2026-01-01 17:59:01 - src.translator.api - INFO - Job d9be72c3-797e-4b47-9ce8-4e0a403902c0: Loaded glossary 'glossary' with 1352 entries
-2026-01-01 17:59:01 - src.translator.api - INFO - Job d9be72c3-797e-4b47-9ce8-4e0a403902c0: Using shared translation memory from /Users/enrico/workspace/translator/data/memory.json
-2026-01-01 17:59:01 - src.translator.api - INFO - Job d9be72c3-797e-4b47-9ce8-4e0a403902c0: Memory contains 0 existing records
-2026-01-01 17:59:01 - src.translator.api - INFO - Job d9be72c3-797e-4b47-9ce8-4e0a403902c0: Using custom prompt provided by user
-2026-01-01 17:59:01 - src.translator.api - INFO - Job d9be72c3-797e-4b47-9ce8-4e0a403902c0: [PRE-TRANSLATE] About to call translate_file_to_memory
-2026-01-01 17:59:01 - src.translator.api - INFO - Job d9be72c3-797e-4b47-9ce8-4e0a403902c0: [PRE-TRANSLATE] Input path: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_d9be72c3-797e-4b47-9ce8-4e0a403902c0_mb1by_oz.txt
-2026-01-01 17:59:01 - src.translator.api - INFO - Job d9be72c3-797e-4b47-9ce8-4e0a403902c0: [PRE-TRANSLATE] Input path absolute: /private/var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_d9be72c3-797e-4b47-9ce8-4e0a403902c0_mb1by_oz.txt
-2026-01-01 17:59:01 - src.translator.api - INFO - Job d9be72c3-797e-4b47-9ce8-4e0a403902c0: [PRE-TRANSLATE] Input file exists: True
-2026-01-01 17:59:01 - src.translator.api - INFO - Job d9be72c3-797e-4b47-9ce8-4e0a403902c0: [PRE-TRANSLATE] Final verification - Hash: 6c27678b169985646fa3b971e35c8042
-2026-01-01 17:59:01 - src.translator.api - INFO - Job d9be72c3-797e-4b47-9ce8-4e0a403902c0: [PRE-TRANSLATE] Expected hash: 6c27678b169985646fa3b971e35c8042
-2026-01-01 17:59:01 - src.translator.api - INFO - Job d9be72c3-797e-4b47-9ce8-4e0a403902c0: [PRE-TRANSLATE] File verified, calling translate_file_to_memory
-2026-01-01 17:59:01 - src.translator.api - INFO - Job d9be72c3-797e-4b47-9ce8-4e0a403902c0: [PRE-TRANSLATE] Source lang: fr, Target lang: it
-2026-01-01 17:59:01 - src.translator.api - INFO - Job d9be72c3-797e-4b47-9ce8-4e0a403902c0: Stored 3 original paragraphs
-2026-01-01 17:59:01 - src.translator.processing - INFO - [translate_file_to_memory] ===== STARTING SINGLE-SHOT TRANSLATION =====
-2026-01-01 17:59:01 - src.translator.processing - INFO - [translate_file_to_memory] Input path: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_d9be72c3-797e-4b47-9ce8-4e0a403902c0_mb1by_oz.txt
-2026-01-01 17:59:01 - src.translator.processing - INFO - [translate_file_to_memory] Absolute path: /private/var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_d9be72c3-797e-4b47-9ce8-4e0a403902c0_mb1by_oz.txt
-2026-01-01 17:59:01 - src.translator.processing - INFO - [translate_file_to_memory] File hash: 6c27678b169985646fa3b971e35c8042
-2026-01-01 17:59:01 - src.translator.processing - INFO - [translate_file_to_memory] File size: 129 bytes
-2026-01-01 17:59:01 - src.translator.processing - INFO - [translate_file_to_memory] Reading entire file as text...
-2026-01-01 17:59:01 - src.translator.processing - INFO - [_read_file_as_text] Reading entire file as text: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_d9be72c3-797e-4b47-9ce8-4e0a403902c0_mb1by_oz.txt
-2026-01-01 17:59:01 - src.translator.processing - INFO - [_read_file_as_text] File type: .txt
-2026-01-01 17:59:01 - src.translator.processing - INFO - [_read_file_as_text] File hash: 6c27678b169985646fa3b971e35c8042
-2026-01-01 17:59:01 - src.translator.processing - INFO - [_read_file_as_text] File size: 129 bytes
-2026-01-01 17:59:01 - src.translator.processing - INFO - [_read_file_as_text] Extracted text length: 121 characters
-2026-01-01 17:59:01 - src.translator.processing - INFO - [_read_file_as_text] First 200 chars: 
-
-2. OBJET DU BAIL
-
-☐ Appartement de ______ pièces  
-☐ ______ chambre(s) meublée(s)
-
-Adresse de l'immeuble: [À compléter]...
-2026-01-01 17:59:01 - src.translator.processing - INFO - [translate_file_to_memory] Looking up glossary matches...
-2026-01-01 17:59:01 - src.translator.processing - INFO - [translate_file_to_memory] Found 1 glossary matches (after filtering reference doc conflicts)
-2026-01-01 17:59:01 - src.translator.processing - INFO - [translate_file_to_memory] ===== STEP 1: CHECKING TRANSLATION MEMORY =====
-2026-01-01 17:59:01 - src.translator.processing - INFO - [translate_file_to_memory] Memory enabled (skip_memory=False), checking for existing translation...
-2026-01-01 17:59:01 - src.translator.processing - INFO - [translate_file_to_memory] Document length: 121 characters
-2026-01-01 17:59:01 - src.translator.processing - INFO - [translate_file_to_memory] ⚠️ STEP 1 RESULT: No memory matches found (threshold: 95%)
-2026-01-01 17:59:01 - src.translator.processing - INFO - [translate_file_to_memory] ⚠️ Will proceed to STEP 2: Query Claude API
-2026-01-01 17:59:01 - src.translator.processing - INFO - [translate_file_to_memory] Found 0 memory hits for Claude context (threshold: 80%)
-2026-01-01 17:59:01 - src.translator.processing - INFO - [translate_file_to_memory] ===== STEP 2: QUERYING CLAUDE API =====
-2026-01-01 17:59:01 - src.translator.processing - INFO - [translate_file_to_memory] Sending entire document to Claude API (single call)
-2026-01-01 17:59:01 - src.translator.processing - INFO - [translate_file_to_memory] Document length: 121 characters
-2026-01-01 17:59:01 - src.translator.processing - INFO - [translate_file_to_memory] Glossary matches: 1
-2026-01-01 17:59:01 - src.translator.processing - INFO - [translate_file_to_memory] Memory hits for context: 0
-2026-01-01 17:59:01 - src.translator.claude_client - INFO - ================================================================================
-2026-01-01 17:59:01 - src.translator.claude_client - INFO - 🚀 CLAUDE API REQUEST - ENTIRE DOCUMENT (SINGLE SHOT)
-2026-01-01 17:59:01 - src.translator.claude_client - INFO - ================================================================================
-2026-01-01 17:59:01 - src.translator.claude_client - INFO - Model: claude-sonnet-4-5-20250929
-2026-01-01 17:59:01 - src.translator.claude_client - INFO - Max tokens: 8192
-2026-01-01 17:59:01 - src.translator.claude_client - INFO - Document length: 121 characters
-2026-01-01 17:59:01 - src.translator.claude_client - INFO - Total prompt length: 12,018 characters (~3,004 tokens)
-2026-01-01 17:59:01 - src.translator.claude_client - INFO - Source language: fr -> Target language: it
-2026-01-01 17:59:01 - src.translator.claude_client - INFO - Glossary entries: 1
-2026-01-01 17:59:01 - src.translator.claude_client - INFO - Memory entries: 0
-2026-01-01 17:59:01 - src.translator.claude_client - INFO - --------------------------------------------------------------------------------
-2026-01-01 17:59:01 - src.translator.claude_client - INFO - 📝 DOCUMENT PREVIEW (first 500 chars):
-2026-01-01 17:59:01 - src.translator.claude_client - INFO - 
-
-2. OBJET DU BAIL
-
-☐ Appartement de ______ pièces  
-☐ ______ chambre(s) meublée(s)
-
-Adresse de l'immeuble: [À compléter]...
-2026-01-01 17:59:01 - src.translator.claude_client - INFO - --------------------------------------------------------------------------------
-2026-01-01 17:59:01 - src.translator.claude_client - INFO - ⏱️  Sending entire document to Claude API in single call...
-INFO:     127.0.0.1:50815 - "GET /api/translate/d9be72c3-797e-4b47-9ce8-4e0a403902c0/status HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50817 - "GET /api/translate/d9be72c3-797e-4b47-9ce8-4e0a403902c0/status HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50819 - "GET /api/translate/d9be72c3-797e-4b47-9ce8-4e0a403902c0/status HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50822 - "GET /api/translate/d9be72c3-797e-4b47-9ce8-4e0a403902c0/status HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50825 - "GET /api/translate/d9be72c3-797e-4b47-9ce8-4e0a403902c0/status HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50828 - "GET /api/translate/d9be72c3-797e-4b47-9ce8-4e0a403902c0/status HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50831 - "GET /api/translate/d9be72c3-797e-4b47-9ce8-4e0a403902c0/status HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50833 - "GET /api/translate/d9be72c3-797e-4b47-9ce8-4e0a403902c0/status HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50836 - "GET /api/translate/d9be72c3-797e-4b47-9ce8-4e0a403902c0/status HTTP/1.1" 200 OK
-2026-01-01 17:59:25 - httpx - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
-2026-01-01 17:59:25 - src.translator.claude_client - INFO - ================================================================================
-2026-01-01 17:59:25 - src.translator.claude_client - INFO - ✅ CLAUDE API RESPONSE RECEIVED
-2026-01-01 17:59:25 - src.translator.claude_client - INFO - ================================================================================
-2026-01-01 17:59:25 - src.translator.claude_client - INFO - ⏱️  Request duration: 24.05 seconds (0.40 minutes)
-2026-01-01 17:59:25 - src.translator.claude_client - INFO - 📊 Response length: 3,379 characters
-2026-01-01 17:59:25 - src.translator.claude_client - INFO - 📈 Token usage:
-2026-01-01 17:59:25 - src.translator.claude_client - INFO -   - Input tokens: 3820
-2026-01-01 17:59:25 - src.translator.claude_client - INFO -   - Output tokens: 1045
-2026-01-01 17:59:25 - src.translator.claude_client - INFO - 📝 TRANSLATION PREVIEW (first 500 chars):
-2026-01-01 17:59:25 - src.translator.claude_client - INFO - # TRADUZIONE
-
-## 2. OGGETTO DELLA LOCAZIONE
-
-☐ Stamberga di ______ locali  
-☐ ______ camera/e ammobiliata/e
-
-Indirizzo dell'immobile: [Da completare]
-
----
-
-## TABELLA COMPARATIVA
-
-| Originale | Traduzione | Spiegazione | Fonte |
-|-----------|------------|-------------|-------|
-| OBJET DU BAIL | OGGETTO DELLA LOCAZIONE | "Objet du bail" è formula standard nei contratti di locazione svizzeri. "Oggetto della locazione" è la resa italiana consolidata in ambito contrattuale svizzero, preferibile a "o...
-2026-01-01 17:59:25 - src.translator.claude_client - INFO - ================================================================================
-2026-01-01 17:59:25 - src.translator.processing - INFO - [translate_file_to_memory] ✅ STEP 2 RESULT: Claude API translation completed in 24.05s
-2026-01-01 17:59:25 - src.translator.processing - INFO - [translate_file_to_memory] Translated length: 3,379 characters
-2026-01-01 17:59:25 - src.translator.processing - INFO - [translate_file_to_memory] ===== STEP 3: STORING TRANSLATION IN MEMORY =====
-2026-01-01 17:59:25 - src.translator.processing - INFO - [translate_file_to_memory] Storing translation in memory for future use...
-2026-01-01 17:59:25 - src.translator.processing - INFO - [translate_file_to_memory] Source text length: 121 characters
-2026-01-01 17:59:25 - src.translator.processing - INFO - [translate_file_to_memory] Translated text length: 3,379 characters
-2026-01-01 17:59:25 - src.translator.processing - INFO - [translate_file_to_memory] ✅ STEP 3 RESULT: Translation stored in memory successfully
-2026-01-01 17:59:25 - src.translator.processing - INFO - [translate_file_to_memory] Memory file: /Users/enrico/workspace/translator/data/memory.json
-2026-01-01 17:59:25 - src.translator.processing - INFO - [translate_file_to_memory] Total records in memory: 1
-2026-01-01 17:59:25 - src.translator.processing - INFO - [translate_file_to_memory] Translation complete: 24.05s
-2026-01-01 17:59:25 - src.translator.processing - INFO - [translate_file_to_memory] Translated length: 3,379 characters
-2026-01-01 17:59:25 - src.translator.glossary_enricher - INFO - [apply_glossary_with_highlighting] Applying glossary: glossary
-2026-01-01 17:59:25 - src.translator.glossary_enricher - INFO - [apply_glossary_with_highlighting] Translated text length: 3379
-2026-01-01 17:59:26 - src.translator.glossary_enricher - INFO - [apply_glossary_with_highlighting] Applied 9 glossary terms
-2026-01-01 17:59:26 - src.translator.glossary_enricher - INFO - [apply_glossary_with_highlighting] Breakdown: 9 translation matches, 0 source replacements
-2026-01-01 17:59:26 - src.translator.processing - INFO - [translate_file_to_memory] Glossary enrichment: 9 terms highlighted (after filtering reference doc)
-2026-01-01 17:59:26 - src.translator.glossary_enricher - INFO - [apply_memory_with_highlighting] Applying translation memory
-2026-01-01 17:59:26 - src.translator.glossary_enricher - INFO - [apply_memory_with_highlighting] Translated text length: 3568
-2026-01-01 17:59:26 - src.translator.glossary_enricher - INFO - [apply_memory_with_highlighting] Found 1 memory records for fr->it
-2026-01-01 17:59:26 - src.translator.glossary_enricher - INFO - [apply_memory_with_highlighting] Applied 0 memory terms
-2026-01-01 17:59:26 - src.translator.processing - INFO - [translate_file_to_memory] Memory enrichment: 0 terms highlighted
-2026-01-01 17:59:26 - src.translator.processing - INFO - [translate_file_to_memory] Generating PDF from 3 source paragraphs and 18 translated paragraphs
-2026-01-01 17:59:26 - src.translator.pdf_writer - INFO - [write_pdf_to_bytes] Creating two-column layout with 3 source paragraphs and 18 translated paragraphs
-2026-01-01 17:59:26 - src.translator.processing - INFO - [translate_file_to_memory] PDF generated: 5,978 bytes
-2026-01-01 17:59:26 - src.translator.api - INFO - [TRANSLATION d9be72c3-797e-4b47-9ce8-4e0a403902c0] Translation complete
-2026-01-01 17:59:26 - src.translator.api - INFO - [TRANSLATION d9be72c3-797e-4b47-9ce8-4e0a403902c0] PDF generated in memory: 5,978 bytes
-2026-01-01 17:59:26 - src.translator.api - INFO - [TRANSLATION d9be72c3-797e-4b47-9ce8-4e0a403902c0] Original paragraphs: 3
-2026-01-01 17:59:26 - src.translator.api - INFO - [TRANSLATION d9be72c3-797e-4b47-9ce8-4e0a403902c0] Translated paragraphs: 18
-2026-01-01 17:59:26 - src.translator.api - INFO - [TRANSLATION d9be72c3-797e-4b47-9ce8-4e0a403902c0] Status updated to completed
-2026-01-01 17:59:26 - src.translator.api - INFO - [TRANSLATION d9be72c3-797e-4b47-9ce8-4e0a403902c0] Final job hash: 6c27678b169985646fa3b971e35c8042
-2026-01-01 17:59:26 - src.translator.api - INFO - [TRANSLATION d9be72c3-797e-4b47-9ce8-4e0a403902c0] ===== TRANSLATION COMPLETE =====
-2026-01-01 17:59:26 - src.translator.api - INFO - ================================================================================
-2026-01-01 17:59:26 - src.translator.api - INFO - Job d9be72c3-797e-4b47-9ce8-4e0a403902c0: Cleaned up input file
-INFO:     127.0.0.1:50838 - "GET /api/translate/d9be72c3-797e-4b47-9ce8-4e0a403902c0/status HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50840 - "GET /api/translate/d9be72c3-797e-4b47-9ce8-4e0a403902c0/report HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51023 - "GET /api/glossary/glossary/content HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51025 - "GET /api/glossary/glossary/content HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51032 - "GET /api/glossary/glossary/content HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51058 - "GET /api/glossary/glossary/content HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51070 - "GET /api/glossary/glossary/content HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51076 - "GET /api/glossary/glossary/content HTTP/1.1" 200 OK
-2026-01-01 18:14:57 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2026-01-01 18:14:57 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2026-01-01 18:14:57 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:51091 - "GET /api/prompt HTTP/1.1" 200 OK
-2026-01-01 18:14:57 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2026-01-01 18:14:57 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2026-01-01 18:14:57 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:51093 - "GET /api/prompt HTTP/1.1" 200 OK
-2026-01-01 18:15:03 - src.translator.api - INFO - Detected language: fr (prob: 1.00) -> fr
-INFO:     127.0.0.1:51096 - "POST /api/detect-language HTTP/1.1" 200 OK
-2026-01-01 18:15:08 - src.translator.api - INFO - ================================================================================
-2026-01-01 18:15:08 - src.translator.api - INFO - [REQUEST a1766fe1] ===== NEW TRANSLATION REQUEST =====
-2026-01-01 18:15:08 - src.translator.api - INFO - [REQUEST a1766fe1] Timestamp: 1767287708.288397
-2026-01-01 18:15:08 - src.translator.api - INFO - [REQUEST a1766fe1] File name: OBJET DU BAIL4.txt
-2026-01-01 18:15:08 - src.translator.api - INFO - [REQUEST a1766fe1] Source: fr -> Target: it
-2026-01-01 18:15:08 - src.translator.api - INFO - [REQUEST a1766fe1] File size: 129 bytes
-2026-01-01 18:15:08 - src.translator.api - INFO - [REQUEST a1766fe1] File hash: 6c27678b169985646fa3b971e35c8042
-2026-01-01 18:15:08 - src.translator.api - INFO - [REQUEST a1766fe1] First 200 bytes: b"\n\n2. OBJET DU BAIL\n\n\xe2\x98\x90 Appartement de ______ pi\xc3\xa8ces  \n\xe2\x98\x90 ______ chambre(s) meubl\xc3\xa9e(s)\n\nAdresse de l'immeuble: [\xc3\x80 compl\xc3\xa9ter]"
-2026-01-01 18:15:08 - src.translator.api - INFO - [REQUEST a1766fe1] Use glossary: True
-2026-01-01 18:15:08 - src.translator.api - INFO - [REQUEST a1766fe1] Using default glossary: glossary/glossary.csv
-2026-01-01 18:15:08 - src.translator.api - INFO - [REQUEST a1766fe1] Generated job_id: 63e4fb1c-e18a-41d2-b84d-f637c70f53ea
-2026-01-01 18:15:08 - src.translator.api - INFO - Job 63e4fb1c-e18a-41d2-b84d-f637c70f53ea: Created isolated input file: input_63e4fb1c-e18a-41d2-b84d-f637c70f53ea_1bumguld.txt
-2026-01-01 18:15:08 - src.translator.api - INFO - Job 63e4fb1c-e18a-41d2-b84d-f637c70f53ea: File hash: 6c27678b16998564...
-2026-01-01 18:15:08 - src.translator.api - INFO - [REQUEST a1766fe1] Job 63e4fb1c-e18a-41d2-b84d-f637c70f53ea stored in translation_jobs
-2026-01-01 18:15:08 - src.translator.api - INFO - [REQUEST a1766fe1] Total active jobs: 1
-2026-01-01 18:15:08 - src.translator.api - INFO - ================================================================================
-2026-01-01 18:15:08 - src.translator.api - INFO - [TRANSLATION 63e4fb1c-e18a-41d2-b84d-f637c70f53ea] ===== STARTING TRANSLATION THREAD =====
-2026-01-01 18:15:08 - src.translator.api - INFO - [REQUEST a1766fe1] Job 63e4fb1c-e18a-41d2-b84d-f637c70f53ea: Translation thread started
-2026-01-01 18:15:08 - src.translator.api - INFO - [TRANSLATION 63e4fb1c-e18a-41d2-b84d-f637c70f53ea] Job data from storage:
-2026-01-01 18:15:08 - src.translator.api - INFO - [REQUEST a1766fe1] ===== REQUEST PROCESSING COMPLETE =====
-2026-01-01 18:15:08 - src.translator.api - INFO - [TRANSLATION 63e4fb1c-e18a-41d2-b84d-f637c70f53ea]   - File hash: 6c27678b169985646fa3b971e35c8042
-2026-01-01 18:15:08 - src.translator.api - INFO - ================================================================================
-2026-01-01 18:15:08 - src.translator.api - INFO - [TRANSLATION 63e4fb1c-e18a-41d2-b84d-f637c70f53ea]   - Input path: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_63e4fb1c-e18a-41d2-b84d-f637c70f53ea_1bumguld.txt
-INFO:     127.0.0.1:51098 - "POST /api/translate HTTP/1.1" 202 Accepted
-2026-01-01 18:15:08 - src.translator.api - INFO - [TRANSLATION 63e4fb1c-e18a-41d2-b84d-f637c70f53ea]   - Source: fr -> Target: it
-2026-01-01 18:15:08 - src.translator.api - INFO - Job 63e4fb1c-e18a-41d2-b84d-f637c70f53ea: [FILE VERIFICATION] Opening file: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_63e4fb1c-e18a-41d2-b84d-f637c70f53ea_1bumguld.txt
-2026-01-01 18:15:08 - src.translator.api - INFO - Job 63e4fb1c-e18a-41d2-b84d-f637c70f53ea: [FILE VERIFICATION] File absolute path: /private/var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_63e4fb1c-e18a-41d2-b84d-f637c70f53ea_1bumguld.txt
-2026-01-01 18:15:08 - src.translator.api - INFO - Job 63e4fb1c-e18a-41d2-b84d-f637c70f53ea: [FILE VERIFICATION] File exists: True
-2026-01-01 18:15:08 - src.translator.api - INFO - Job 63e4fb1c-e18a-41d2-b84d-f637c70f53ea: [FILE VERIFICATION] Read 129 bytes from file
-2026-01-01 18:15:08 - src.translator.api - INFO - Job 63e4fb1c-e18a-41d2-b84d-f637c70f53ea: [FILE VERIFICATION] Expected hash: 6c27678b169985646fa3b971e35c8042
-2026-01-01 18:15:08 - src.translator.api - INFO - Job 63e4fb1c-e18a-41d2-b84d-f637c70f53ea: [FILE VERIFICATION] Actual hash: 6c27678b169985646fa3b971e35c8042
-2026-01-01 18:15:08 - src.translator.api - INFO - Job 63e4fb1c-e18a-41d2-b84d-f637c70f53ea: [FILE VERIFICATION] First 100 bytes: b'\n\n2. OBJET DU BAIL\n\n\xe2\x98\x90 Appartement de ______ pi\xc3\xa8ces  \n\xe2\x98\x90 ______ chambre(s) meubl\xc3\xa9e(s)\n\nAdresse d'
-2026-01-01 18:15:08 - src.translator.api - INFO - Job 63e4fb1c-e18a-41d2-b84d-f637c70f53ea: [FILE VERIFICATION] Hash verified successfully
-2026-01-01 18:15:08 - src.translator.api - INFO - Job 63e4fb1c-e18a-41d2-b84d-f637c70f53ea: [FILE VERIFICATION] File: input_63e4fb1c-e18a-41d2-b84d-f637c70f53ea_1bumguld.txt, Size: 129 bytes
-2026-01-01 18:15:08 - src.translator.api - INFO - Job 63e4fb1c-e18a-41d2-b84d-f637c70f53ea: Created isolated temp directory: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/translation_63e4fb1c-e18a-41d2-b84d-f637c70f53ea_a_87a3w6
-2026-01-01 18:15:08 - src.translator.api - INFO - Job 63e4fb1c-e18a-41d2-b84d-f637c70f53ea: Loading glossary from glossary/glossary.csv (file will be read fresh)
-INFO:     127.0.0.1:51100 - "GET /api/translate/63e4fb1c-e18a-41d2-b84d-f637c70f53ea/status HTTP/1.1" 200 OK
-2026-01-01 18:15:08 - src.translator.api - INFO - Job 63e4fb1c-e18a-41d2-b84d-f637c70f53ea: Loaded glossary 'glossary' with 1352 entries
-2026-01-01 18:15:08 - src.translator.api - INFO - Job 63e4fb1c-e18a-41d2-b84d-f637c70f53ea: Using shared translation memory from /Users/enrico/workspace/translator/data/memory.json
-2026-01-01 18:15:08 - src.translator.api - INFO - Job 63e4fb1c-e18a-41d2-b84d-f637c70f53ea: Memory contains 1 existing records
-2026-01-01 18:15:08 - src.translator.api - INFO - Job 63e4fb1c-e18a-41d2-b84d-f637c70f53ea: Using custom prompt provided by user
-2026-01-01 18:15:08 - src.translator.api - INFO - Job 63e4fb1c-e18a-41d2-b84d-f637c70f53ea: [PRE-TRANSLATE] About to call translate_file_to_memory
-2026-01-01 18:15:08 - src.translator.api - INFO - Job 63e4fb1c-e18a-41d2-b84d-f637c70f53ea: [PRE-TRANSLATE] Input path: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_63e4fb1c-e18a-41d2-b84d-f637c70f53ea_1bumguld.txt
-2026-01-01 18:15:08 - src.translator.api - INFO - Job 63e4fb1c-e18a-41d2-b84d-f637c70f53ea: [PRE-TRANSLATE] Input path absolute: /private/var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_63e4fb1c-e18a-41d2-b84d-f637c70f53ea_1bumguld.txt
-2026-01-01 18:15:08 - src.translator.api - INFO - Job 63e4fb1c-e18a-41d2-b84d-f637c70f53ea: [PRE-TRANSLATE] Input file exists: True
-2026-01-01 18:15:08 - src.translator.api - INFO - Job 63e4fb1c-e18a-41d2-b84d-f637c70f53ea: [PRE-TRANSLATE] Final verification - Hash: 6c27678b169985646fa3b971e35c8042
-2026-01-01 18:15:08 - src.translator.api - INFO - Job 63e4fb1c-e18a-41d2-b84d-f637c70f53ea: [PRE-TRANSLATE] Expected hash: 6c27678b169985646fa3b971e35c8042
-2026-01-01 18:15:08 - src.translator.api - INFO - Job 63e4fb1c-e18a-41d2-b84d-f637c70f53ea: [PRE-TRANSLATE] File verified, calling translate_file_to_memory
-2026-01-01 18:15:08 - src.translator.api - INFO - Job 63e4fb1c-e18a-41d2-b84d-f637c70f53ea: [PRE-TRANSLATE] Source lang: fr, Target lang: it
-2026-01-01 18:15:08 - src.translator.api - INFO - Job 63e4fb1c-e18a-41d2-b84d-f637c70f53ea: Stored 3 original paragraphs
-2026-01-01 18:15:08 - src.translator.processing - INFO - [translate_file_to_memory] ===== STARTING SINGLE-SHOT TRANSLATION =====
-2026-01-01 18:15:08 - src.translator.processing - INFO - [translate_file_to_memory] Input path: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_63e4fb1c-e18a-41d2-b84d-f637c70f53ea_1bumguld.txt
-2026-01-01 18:15:08 - src.translator.processing - INFO - [translate_file_to_memory] Absolute path: /private/var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_63e4fb1c-e18a-41d2-b84d-f637c70f53ea_1bumguld.txt
-2026-01-01 18:15:08 - src.translator.processing - INFO - [translate_file_to_memory] File hash: 6c27678b169985646fa3b971e35c8042
-2026-01-01 18:15:08 - src.translator.processing - INFO - [translate_file_to_memory] File size: 129 bytes
-2026-01-01 18:15:08 - src.translator.processing - INFO - [translate_file_to_memory] Reading entire file as text...
-2026-01-01 18:15:08 - src.translator.processing - INFO - [_read_file_as_text] Reading entire file as text: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_63e4fb1c-e18a-41d2-b84d-f637c70f53ea_1bumguld.txt
-2026-01-01 18:15:08 - src.translator.processing - INFO - [_read_file_as_text] File type: .txt
-2026-01-01 18:15:08 - src.translator.processing - INFO - [_read_file_as_text] File hash: 6c27678b169985646fa3b971e35c8042
-2026-01-01 18:15:08 - src.translator.processing - INFO - [_read_file_as_text] File size: 129 bytes
-2026-01-01 18:15:08 - src.translator.processing - INFO - [_read_file_as_text] Extracted text length: 121 characters
-2026-01-01 18:15:08 - src.translator.processing - INFO - [_read_file_as_text] First 200 chars: 
-
-2. OBJET DU BAIL
-
-☐ Appartement de ______ pièces  
-☐ ______ chambre(s) meublée(s)
-
-Adresse de l'immeuble: [À compléter]...
-2026-01-01 18:15:08 - src.translator.processing - INFO - [translate_file_to_memory] Looking up glossary matches...
-2026-01-01 18:15:08 - src.translator.processing - INFO - [translate_file_to_memory] Found 1 glossary matches (after filtering reference doc conflicts)
-2026-01-01 18:15:08 - src.translator.processing - INFO - [translate_file_to_memory] ===== STEP 1: CHECKING TRANSLATION MEMORY =====
-2026-01-01 18:15:08 - src.translator.processing - INFO - [translate_file_to_memory] Memory enabled (skip_memory=False), checking for existing translation...
-2026-01-01 18:15:08 - src.translator.processing - INFO - [translate_file_to_memory] Document length: 121 characters
-2026-01-01 18:15:08 - src.translator.processing - INFO - [translate_file_to_memory] Found memory match with similarity: 100.0%
-2026-01-01 18:15:08 - src.translator.processing - INFO - [translate_file_to_memory] Memory source preview: 2. OBJET DU BAIL
-
-☐ Appartement de ______ pièces  
-☐ ______ chambre(s) meublée(s)
-
-Adresse de l'immeuble: [À compléter]...
-2026-01-01 18:15:08 - src.translator.processing - INFO - [translate_file_to_memory] Memory translation preview: # TRADUZIONE
-
-## 2. OGGETTO DELLA LOCAZIONE
-
-☐ Stamberga di ______ locali  
-☐ ______ camera/e ammobiliata/e
-
-Indirizzo dell'immobile: [Da completare]
-...
-2026-01-01 18:15:08 - src.translator.processing - INFO - [translate_file_to_memory] ✅ STEP 1 RESULT: Using translation from memory (similarity: 100.0%)
-2026-01-01 18:15:08 - src.translator.processing - INFO - [translate_file_to_memory] ✅ No Claude API call needed - translation retrieved from memory
-2026-01-01 18:15:08 - src.translator.processing - INFO - [translate_file_to_memory] ===== STEP 2: SKIPPED (using memory translation) =====
-2026-01-01 18:15:08 - src.translator.processing - INFO - [translate_file_to_memory] No Claude API call needed - translation retrieved from memory
-2026-01-01 18:15:08 - src.translator.processing - INFO - [translate_file_to_memory] ===== STEP 3: SKIPPED (translation already in memory) =====
-2026-01-01 18:15:08 - src.translator.processing - INFO - [translate_file_to_memory] Translation already exists in memory, no need to store again
-2026-01-01 18:15:08 - src.translator.processing - INFO - [translate_file_to_memory] Translation complete: 0.10s
-2026-01-01 18:15:08 - src.translator.processing - INFO - [translate_file_to_memory] Translated length: 3,379 characters
-2026-01-01 18:15:08 - src.translator.glossary_enricher - INFO - [apply_glossary_with_highlighting] Applying glossary: glossary
-2026-01-01 18:15:08 - src.translator.glossary_enricher - INFO - [apply_glossary_with_highlighting] Translated text length: 3379
-2026-01-01 18:15:08 - src.translator.glossary_enricher - INFO - [apply_glossary_with_highlighting] Applied 9 glossary terms
-2026-01-01 18:15:08 - src.translator.glossary_enricher - INFO - [apply_glossary_with_highlighting] Breakdown: 9 translation matches, 0 source replacements
-2026-01-01 18:15:08 - src.translator.processing - INFO - [translate_file_to_memory] Glossary enrichment: 9 terms highlighted (after filtering reference doc)
-2026-01-01 18:15:08 - src.translator.glossary_enricher - INFO - [apply_memory_with_highlighting] Applying translation memory
-2026-01-01 18:15:08 - src.translator.glossary_enricher - INFO - [apply_memory_with_highlighting] Translated text length: 3568
-2026-01-01 18:15:08 - src.translator.glossary_enricher - INFO - [apply_memory_with_highlighting] Found 1 memory records for fr->it
-2026-01-01 18:15:08 - src.translator.glossary_enricher - INFO - [apply_memory_with_highlighting] Applied 0 memory terms
-2026-01-01 18:15:08 - src.translator.processing - INFO - [translate_file_to_memory] Memory enrichment: 0 terms highlighted
-2026-01-01 18:15:08 - src.translator.processing - INFO - [translate_file_to_memory] Generating PDF from 3 source paragraphs and 18 translated paragraphs
-2026-01-01 18:15:08 - src.translator.pdf_writer - INFO - [write_pdf_to_bytes] Creating two-column layout with 3 source paragraphs and 18 translated paragraphs
-2026-01-01 18:15:08 - src.translator.processing - INFO - [translate_file_to_memory] PDF generated: 5,978 bytes
-2026-01-01 18:15:08 - src.translator.api - INFO - [TRANSLATION 63e4fb1c-e18a-41d2-b84d-f637c70f53ea] Translation complete
-2026-01-01 18:15:08 - src.translator.api - INFO - [TRANSLATION 63e4fb1c-e18a-41d2-b84d-f637c70f53ea] PDF generated in memory: 5,978 bytes
-2026-01-01 18:15:08 - src.translator.api - INFO - [TRANSLATION 63e4fb1c-e18a-41d2-b84d-f637c70f53ea] Original paragraphs: 3
-2026-01-01 18:15:08 - src.translator.api - INFO - [TRANSLATION 63e4fb1c-e18a-41d2-b84d-f637c70f53ea] Translated paragraphs: 18
-2026-01-01 18:15:08 - src.translator.api - INFO - [TRANSLATION 63e4fb1c-e18a-41d2-b84d-f637c70f53ea] Status updated to completed
-2026-01-01 18:15:08 - src.translator.api - INFO - [TRANSLATION 63e4fb1c-e18a-41d2-b84d-f637c70f53ea] Final job hash: 6c27678b169985646fa3b971e35c8042
-2026-01-01 18:15:08 - src.translator.api - INFO - [TRANSLATION 63e4fb1c-e18a-41d2-b84d-f637c70f53ea] ===== TRANSLATION COMPLETE =====
-2026-01-01 18:15:08 - src.translator.api - INFO - ================================================================================
-2026-01-01 18:15:08 - src.translator.api - INFO - Job 63e4fb1c-e18a-41d2-b84d-f637c70f53ea: Cleaned up input file
-INFO:     127.0.0.1:51102 - "GET /api/translate/63e4fb1c-e18a-41d2-b84d-f637c70f53ea/status HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51105 - "GET /api/glossary/glossary/content HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51106 - "GET /api/translate/63e4fb1c-e18a-41d2-b84d-f637c70f53ea/report HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51108 - "GET /api/glossary/glossary/content HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51122 - "GET /api/glossary/glossary/content HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51124 - "GET /api/glossary/glossary/content HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51166 - "GET /api/glossary/glossary/content HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51168 - "GET /api/glossary/glossary/content HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51174 - "GET /api/glossary/glossary/content HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51227 - "GET /api/glossary/glossary/content HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51232 - "GET /api/glossary/glossary/content HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51235 - "GET /api/glossary/glossary/content HTTP/1.1" 200 OK
-2026-01-01 18:19:48 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2026-01-01 18:19:48 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2026-01-01 18:19:48 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:51241 - "GET /api/prompt HTTP/1.1" 200 OK
-2026-01-01 18:19:48 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2026-01-01 18:19:48 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2026-01-01 18:19:48 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:51242 - "GET /api/prompt HTTP/1.1" 200 OK
-2026-01-01 18:20:36 - src.translator.api - INFO - Detected language: fr (prob: 1.00) -> fr
-INFO:     127.0.0.1:51260 - "POST /api/detect-language HTTP/1.1" 200 OK
-2026-01-01 18:20:41 - src.translator.api - INFO - ================================================================================
-2026-01-01 18:20:41 - src.translator.api - INFO - [REQUEST 5fee8f5d] ===== NEW TRANSLATION REQUEST =====
-2026-01-01 18:20:41 - src.translator.api - INFO - [REQUEST 5fee8f5d] Timestamp: 1767288041.538263
-2026-01-01 18:20:41 - src.translator.api - INFO - [REQUEST 5fee8f5d] File name: OBJET DU BAIL4.txt
-2026-01-01 18:20:41 - src.translator.api - INFO - [REQUEST 5fee8f5d] Source: fr -> Target: it
-2026-01-01 18:20:41 - src.translator.api - INFO - [REQUEST 5fee8f5d] File size: 129 bytes
-2026-01-01 18:20:41 - src.translator.api - INFO - [REQUEST 5fee8f5d] File hash: 6c27678b169985646fa3b971e35c8042
-2026-01-01 18:20:41 - src.translator.api - INFO - [REQUEST 5fee8f5d] First 200 bytes: b"\n\n2. OBJET DU BAIL\n\n\xe2\x98\x90 Appartement de ______ pi\xc3\xa8ces  \n\xe2\x98\x90 ______ chambre(s) meubl\xc3\xa9e(s)\n\nAdresse de l'immeuble: [\xc3\x80 compl\xc3\xa9ter]"
-2026-01-01 18:20:41 - src.translator.api - INFO - [REQUEST 5fee8f5d] Use glossary: True
-2026-01-01 18:20:41 - src.translator.api - INFO - [REQUEST 5fee8f5d] Using default glossary: glossary/glossary.csv
-2026-01-01 18:20:41 - src.translator.api - INFO - [REQUEST 5fee8f5d] Generated job_id: fb34f777-2d79-45af-bdae-545b9ebf2820
-2026-01-01 18:20:41 - src.translator.api - INFO - Job fb34f777-2d79-45af-bdae-545b9ebf2820: Created isolated input file: input_fb34f777-2d79-45af-bdae-545b9ebf2820_9lkqpnj0.txt
-2026-01-01 18:20:41 - src.translator.api - INFO - Job fb34f777-2d79-45af-bdae-545b9ebf2820: File hash: 6c27678b16998564...
-2026-01-01 18:20:41 - src.translator.api - INFO - [REQUEST 5fee8f5d] Job fb34f777-2d79-45af-bdae-545b9ebf2820 stored in translation_jobs
-2026-01-01 18:20:41 - src.translator.api - INFO - [REQUEST 5fee8f5d] Total active jobs: 1
-2026-01-01 18:20:41 - src.translator.api - INFO - ================================================================================
-2026-01-01 18:20:41 - src.translator.api - INFO - [REQUEST 5fee8f5d] Job fb34f777-2d79-45af-bdae-545b9ebf2820: Translation thread started
-2026-01-01 18:20:41 - src.translator.api - INFO - [TRANSLATION fb34f777-2d79-45af-bdae-545b9ebf2820] ===== STARTING TRANSLATION THREAD =====
-2026-01-01 18:20:41 - src.translator.api - INFO - [REQUEST 5fee8f5d] ===== REQUEST PROCESSING COMPLETE =====
-2026-01-01 18:20:41 - src.translator.api - INFO - [TRANSLATION fb34f777-2d79-45af-bdae-545b9ebf2820] Job data from storage:
-2026-01-01 18:20:41 - src.translator.api - INFO - ================================================================================
-INFO:     127.0.0.1:51262 - "POST /api/translate HTTP/1.1" 202 Accepted
-2026-01-01 18:20:41 - src.translator.api - INFO - [TRANSLATION fb34f777-2d79-45af-bdae-545b9ebf2820]   - File hash: 6c27678b169985646fa3b971e35c8042
-2026-01-01 18:20:41 - src.translator.api - INFO - [TRANSLATION fb34f777-2d79-45af-bdae-545b9ebf2820]   - Input path: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_fb34f777-2d79-45af-bdae-545b9ebf2820_9lkqpnj0.txt
-2026-01-01 18:20:41 - src.translator.api - INFO - [TRANSLATION fb34f777-2d79-45af-bdae-545b9ebf2820]   - Source: fr -> Target: it
-2026-01-01 18:20:41 - src.translator.api - INFO - Job fb34f777-2d79-45af-bdae-545b9ebf2820: [FILE VERIFICATION] Opening file: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_fb34f777-2d79-45af-bdae-545b9ebf2820_9lkqpnj0.txt
-2026-01-01 18:20:41 - src.translator.api - INFO - Job fb34f777-2d79-45af-bdae-545b9ebf2820: [FILE VERIFICATION] File absolute path: /private/var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_fb34f777-2d79-45af-bdae-545b9ebf2820_9lkqpnj0.txt
-2026-01-01 18:20:41 - src.translator.api - INFO - Job fb34f777-2d79-45af-bdae-545b9ebf2820: [FILE VERIFICATION] File exists: True
-2026-01-01 18:20:41 - src.translator.api - INFO - Job fb34f777-2d79-45af-bdae-545b9ebf2820: [FILE VERIFICATION] Read 129 bytes from file
-2026-01-01 18:20:41 - src.translator.api - INFO - Job fb34f777-2d79-45af-bdae-545b9ebf2820: [FILE VERIFICATION] Expected hash: 6c27678b169985646fa3b971e35c8042
-2026-01-01 18:20:41 - src.translator.api - INFO - Job fb34f777-2d79-45af-bdae-545b9ebf2820: [FILE VERIFICATION] Actual hash: 6c27678b169985646fa3b971e35c8042
-2026-01-01 18:20:41 - src.translator.api - INFO - Job fb34f777-2d79-45af-bdae-545b9ebf2820: [FILE VERIFICATION] First 100 bytes: b'\n\n2. OBJET DU BAIL\n\n\xe2\x98\x90 Appartement de ______ pi\xc3\xa8ces  \n\xe2\x98\x90 ______ chambre(s) meubl\xc3\xa9e(s)\n\nAdresse d'
-2026-01-01 18:20:41 - src.translator.api - INFO - Job fb34f777-2d79-45af-bdae-545b9ebf2820: [FILE VERIFICATION] Hash verified successfully
-2026-01-01 18:20:41 - src.translator.api - INFO - Job fb34f777-2d79-45af-bdae-545b9ebf2820: [FILE VERIFICATION] File: input_fb34f777-2d79-45af-bdae-545b9ebf2820_9lkqpnj0.txt, Size: 129 bytes
-2026-01-01 18:20:41 - src.translator.api - INFO - Job fb34f777-2d79-45af-bdae-545b9ebf2820: Created isolated temp directory: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/translation_fb34f777-2d79-45af-bdae-545b9ebf2820__a92h493
-2026-01-01 18:20:41 - src.translator.api - INFO - Job fb34f777-2d79-45af-bdae-545b9ebf2820: Loading glossary from glossary/glossary.csv (file will be read fresh)
-2026-01-01 18:20:41 - src.translator.api - INFO - Job fb34f777-2d79-45af-bdae-545b9ebf2820: Loaded glossary 'glossary' with 1352 entries
-INFO:     127.0.0.1:51264 - "GET /api/translate/fb34f777-2d79-45af-bdae-545b9ebf2820/status HTTP/1.1" 200 OK
-2026-01-01 18:20:41 - src.translator.api - INFO - Job fb34f777-2d79-45af-bdae-545b9ebf2820: Using shared translation memory from /Users/enrico/workspace/translator/data/memory.json
-2026-01-01 18:20:41 - src.translator.api - INFO - Job fb34f777-2d79-45af-bdae-545b9ebf2820: Memory contains 1 existing records
-2026-01-01 18:20:41 - src.translator.api - INFO - Job fb34f777-2d79-45af-bdae-545b9ebf2820: Using custom prompt provided by user
-2026-01-01 18:20:41 - src.translator.api - INFO - Job fb34f777-2d79-45af-bdae-545b9ebf2820: [PRE-TRANSLATE] About to call translate_file_to_memory
-2026-01-01 18:20:41 - src.translator.api - INFO - Job fb34f777-2d79-45af-bdae-545b9ebf2820: [PRE-TRANSLATE] Input path: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_fb34f777-2d79-45af-bdae-545b9ebf2820_9lkqpnj0.txt
-2026-01-01 18:20:41 - src.translator.api - INFO - Job fb34f777-2d79-45af-bdae-545b9ebf2820: [PRE-TRANSLATE] Input path absolute: /private/var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_fb34f777-2d79-45af-bdae-545b9ebf2820_9lkqpnj0.txt
-2026-01-01 18:20:41 - src.translator.api - INFO - Job fb34f777-2d79-45af-bdae-545b9ebf2820: [PRE-TRANSLATE] Input file exists: True
-2026-01-01 18:20:41 - src.translator.api - INFO - Job fb34f777-2d79-45af-bdae-545b9ebf2820: [PRE-TRANSLATE] Final verification - Hash: 6c27678b169985646fa3b971e35c8042
-2026-01-01 18:20:41 - src.translator.api - INFO - Job fb34f777-2d79-45af-bdae-545b9ebf2820: [PRE-TRANSLATE] Expected hash: 6c27678b169985646fa3b971e35c8042
-2026-01-01 18:20:41 - src.translator.api - INFO - Job fb34f777-2d79-45af-bdae-545b9ebf2820: [PRE-TRANSLATE] File verified, calling translate_file_to_memory
-2026-01-01 18:20:41 - src.translator.api - INFO - Job fb34f777-2d79-45af-bdae-545b9ebf2820: [PRE-TRANSLATE] Source lang: fr, Target lang: it
-2026-01-01 18:20:41 - src.translator.api - INFO - Job fb34f777-2d79-45af-bdae-545b9ebf2820: Stored 3 original paragraphs
-2026-01-01 18:20:41 - src.translator.processing - INFO - [translate_file_to_memory] ===== STARTING SINGLE-SHOT TRANSLATION =====
-2026-01-01 18:20:41 - src.translator.processing - INFO - [translate_file_to_memory] Input path: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_fb34f777-2d79-45af-bdae-545b9ebf2820_9lkqpnj0.txt
-2026-01-01 18:20:41 - src.translator.processing - INFO - [translate_file_to_memory] Absolute path: /private/var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_fb34f777-2d79-45af-bdae-545b9ebf2820_9lkqpnj0.txt
-2026-01-01 18:20:41 - src.translator.processing - INFO - [translate_file_to_memory] File hash: 6c27678b169985646fa3b971e35c8042
-2026-01-01 18:20:41 - src.translator.processing - INFO - [translate_file_to_memory] File size: 129 bytes
-2026-01-01 18:20:41 - src.translator.processing - INFO - [translate_file_to_memory] Reading entire file as text...
-2026-01-01 18:20:41 - src.translator.processing - INFO - [_read_file_as_text] Reading entire file as text: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_fb34f777-2d79-45af-bdae-545b9ebf2820_9lkqpnj0.txt
-2026-01-01 18:20:41 - src.translator.processing - INFO - [_read_file_as_text] File type: .txt
-2026-01-01 18:20:41 - src.translator.processing - INFO - [_read_file_as_text] File hash: 6c27678b169985646fa3b971e35c8042
-2026-01-01 18:20:41 - src.translator.processing - INFO - [_read_file_as_text] File size: 129 bytes
-2026-01-01 18:20:41 - src.translator.processing - INFO - [_read_file_as_text] Extracted text length: 121 characters
-2026-01-01 18:20:41 - src.translator.processing - INFO - [_read_file_as_text] First 200 chars: 
-
-2. OBJET DU BAIL
-
-☐ Appartement de ______ pièces  
-☐ ______ chambre(s) meublée(s)
-
-Adresse de l'immeuble: [À compléter]...
-2026-01-01 18:20:41 - src.translator.processing - INFO - [translate_file_to_memory] Looking up glossary matches...
-2026-01-01 18:20:41 - src.translator.processing - INFO - [translate_file_to_memory] Found 1 glossary matches (after filtering reference doc conflicts)
-2026-01-01 18:20:41 - src.translator.processing - INFO - [translate_file_to_memory] ===== STEP 1: CHECKING TRANSLATION MEMORY =====
-2026-01-01 18:20:41 - src.translator.processing - INFO - [translate_file_to_memory] Memory enabled (skip_memory=False), checking for existing translation...
-2026-01-01 18:20:41 - src.translator.processing - INFO - [translate_file_to_memory] Document length: 121 characters
-2026-01-01 18:20:41 - src.translator.processing - INFO - [translate_file_to_memory] Found memory match with similarity: 100.0%
-2026-01-01 18:20:41 - src.translator.processing - INFO - [translate_file_to_memory] Memory source preview: 2. OBJET DU BAIL
-
-☐ Appartement de ______ pièces  
-☐ ______ chambre(s) meublée(s)
-
-Adresse de l'immeuble: [À compléter]...
-2026-01-01 18:20:41 - src.translator.processing - INFO - [translate_file_to_memory] Memory translation preview: # TRADUZIONE
-
-## 2. OGGETTO DELLA LOCAZIONE
-
-☐ Stamberga di ______ locali  
-☐ ______ camera/e ammobiliata/e
-
-Indirizzo dell'immobile: [Da completare]
-...
-2026-01-01 18:20:41 - src.translator.processing - INFO - [translate_file_to_memory] ✅ STEP 1 RESULT: Using translation from memory (similarity: 100.0%)
-2026-01-01 18:20:41 - src.translator.processing - INFO - [translate_file_to_memory] ✅ No Claude API call needed - translation retrieved from memory
-2026-01-01 18:20:41 - src.translator.processing - INFO - [translate_file_to_memory] ===== STEP 2: SKIPPED (using memory translation) =====
-2026-01-01 18:20:41 - src.translator.processing - INFO - [translate_file_to_memory] No Claude API call needed - translation retrieved from memory
-2026-01-01 18:20:41 - src.translator.processing - INFO - [translate_file_to_memory] ===== STEP 3: SKIPPED (translation already in memory) =====
-2026-01-01 18:20:41 - src.translator.processing - INFO - [translate_file_to_memory] Translation already exists in memory, no need to store again
-2026-01-01 18:20:41 - src.translator.processing - INFO - [translate_file_to_memory] Translation complete: 0.10s
-2026-01-01 18:20:41 - src.translator.processing - INFO - [translate_file_to_memory] Translated length: 3,379 characters
-2026-01-01 18:20:41 - src.translator.glossary_enricher - INFO - [apply_glossary_with_highlighting] Applying glossary: glossary
-2026-01-01 18:20:41 - src.translator.glossary_enricher - INFO - [apply_glossary_with_highlighting] Translated text length: 3379
-2026-01-01 18:20:41 - src.translator.glossary_enricher - INFO - [apply_glossary_with_highlighting] Applied 9 glossary terms
-2026-01-01 18:20:41 - src.translator.glossary_enricher - INFO - [apply_glossary_with_highlighting] Breakdown: 9 translation matches, 0 source replacements
-2026-01-01 18:20:41 - src.translator.processing - INFO - [translate_file_to_memory] Glossary enrichment: 9 terms highlighted (after filtering reference doc)
-2026-01-01 18:20:41 - src.translator.glossary_enricher - INFO - [apply_memory_with_highlighting] Applying translation memory
-2026-01-01 18:20:41 - src.translator.glossary_enricher - INFO - [apply_memory_with_highlighting] Translated text length: 3568
-2026-01-01 18:20:41 - src.translator.glossary_enricher - INFO - [apply_memory_with_highlighting] Found 1 memory records for fr->it
-2026-01-01 18:20:41 - src.translator.glossary_enricher - INFO - [apply_memory_with_highlighting] Applied 0 memory terms
-2026-01-01 18:20:41 - src.translator.processing - INFO - [translate_file_to_memory] Memory enrichment: 0 terms highlighted
-2026-01-01 18:20:41 - src.translator.processing - INFO - [translate_file_to_memory] Generating PDF from 3 source paragraphs and 18 translated paragraphs
-2026-01-01 18:20:41 - src.translator.pdf_writer - INFO - [write_pdf_to_bytes] Creating two-column layout with 3 source paragraphs and 18 translated paragraphs
-2026-01-01 18:20:41 - src.translator.processing - INFO - [translate_file_to_memory] PDF generated: 5,978 bytes
-2026-01-01 18:20:41 - src.translator.api - INFO - [TRANSLATION fb34f777-2d79-45af-bdae-545b9ebf2820] Translation complete
-2026-01-01 18:20:41 - src.translator.api - INFO - [TRANSLATION fb34f777-2d79-45af-bdae-545b9ebf2820] PDF generated in memory: 5,978 bytes
-2026-01-01 18:20:41 - src.translator.api - INFO - [TRANSLATION fb34f777-2d79-45af-bdae-545b9ebf2820] Original paragraphs: 3
-2026-01-01 18:20:41 - src.translator.api - INFO - [TRANSLATION fb34f777-2d79-45af-bdae-545b9ebf2820] Translated paragraphs: 18
-2026-01-01 18:20:41 - src.translator.api - INFO - [TRANSLATION fb34f777-2d79-45af-bdae-545b9ebf2820] Status updated to completed
-2026-01-01 18:20:41 - src.translator.api - INFO - [TRANSLATION fb34f777-2d79-45af-bdae-545b9ebf2820] Final job hash: 6c27678b169985646fa3b971e35c8042
-2026-01-01 18:20:41 - src.translator.api - INFO - [TRANSLATION fb34f777-2d79-45af-bdae-545b9ebf2820] ===== TRANSLATION COMPLETE =====
-2026-01-01 18:20:41 - src.translator.api - INFO - ================================================================================
-2026-01-01 18:20:41 - src.translator.api - INFO - Job fb34f777-2d79-45af-bdae-545b9ebf2820: Cleaned up input file
-INFO:     127.0.0.1:51266 - "GET /api/translate/fb34f777-2d79-45af-bdae-545b9ebf2820/status HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51269 - "GET /api/glossary/glossary/content HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51270 - "GET /api/translate/fb34f777-2d79-45af-bdae-545b9ebf2820/report HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51272 - "GET /api/glossary/glossary/content HTTP/1.1" 200 OK
-2026-01-01 18:21:18 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2026-01-01 18:21:18 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2026-01-01 18:21:18 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:51281 - "GET /api/prompt HTTP/1.1" 200 OK
-2026-01-01 18:21:18 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
-2026-01-01 18:21:18 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
-2026-01-01 18:21:18 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
-[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
-INFO:     127.0.0.1:51283 - "GET /api/prompt HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51285 - "GET /api/memory/content HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51402 - "GET /api/memory/content HTTP/1.1" 200 OK
-2026-01-01 18:25:12 - src.translator.api - INFO - Detected language: fr (prob: 1.00) -> fr
-INFO:     127.0.0.1:51409 - "POST /api/detect-language HTTP/1.1" 200 OK
-2026-01-01 18:25:15 - src.translator.api - INFO - ================================================================================
-2026-01-01 18:25:15 - src.translator.api - INFO - [REQUEST 2b6c3e7b] ===== NEW TRANSLATION REQUEST =====
-2026-01-01 18:25:15 - src.translator.api - INFO - [REQUEST 2b6c3e7b] Timestamp: 1767288315.990552
-2026-01-01 18:25:15 - src.translator.api - INFO - [REQUEST 2b6c3e7b] File name: OBJET DU BAIL4.txt
-2026-01-01 18:25:15 - src.translator.api - INFO - [REQUEST 2b6c3e7b] Source: fr -> Target: it
-2026-01-01 18:25:15 - src.translator.api - INFO - [REQUEST 2b6c3e7b] File size: 129 bytes
-2026-01-01 18:25:15 - src.translator.api - INFO - [REQUEST 2b6c3e7b] File hash: 6c27678b169985646fa3b971e35c8042
-2026-01-01 18:25:15 - src.translator.api - INFO - [REQUEST 2b6c3e7b] First 200 bytes: b"\n\n2. OBJET DU BAIL\n\n\xe2\x98\x90 Appartement de ______ pi\xc3\xa8ces  \n\xe2\x98\x90 ______ chambre(s) meubl\xc3\xa9e(s)\n\nAdresse de l'immeuble: [\xc3\x80 compl\xc3\xa9ter]"
-2026-01-01 18:25:15 - src.translator.api - INFO - [REQUEST 2b6c3e7b] Use glossary: True
-2026-01-01 18:25:15 - src.translator.api - INFO - [REQUEST 2b6c3e7b] Using default glossary: glossary/glossary.csv
-2026-01-01 18:25:15 - src.translator.api - INFO - [REQUEST 2b6c3e7b] Generated job_id: 8feef342-944f-4e8a-9c45-de6785637369
-2026-01-01 18:25:15 - src.translator.api - INFO - Job 8feef342-944f-4e8a-9c45-de6785637369: Created isolated input file: input_8feef342-944f-4e8a-9c45-de6785637369_wgq8wrqu.txt
-2026-01-01 18:25:15 - src.translator.api - INFO - Job 8feef342-944f-4e8a-9c45-de6785637369: File hash: 6c27678b16998564...
-2026-01-01 18:25:15 - src.translator.api - INFO - [REQUEST 2b6c3e7b] Job 8feef342-944f-4e8a-9c45-de6785637369 stored in translation_jobs
-2026-01-01 18:25:15 - src.translator.api - INFO - [REQUEST 2b6c3e7b] Total active jobs: 1
-2026-01-01 18:25:15 - src.translator.api - INFO - ================================================================================
-2026-01-01 18:25:15 - src.translator.api - INFO - [TRANSLATION 8feef342-944f-4e8a-9c45-de6785637369] ===== STARTING TRANSLATION THREAD =====
-2026-01-01 18:25:15 - src.translator.api - INFO - [TRANSLATION 8feef342-944f-4e8a-9c45-de6785637369] Job data from storage:
-2026-01-01 18:25:15 - src.translator.api - INFO - [TRANSLATION 8feef342-944f-4e8a-9c45-de6785637369]   - File hash: 6c27678b169985646fa3b971e35c8042
-2026-01-01 18:25:15 - src.translator.api - INFO - [TRANSLATION 8feef342-944f-4e8a-9c45-de6785637369]   - Input path: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_8feef342-944f-4e8a-9c45-de6785637369_wgq8wrqu.txt
-2026-01-01 18:25:15 - src.translator.api - INFO - [REQUEST 2b6c3e7b] Job 8feef342-944f-4e8a-9c45-de6785637369: Translation thread started
-2026-01-01 18:25:15 - src.translator.api - INFO - [TRANSLATION 8feef342-944f-4e8a-9c45-de6785637369]   - Source: fr -> Target: it
-2026-01-01 18:25:15 - src.translator.api - INFO - [REQUEST 2b6c3e7b] ===== REQUEST PROCESSING COMPLETE =====
-2026-01-01 18:25:15 - src.translator.api - INFO - ================================================================================
-INFO:     127.0.0.1:51412 - "POST /api/translate HTTP/1.1" 202 Accepted
-2026-01-01 18:25:15 - src.translator.api - INFO - Job 8feef342-944f-4e8a-9c45-de6785637369: [FILE VERIFICATION] Opening file: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_8feef342-944f-4e8a-9c45-de6785637369_wgq8wrqu.txt
-2026-01-01 18:25:15 - src.translator.api - INFO - Job 8feef342-944f-4e8a-9c45-de6785637369: [FILE VERIFICATION] File absolute path: /private/var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_8feef342-944f-4e8a-9c45-de6785637369_wgq8wrqu.txt
-2026-01-01 18:25:15 - src.translator.api - INFO - Job 8feef342-944f-4e8a-9c45-de6785637369: [FILE VERIFICATION] File exists: True
-2026-01-01 18:25:15 - src.translator.api - INFO - Job 8feef342-944f-4e8a-9c45-de6785637369: [FILE VERIFICATION] Read 129 bytes from file
-2026-01-01 18:25:15 - src.translator.api - INFO - Job 8feef342-944f-4e8a-9c45-de6785637369: [FILE VERIFICATION] Expected hash: 6c27678b169985646fa3b971e35c8042
-2026-01-01 18:25:15 - src.translator.api - INFO - Job 8feef342-944f-4e8a-9c45-de6785637369: [FILE VERIFICATION] Actual hash: 6c27678b169985646fa3b971e35c8042
-2026-01-01 18:25:15 - src.translator.api - INFO - Job 8feef342-944f-4e8a-9c45-de6785637369: [FILE VERIFICATION] First 100 bytes: b'\n\n2. OBJET DU BAIL\n\n\xe2\x98\x90 Appartement de ______ pi\xc3\xa8ces  \n\xe2\x98\x90 ______ chambre(s) meubl\xc3\xa9e(s)\n\nAdresse d'
-2026-01-01 18:25:15 - src.translator.api - INFO - Job 8feef342-944f-4e8a-9c45-de6785637369: [FILE VERIFICATION] Hash verified successfully
-2026-01-01 18:25:15 - src.translator.api - INFO - Job 8feef342-944f-4e8a-9c45-de6785637369: [FILE VERIFICATION] File: input_8feef342-944f-4e8a-9c45-de6785637369_wgq8wrqu.txt, Size: 129 bytes
-2026-01-01 18:25:15 - src.translator.api - INFO - Job 8feef342-944f-4e8a-9c45-de6785637369: Created isolated temp directory: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/translation_8feef342-944f-4e8a-9c45-de6785637369_0xwyk5xz
-2026-01-01 18:25:15 - src.translator.api - INFO - Job 8feef342-944f-4e8a-9c45-de6785637369: Loading glossary from glossary/glossary.csv (file will be read fresh)
-INFO:     127.0.0.1:51414 - "GET /api/translate/8feef342-944f-4e8a-9c45-de6785637369/status HTTP/1.1" 200 OK
-2026-01-01 18:25:16 - src.translator.api - INFO - Job 8feef342-944f-4e8a-9c45-de6785637369: Loaded glossary 'glossary' with 1352 entries
-2026-01-01 18:25:16 - src.translator.api - INFO - Job 8feef342-944f-4e8a-9c45-de6785637369: Using shared translation memory from /Users/enrico/workspace/translator/data/memory.json
-2026-01-01 18:25:16 - src.translator.api - INFO - Job 8feef342-944f-4e8a-9c45-de6785637369: Memory contains 1 existing records
-2026-01-01 18:25:16 - src.translator.api - INFO - Job 8feef342-944f-4e8a-9c45-de6785637369: Using custom prompt provided by user
-2026-01-01 18:25:16 - src.translator.api - INFO - Job 8feef342-944f-4e8a-9c45-de6785637369: [PRE-TRANSLATE] About to call translate_file_to_memory
-2026-01-01 18:25:16 - src.translator.api - INFO - Job 8feef342-944f-4e8a-9c45-de6785637369: [PRE-TRANSLATE] Input path: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_8feef342-944f-4e8a-9c45-de6785637369_wgq8wrqu.txt
-2026-01-01 18:25:16 - src.translator.api - INFO - Job 8feef342-944f-4e8a-9c45-de6785637369: [PRE-TRANSLATE] Input path absolute: /private/var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_8feef342-944f-4e8a-9c45-de6785637369_wgq8wrqu.txt
-2026-01-01 18:25:16 - src.translator.api - INFO - Job 8feef342-944f-4e8a-9c45-de6785637369: [PRE-TRANSLATE] Input file exists: True
-2026-01-01 18:25:16 - src.translator.api - INFO - Job 8feef342-944f-4e8a-9c45-de6785637369: [PRE-TRANSLATE] Final verification - Hash: 6c27678b169985646fa3b971e35c8042
-2026-01-01 18:25:16 - src.translator.api - INFO - Job 8feef342-944f-4e8a-9c45-de6785637369: [PRE-TRANSLATE] Expected hash: 6c27678b169985646fa3b971e35c8042
-2026-01-01 18:25:16 - src.translator.api - INFO - Job 8feef342-944f-4e8a-9c45-de6785637369: [PRE-TRANSLATE] File verified, calling translate_file_to_memory
-2026-01-01 18:25:16 - src.translator.api - INFO - Job 8feef342-944f-4e8a-9c45-de6785637369: [PRE-TRANSLATE] Source lang: fr, Target lang: it
-2026-01-01 18:25:16 - src.translator.api - INFO - Job 8feef342-944f-4e8a-9c45-de6785637369: Stored 3 original paragraphs
-2026-01-01 18:25:16 - src.translator.processing - INFO - [translate_file_to_memory] ===== STARTING SINGLE-SHOT TRANSLATION =====
-2026-01-01 18:25:16 - src.translator.processing - INFO - [translate_file_to_memory] Input path: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_8feef342-944f-4e8a-9c45-de6785637369_wgq8wrqu.txt
-2026-01-01 18:25:16 - src.translator.processing - INFO - [translate_file_to_memory] Absolute path: /private/var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_8feef342-944f-4e8a-9c45-de6785637369_wgq8wrqu.txt
-2026-01-01 18:25:16 - src.translator.processing - INFO - [translate_file_to_memory] File hash: 6c27678b169985646fa3b971e35c8042
-2026-01-01 18:25:16 - src.translator.processing - INFO - [translate_file_to_memory] File size: 129 bytes
-2026-01-01 18:25:16 - src.translator.processing - INFO - [translate_file_to_memory] Reading entire file as text...
-2026-01-01 18:25:16 - src.translator.processing - INFO - [_read_file_as_text] Reading entire file as text: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/input_8feef342-944f-4e8a-9c45-de6785637369_wgq8wrqu.txt
-2026-01-01 18:25:16 - src.translator.processing - INFO - [_read_file_as_text] File type: .txt
-2026-01-01 18:25:16 - src.translator.processing - INFO - [_read_file_as_text] File hash: 6c27678b169985646fa3b971e35c8042
-2026-01-01 18:25:16 - src.translator.processing - INFO - [_read_file_as_text] File size: 129 bytes
-2026-01-01 18:25:16 - src.translator.processing - INFO - [_read_file_as_text] Extracted text length: 121 characters
-2026-01-01 18:25:16 - src.translator.processing - INFO - [_read_file_as_text] First 200 chars: 
-
-2. OBJET DU BAIL
-
-☐ Appartement de ______ pièces  
-☐ ______ chambre(s) meublée(s)
-
-Adresse de l'immeuble: [À compléter]...
-2026-01-01 18:25:16 - src.translator.processing - INFO - [translate_file_to_memory] Looking up glossary matches...
-2026-01-01 18:25:16 - src.translator.processing - INFO - [translate_file_to_memory] Found 1 glossary matches (after filtering reference doc conflicts)
-2026-01-01 18:25:16 - src.translator.processing - INFO - [translate_file_to_memory] ===== STEP 1: CHECKING TRANSLATION MEMORY =====
-2026-01-01 18:25:16 - src.translator.processing - INFO - [translate_file_to_memory] Memory enabled (skip_memory=False), checking for existing translation...
-2026-01-01 18:25:16 - src.translator.processing - INFO - [translate_file_to_memory] Document length: 121 characters
-2026-01-01 18:25:16 - src.translator.processing - INFO - [translate_file_to_memory] Found memory match with similarity: 100.0%
-2026-01-01 18:25:16 - src.translator.processing - INFO - [translate_file_to_memory] Memory source preview: 2. OBJET DU BAIL
-
-☐ Appartement de ______ pièces  
-☐ ______ chambre(s) meublée(s)
-
-Adresse de l'immeuble: [À compléter]...
-2026-01-01 18:25:16 - src.translator.processing - INFO - [translate_file_to_memory] Memory translation preview: # TRADUZIONE
-
-## 2. OGGETTO DELLA LOCAZIONE
-
-☐ Stamberga di ______ locali  
-☐ ______ camera/e ammobiliata/e
-
-Indirizzo dell'immobile: [Da completare]
-...
-2026-01-01 18:25:16 - src.translator.processing - INFO - [translate_file_to_memory] ✅ STEP 1 RESULT: Using translation from memory (similarity: 100.0%)
-2026-01-01 18:25:16 - src.translator.processing - INFO - [translate_file_to_memory] ✅ No Claude API call needed - translation retrieved from memory
-2026-01-01 18:25:16 - src.translator.processing - INFO - [translate_file_to_memory] ===== STEP 2: SKIPPED (using memory translation) =====
-2026-01-01 18:25:16 - src.translator.processing - INFO - [translate_file_to_memory] No Claude API call needed - translation retrieved from memory
-2026-01-01 18:25:16 - src.translator.processing - INFO - [translate_file_to_memory] ===== STEP 3: SKIPPED (translation already in memory) =====
-2026-01-01 18:25:16 - src.translator.processing - INFO - [translate_file_to_memory] Translation already exists in memory, no need to store again
-2026-01-01 18:25:16 - src.translator.processing - INFO - [translate_file_to_memory] Translation complete: 0.10s
-2026-01-01 18:25:16 - src.translator.processing - INFO - [translate_file_to_memory] Translated length: 3,379 characters
-2026-01-01 18:25:16 - src.translator.glossary_enricher - INFO - [apply_glossary_with_highlighting] Applying glossary: glossary
-2026-01-01 18:25:16 - src.translator.glossary_enricher - INFO - [apply_glossary_with_highlighting] Translated text length: 3379
-2026-01-01 18:25:16 - src.translator.glossary_enricher - INFO - [apply_glossary_with_highlighting] Applied 9 glossary terms
-2026-01-01 18:25:16 - src.translator.glossary_enricher - INFO - [apply_glossary_with_highlighting] Breakdown: 9 translation matches, 0 source replacements
-2026-01-01 18:25:16 - src.translator.processing - INFO - [translate_file_to_memory] Glossary enrichment: 9 terms highlighted (after filtering reference doc)
-2026-01-01 18:25:16 - src.translator.glossary_enricher - INFO - [apply_memory_with_highlighting] Applying translation memory
-2026-01-01 18:25:16 - src.translator.glossary_enricher - INFO - [apply_memory_with_highlighting] Translated text length: 3568
-2026-01-01 18:25:16 - src.translator.glossary_enricher - INFO - [apply_memory_with_highlighting] Found 1 memory records for fr->it
-2026-01-01 18:25:16 - src.translator.glossary_enricher - INFO - [apply_memory_with_highlighting] Applied 0 memory terms
-2026-01-01 18:25:16 - src.translator.processing - INFO - [translate_file_to_memory] Memory enrichment: 0 terms highlighted
-2026-01-01 18:25:16 - src.translator.processing - INFO - [translate_file_to_memory] Generating PDF from 3 source paragraphs and 18 translated paragraphs
-2026-01-01 18:25:16 - src.translator.pdf_writer - INFO - [write_pdf_to_bytes] Creating two-column layout with 3 source paragraphs and 18 translated paragraphs
-2026-01-01 18:25:16 - src.translator.processing - INFO - [translate_file_to_memory] PDF generated: 5,978 bytes
-2026-01-01 18:25:16 - src.translator.api - INFO - [TRANSLATION 8feef342-944f-4e8a-9c45-de6785637369] Translation complete
-2026-01-01 18:25:16 - src.translator.api - INFO - [TRANSLATION 8feef342-944f-4e8a-9c45-de6785637369] PDF generated in memory: 5,978 bytes
-2026-01-01 18:25:16 - src.translator.api - INFO - [TRANSLATION 8feef342-944f-4e8a-9c45-de6785637369] Original paragraphs: 3
-2026-01-01 18:25:16 - src.translator.api - INFO - [TRANSLATION 8feef342-944f-4e8a-9c45-de6785637369] Translated paragraphs: 18
-2026-01-01 18:25:16 - src.translator.api - INFO - [TRANSLATION 8feef342-944f-4e8a-9c45-de6785637369] Status updated to completed
-2026-01-01 18:25:16 - src.translator.api - INFO - [TRANSLATION 8feef342-944f-4e8a-9c45-de6785637369] Final job hash: 6c27678b169985646fa3b971e35c8042
-2026-01-01 18:25:16 - src.translator.api - INFO - [TRANSLATION 8feef342-944f-4e8a-9c45-de6785637369] ===== TRANSLATION COMPLETE =====
-2026-01-01 18:25:16 - src.translator.api - INFO - ================================================================================
-2026-01-01 18:25:16 - src.translator.api - INFO - Job 8feef342-944f-4e8a-9c45-de6785637369: Cleaned up input file
-INFO:     127.0.0.1:51416 - "GET /api/translate/8feef342-944f-4e8a-9c45-de6785637369/status HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51419 - "GET /api/glossary/glossary/content HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51420 - "GET /api/translate/8feef342-944f-4e8a-9c45-de6785637369/report HTTP/1.1" 200 OK
-INFO:     127.0.0.1:51422 - "GET /api/glossary/glossary/content HTTP/1.1" 200 OK
-WARNING:  WatchFiles detected changes in 'src/translator/api.py'. Reloading...
+INFO:     127.0.0.1:59129 - "GET /api/prompt HTTP/1.1" 200 OK
+2026-01-03 18:07:11 - src.translator.api - INFO - Detected language: de (prob: 1.00) -> de
+INFO:     127.0.0.1:59137 - "POST /api/detect-language HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59161 - "GET /api/translate/streaming/status HTTP/1.1" 404 Not Found
+2026-01-03 18:07:31 - src.translator.api - INFO - [STREAM f4c76063-ef09-4974-abe4-55ed3d66046e] Starting streaming translation
+2026-01-03 18:07:31 - src.translator.processing - INFO - [_read_file_as_text] Reading entire file as text: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/tmpfv3shtjc.pdf
+2026-01-03 18:07:31 - src.translator.processing - INFO - [_read_file_as_text] File type: .pdf
+2026-01-03 18:07:31 - src.translator.processing - INFO - [_read_file_as_text] File hash: 5d8bac2b5f3b93e3a8a4d7373852e903
+2026-01-03 18:07:31 - src.translator.processing - INFO - [_read_file_as_text] File size: 187,007 bytes
+2026-01-03 18:07:31 - src.translator.processing - INFO - [_read_file_as_text] Extracted text length: 457 characters
+2026-01-03 18:07:31 - src.translator.processing - INFO - [_read_file_as_text] First 200 chars: Umsatzdetails
+www.commerzbank.de
+IBAN: DE49 1008 0000 0272 7699 00 | 0-Euro-Konto
+BIC: DRESDEFF100
+Kontowährung: EUR
+Kontoinhaber: Enrico Mariotti
+Buchungstag: 2024-09-06
+Umsatzart: Überweisung
+Erik I...
+2026-01-03 18:07:31 - src.translator.api - INFO - [STREAM 8ffabba2-32c7-49a3-8ff1-b4fe7f244e2c] Starting streaming translation
+2026-01-03 18:07:31 - src.translator.processing - INFO - [_read_file_as_text] Reading entire file as text: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/tmp2aqn4mq1.pdf
+2026-01-03 18:07:31 - src.translator.processing - INFO - [_read_file_as_text] File type: .pdf
+2026-01-03 18:07:31 - src.translator.processing - INFO - [_read_file_as_text] File hash: 5d8bac2b5f3b93e3a8a4d7373852e903
+2026-01-03 18:07:31 - src.translator.processing - INFO - [_read_file_as_text] File size: 187,007 bytes
+2026-01-03 18:07:31 - src.translator.processing - INFO - [_read_file_as_text] Extracted text length: 457 characters
+2026-01-03 18:07:31 - src.translator.processing - INFO - [_read_file_as_text] First 200 chars: Umsatzdetails
+www.commerzbank.de
+IBAN: DE49 1008 0000 0272 7699 00 | 0-Euro-Konto
+BIC: DRESDEFF100
+Kontowährung: EUR
+Kontoinhaber: Enrico Mariotti
+Buchungstag: 2024-09-06
+Umsatzart: Überweisung
+Erik I...
+INFO:     127.0.0.1:59158 - "POST /api/translate-stream HTTP/1.1" 200 OK
+2026-01-03 18:07:31 - src.translator.claude_client - INFO - ================================================================================
+2026-01-03 18:07:31 - src.translator.claude_client - INFO - 🔄 STREAMING CLAUDE API REQUEST
+2026-01-03 18:07:31 - src.translator.claude_client - INFO - ================================================================================
+2026-01-03 18:07:31 - src.translator.claude_client - INFO - 📊 Document details:
+2026-01-03 18:07:31 - src.translator.claude_client - INFO -   - Document length: 457 characters
+2026-01-03 18:07:31 - src.translator.claude_client - INFO -   - Source: de -> Target: it
+2026-01-03 18:07:31 - src.translator.claude_client - INFO -   - Glossary matches: 1
+2026-01-03 18:07:31 - src.translator.claude_client - INFO -   - Memory hits: 0
+2026-01-03 18:07:31 - src.translator.claude_client - INFO -   - Reference doc pairs: 0
+2026-01-03 18:07:31 - src.translator.claude_client - INFO - 📏 Prompt details:
+2026-01-03 18:07:31 - src.translator.claude_client - INFO -   - Total prompt length: 997 characters (~249 tokens)
+2026-01-03 18:07:31 - src.translator.claude_client - INFO - 🎯 Model: claude-sonnet-4-5-20250929
+2026-01-03 18:07:31 - src.translator.claude_client - INFO - ⏱️  Starting streaming translation...
+2026-01-03 18:07:31 - src.translator.claude_client - INFO - ================================================================================
+2026-01-03 18:07:33 - httpx - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:     127.0.0.1:59162 - "POST /api/translate-stream HTTP/1.1" 200 OK
+2026-01-03 18:07:33 - src.translator.claude_client - INFO - ================================================================================
+2026-01-03 18:07:33 - src.translator.claude_client - INFO - 🔄 STREAMING CLAUDE API REQUEST
+2026-01-03 18:07:33 - src.translator.claude_client - INFO - ================================================================================
+2026-01-03 18:07:33 - src.translator.claude_client - INFO - 📊 Document details:
+2026-01-03 18:07:33 - src.translator.claude_client - INFO -   - Document length: 457 characters
+2026-01-03 18:07:33 - src.translator.claude_client - INFO -   - Source: de -> Target: it
+2026-01-03 18:07:33 - src.translator.claude_client - INFO -   - Glossary matches: 1
+2026-01-03 18:07:33 - src.translator.claude_client - INFO -   - Memory hits: 0
+2026-01-03 18:07:33 - src.translator.claude_client - INFO -   - Reference doc pairs: 0
+2026-01-03 18:07:33 - src.translator.claude_client - INFO - 📏 Prompt details:
+2026-01-03 18:07:33 - src.translator.claude_client - INFO -   - Total prompt length: 997 characters (~249 tokens)
+2026-01-03 18:07:33 - src.translator.claude_client - INFO - 🎯 Model: claude-sonnet-4-5-20250929
+2026-01-03 18:07:33 - src.translator.claude_client - INFO - ⏱️  Starting streaming translation...
+2026-01-03 18:07:33 - src.translator.claude_client - INFO - ================================================================================
+2026-01-03 18:07:35 - httpx - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-01-03 18:07:38 - src.translator.claude_client - INFO - ================================================================================
+2026-01-03 18:07:38 - src.translator.claude_client - INFO - ✅ CLAUDE API STREAMING COMPLETED
+2026-01-03 18:07:38 - src.translator.claude_client - INFO - ================================================================================
+2026-01-03 18:07:38 - src.translator.claude_client - INFO - ⏱️  Total duration: 6.93 seconds
+2026-01-03 18:07:38 - src.translator.claude_client - INFO - ================================================================================
+2026-01-03 18:07:38 - src.translator.api - INFO - [STREAM f4c76063-ef09-4974-abe4-55ed3d66046e] Generating PDF...
+2026-01-03 18:07:38 - src.translator.api - INFO - [STREAM f4c76063-ef09-4974-abe4-55ed3d66046e] Using PyMuPDF to preserve PDF formatting
+2026-01-03 18:07:38 - src.translator.pdf_formatter - INFO - Translating PDF with formatting preservation
+2026-01-03 18:07:38 - src.translator.pdf_formatter - INFO - Input: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/tmpfv3shtjc.pdf
+2026-01-03 18:07:38 - src.translator.pdf_formatter - INFO - Output: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/tmp_8mtenac.pdf
+2026-01-03 18:07:38 - src.translator.pdf_formatter - INFO - Number of translated paragraphs: 2
+2026-01-03 18:07:38 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] Reading PDF: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/tmpfv3shtjc.pdf
+2026-01-03 18:07:38 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] Absolute path: /private/var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/tmpfv3shtjc.pdf
+2026-01-03 18:07:38 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] File hash: 5d8bac2b5f3b93e3a8a4d7373852e903
+2026-01-03 18:07:38 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] File size: 187,007 bytes
+2026-01-03 18:07:38 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] PDF opened, pages: 1
+2026-01-03 18:07:38 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] First page first chunk: Umsatzdetails
+www.commerzbank.de
+IBAN: DE49 1008 0000 0272 7699 00 | 0-Euro-Konto
+BIC: DRESDEFF100
+K...
+2026-01-03 18:07:38 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] Extracted 1 paragraphs
+2026-01-03 18:07:38 - src.translator.pdf_formatter - INFO - Extracted 1 original paragraphs from PDF
+2026-01-03 18:07:38 - src.translator.pdf_formatter - WARNING - Paragraph count mismatch: 1 original vs 2 translated
+2026-01-03 18:07:38 - src.translator.pdf_formatter - WARNING - Will attempt to map paragraphs by position
+2026-01-03 18:07:38 - src.translator.pdf_formatter - INFO - Opened PDF with 1 pages
+2026-01-03 18:07:38 - src.translator.pdf_formatter - INFO - Processing page 1
+2026-01-03 18:07:38 - src.translator.pdf_formatter - INFO - Page 1: Found 11 paragraph groups
+2026-01-03 18:07:38 - src.translator.pdf_formatter - INFO - Page 1: Starting with translation_idx=0, total translations=2
+2026-01-03 18:07:38 - src.translator.pdf_formatter - WARNING - Page 1: Ran out of translations at index 2
+2026-01-03 18:07:38 - src.translator.pdf_formatter - INFO - Page 1: Re-inserting 2 translated paragraphs
+2026-01-03 18:07:38 - src.translator.pdf_formatter - INFO - Page 1: Inserting translation 0: '# Traduzione in italiano...' (font: Arial, size: 14.0)
+2026-01-03 18:07:38 - src.translator.pdf_formatter - WARNING - Page 1: insert_textbox overflow (rc=-7.8), trying insert_text
+2026-01-03 18:07:38 - src.translator.pdf_formatter - INFO - Page 1: Successfully inserted text using insert_text
+2026-01-03 18:07:38 - src.translator.pdf_formatter - INFO - Page 1: Inserting translation 1: '## Dettagli della transazione
+www.commerzbank.de
+I...' (font: Arial Bold, size: 7.5)
+2026-01-03 18:07:38 - src.translator.pdf_formatter - WARNING - Page 1: insert_textbox overflow (rc=-148.0), trying insert_text
+2026-01-03 18:07:38 - src.translator.pdf_formatter - INFO - Page 1: Successfully inserted text using insert_text
+2026-01-03 18:07:38 - src.translator.pdf_formatter - INFO - Saved translated PDF with preserved formatting to /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/tmp_8mtenac.pdf
+2026-01-03 18:07:38 - src.translator.api - INFO - [STREAM f4c76063-ef09-4974-abe4-55ed3d66046e] PDF generated with formatting preservation: 192,504 bytes
+2026-01-03 18:07:38 - src.translator.api - INFO - [STREAM f4c76063-ef09-4974-abe4-55ed3d66046e] PDF stored for download
+2026-01-03 18:07:38 - src.translator.claude_client - INFO - ================================================================================
+2026-01-03 18:07:38 - src.translator.claude_client - INFO - ✅ CLAUDE API STREAMING COMPLETED
+2026-01-03 18:07:38 - src.translator.claude_client - INFO - ================================================================================
+2026-01-03 18:07:38 - src.translator.claude_client - INFO - ⏱️  Total duration: 4.93 seconds
+2026-01-03 18:07:38 - src.translator.claude_client - INFO - ================================================================================
+2026-01-03 18:07:38 - src.translator.api - INFO - [STREAM 8ffabba2-32c7-49a3-8ff1-b4fe7f244e2c] Generating PDF...
+2026-01-03 18:07:38 - src.translator.api - INFO - [STREAM 8ffabba2-32c7-49a3-8ff1-b4fe7f244e2c] Using PyMuPDF to preserve PDF formatting
+2026-01-03 18:07:38 - src.translator.pdf_formatter - INFO - Translating PDF with formatting preservation
+2026-01-03 18:07:38 - src.translator.pdf_formatter - INFO - Input: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/tmp2aqn4mq1.pdf
+2026-01-03 18:07:38 - src.translator.pdf_formatter - INFO - Output: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/tmpiuop3inu.pdf
+2026-01-03 18:07:38 - src.translator.pdf_formatter - INFO - Number of translated paragraphs: 2
+2026-01-03 18:07:38 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] Reading PDF: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/tmp2aqn4mq1.pdf
+2026-01-03 18:07:38 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] Absolute path: /private/var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/tmp2aqn4mq1.pdf
+2026-01-03 18:07:38 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] File hash: 5d8bac2b5f3b93e3a8a4d7373852e903
+2026-01-03 18:07:38 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] File size: 187,007 bytes
+2026-01-03 18:07:38 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] PDF opened, pages: 1
+2026-01-03 18:07:38 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] First page first chunk: Umsatzdetails
+www.commerzbank.de
+IBAN: DE49 1008 0000 0272 7699 00 | 0-Euro-Konto
+BIC: DRESDEFF100
+K...
+2026-01-03 18:07:38 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] Extracted 1 paragraphs
+2026-01-03 18:07:38 - src.translator.pdf_formatter - INFO - Extracted 1 original paragraphs from PDF
+2026-01-03 18:07:38 - src.translator.pdf_formatter - WARNING - Paragraph count mismatch: 1 original vs 2 translated
+2026-01-03 18:07:38 - src.translator.pdf_formatter - WARNING - Will attempt to map paragraphs by position
+2026-01-03 18:07:38 - src.translator.pdf_formatter - INFO - Opened PDF with 1 pages
+2026-01-03 18:07:38 - src.translator.pdf_formatter - INFO - Processing page 1
+2026-01-03 18:07:38 - src.translator.pdf_formatter - INFO - Page 1: Found 11 paragraph groups
+2026-01-03 18:07:38 - src.translator.pdf_formatter - INFO - Page 1: Starting with translation_idx=0, total translations=2
+2026-01-03 18:07:38 - src.translator.pdf_formatter - WARNING - Page 1: Ran out of translations at index 2
+2026-01-03 18:07:38 - src.translator.pdf_formatter - INFO - Page 1: Re-inserting 2 translated paragraphs
+2026-01-03 18:07:38 - src.translator.pdf_formatter - INFO - Page 1: Inserting translation 0: '# Traduzione in italiano...' (font: Arial, size: 14.0)
+2026-01-03 18:07:38 - src.translator.pdf_formatter - WARNING - Page 1: insert_textbox overflow (rc=-7.8), trying insert_text
+2026-01-03 18:07:38 - src.translator.pdf_formatter - INFO - Page 1: Successfully inserted text using insert_text
+2026-01-03 18:07:38 - src.translator.pdf_formatter - INFO - Page 1: Inserting translation 1: '## Dettagli della transazione
+www.commerzbank.de
+I...' (font: Arial Bold, size: 7.5)
+2026-01-03 18:07:38 - src.translator.pdf_formatter - WARNING - Page 1: insert_textbox overflow (rc=-148.0), trying insert_text
+2026-01-03 18:07:38 - src.translator.pdf_formatter - INFO - Page 1: Successfully inserted text using insert_text
+2026-01-03 18:07:38 - src.translator.pdf_formatter - INFO - Saved translated PDF with preserved formatting to /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/tmpiuop3inu.pdf
+2026-01-03 18:07:38 - src.translator.api - INFO - [STREAM 8ffabba2-32c7-49a3-8ff1-b4fe7f244e2c] PDF generated with formatting preservation: 192,504 bytes
+2026-01-03 18:07:38 - src.translator.api - INFO - [STREAM 8ffabba2-32c7-49a3-8ff1-b4fe7f244e2c] PDF stored for download
+INFO:     127.0.0.1:59173 - "GET /api/glossary/glossary/content HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59175 - "GET /api/glossary/glossary/content HTTP/1.1" 200 OK
+2026-01-03 18:07:45 - src.translator.api - INFO - [DOWNLOAD STREAM f4c76063-ef09-4974-abe4-55ed3d66046e] Serving PDF from memory: 192,504 bytes
+INFO:     127.0.0.1:59186 - "GET /api/translate-stream/f4c76063-ef09-4974-abe4-55ed3d66046e/download HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'src/translator/pdf_formatter.py'. Reloading...
 INFO:     Shutting down
 INFO:     Waiting for application shutdown.
 INFO:     Application shutdown complete.
-INFO:     Finished server process [61363]
-2026-01-01 18:52:53 - src.translator.api - INFO - Logging initialized. Log file: /Users/enrico/workspace/translator/logs/backend.log
-INFO:     Started server process [65410]
+INFO:     Finished server process [98549]
+2026-01-03 18:10:37 - src.translator.api - INFO - Logging initialized. Log file: /Users/enrico/workspace/translator/logs/backend.log
+INFO:     Started server process [99438]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
-WARNING:  WatchFiles detected changes in 'src/translator/api.py'. Reloading...
+WARNING:  WatchFiles detected changes in 'src/translator/pdf_formatter.py'. Reloading...
 INFO:     Shutting down
 INFO:     Waiting for application shutdown.
 INFO:     Application shutdown complete.
-INFO:     Finished server process [65410]
-2026-01-01 18:53:10 - src.translator.api - INFO - Logging initialized. Log file: /Users/enrico/workspace/translator/logs/backend.log
-INFO:     Started server process [65432]
+INFO:     Finished server process [99438]
+2026-01-03 18:10:51 - src.translator.api - INFO - Logging initialized. Log file: /Users/enrico/workspace/translator/logs/backend.log
+INFO:     Started server process [99448]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
-WARNING:  WatchFiles detected changes in 'src/translator/api.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [65432]
-2026-01-01 18:53:20 - src.translator.api - INFO - Logging initialized. Log file: /Users/enrico/workspace/translator/logs/backend.log
-INFO:     Started server process [65448]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [65448]
-INFO:     Stopping reloader process [61360]
+2026-01-03 18:53:02 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
+2026-01-03 18:53:02 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
+2026-01-03 18:53:02 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
+[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
+[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
+INFO:     127.0.0.1:62569 - "GET /api/prompt HTTP/1.1" 200 OK
+2026-01-03 18:53:02 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
+2026-01-03 18:53:02 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
+2026-01-03 18:53:02 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
+[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
+INFO:     127.0.0.1:62570 - "GET /api/prompt HTTP/1.1" 200 OK
+2026-01-03 18:53:14 - src.translator.api - INFO - Detected language: de (prob: 1.00) -> de
+INFO:     127.0.0.1:62582 - "POST /api/detect-language HTTP/1.1" 200 OK
+2026-01-03 18:53:23 - src.translator.api - INFO - [STREAM 43f09c7b-bda9-4cad-9131-2f4d1f20f3e9] Starting streaming translation
+2026-01-03 18:53:23 - src.translator.processing - INFO - [_read_file_as_text] Reading entire file as text: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/tmpsfgwkvts.pdf
+2026-01-03 18:53:23 - src.translator.processing - INFO - [_read_file_as_text] File type: .pdf
+2026-01-03 18:53:23 - src.translator.processing - INFO - [_read_file_as_text] File hash: 5d8bac2b5f3b93e3a8a4d7373852e903
+2026-01-03 18:53:23 - src.translator.processing - INFO - [_read_file_as_text] File size: 187,007 bytes
+2026-01-03 18:53:23 - src.translator.processing - INFO - [_read_file_as_text] Extracted text length: 457 characters
+2026-01-03 18:53:23 - src.translator.processing - INFO - [_read_file_as_text] First 200 chars: Umsatzdetails
+www.commerzbank.de
+IBAN: DE49 1008 0000 0272 7699 00 | 0-Euro-Konto
+BIC: DRESDEFF100
+Kontowährung: EUR
+Kontoinhaber: Enrico Mariotti
+Buchungstag: 2024-09-06
+Umsatzart: Überweisung
+Erik I...
+INFO:     127.0.0.1:62603 - "POST /api/translate-stream HTTP/1.1" 200 OK
+2026-01-03 18:53:23 - src.translator.claude_client - INFO - ================================================================================
+2026-01-03 18:53:23 - src.translator.claude_client - INFO - 🔄 STREAMING CLAUDE API REQUEST
+2026-01-03 18:53:23 - src.translator.claude_client - INFO - ================================================================================
+2026-01-03 18:53:23 - src.translator.claude_client - INFO - 📊 Document details:
+2026-01-03 18:53:23 - src.translator.claude_client - INFO -   - Document length: 457 characters
+2026-01-03 18:53:23 - src.translator.claude_client - INFO -   - Source: de -> Target: it
+2026-01-03 18:53:23 - src.translator.claude_client - INFO -   - Glossary matches: 1
+2026-01-03 18:53:23 - src.translator.claude_client - INFO -   - Memory hits: 0
+2026-01-03 18:53:23 - src.translator.claude_client - INFO -   - Reference doc pairs: 0
+2026-01-03 18:53:23 - src.translator.claude_client - INFO - 📏 Prompt details:
+2026-01-03 18:53:23 - src.translator.claude_client - INFO -   - Total prompt length: 12,364 characters (~3,091 tokens)
+2026-01-03 18:53:23 - src.translator.claude_client - INFO - 🎯 Model: claude-sonnet-4-5-20250929
+2026-01-03 18:53:23 - src.translator.claude_client - INFO - ⏱️  Starting streaming translation...
+2026-01-03 18:53:23 - src.translator.claude_client - INFO - ================================================================================
+2026-01-03 18:53:25 - httpx - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+INFO:     127.0.0.1:62606 - "GET /api/translate/streaming/status HTTP/1.1" 404 Not Found
+2026-01-03 18:53:26 - src.translator.api - INFO - [STREAM 58d308f7-58f9-4fee-86d0-7cff92af13b8] Starting streaming translation
+2026-01-03 18:53:26 - src.translator.processing - INFO - [_read_file_as_text] Reading entire file as text: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/tmphxwp7a06.pdf
+2026-01-03 18:53:26 - src.translator.processing - INFO - [_read_file_as_text] File type: .pdf
+2026-01-03 18:53:26 - src.translator.processing - INFO - [_read_file_as_text] File hash: 5d8bac2b5f3b93e3a8a4d7373852e903
+2026-01-03 18:53:26 - src.translator.processing - INFO - [_read_file_as_text] File size: 187,007 bytes
+2026-01-03 18:53:26 - src.translator.processing - INFO - [_read_file_as_text] Extracted text length: 457 characters
+2026-01-03 18:53:26 - src.translator.processing - INFO - [_read_file_as_text] First 200 chars: Umsatzdetails
+www.commerzbank.de
+IBAN: DE49 1008 0000 0272 7699 00 | 0-Euro-Konto
+BIC: DRESDEFF100
+Kontowährung: EUR
+Kontoinhaber: Enrico Mariotti
+Buchungstag: 2024-09-06
+Umsatzart: Überweisung
+Erik I...
+INFO:     127.0.0.1:62607 - "POST /api/translate-stream HTTP/1.1" 200 OK
+2026-01-03 18:53:26 - src.translator.claude_client - INFO - ================================================================================
+2026-01-03 18:53:26 - src.translator.claude_client - INFO - 🔄 STREAMING CLAUDE API REQUEST
+2026-01-03 18:53:26 - src.translator.claude_client - INFO - ================================================================================
+2026-01-03 18:53:26 - src.translator.claude_client - INFO - 📊 Document details:
+2026-01-03 18:53:26 - src.translator.claude_client - INFO -   - Document length: 457 characters
+2026-01-03 18:53:26 - src.translator.claude_client - INFO -   - Source: de -> Target: it
+2026-01-03 18:53:26 - src.translator.claude_client - INFO -   - Glossary matches: 1
+2026-01-03 18:53:26 - src.translator.claude_client - INFO -   - Memory hits: 0
+2026-01-03 18:53:26 - src.translator.claude_client - INFO -   - Reference doc pairs: 0
+2026-01-03 18:53:26 - src.translator.claude_client - INFO - 📏 Prompt details:
+2026-01-03 18:53:26 - src.translator.claude_client - INFO -   - Total prompt length: 12,364 characters (~3,091 tokens)
+2026-01-03 18:53:26 - src.translator.claude_client - INFO - 🎯 Model: claude-sonnet-4-5-20250929
+2026-01-03 18:53:26 - src.translator.claude_client - INFO - ⏱️  Starting streaming translation...
+2026-01-03 18:53:26 - src.translator.claude_client - INFO - ================================================================================
+2026-01-03 18:53:28 - httpx - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-01-03 18:53:56 - src.translator.claude_client - INFO - ================================================================================
+2026-01-03 18:53:56 - src.translator.claude_client - INFO - ✅ CLAUDE API STREAMING COMPLETED
+2026-01-03 18:53:56 - src.translator.claude_client - INFO - ================================================================================
+2026-01-03 18:53:56 - src.translator.claude_client - INFO - ⏱️  Total duration: 33.09 seconds
+2026-01-03 18:53:56 - src.translator.claude_client - INFO - ================================================================================
+2026-01-03 18:53:56 - src.translator.api - INFO - [STREAM 43f09c7b-bda9-4cad-9131-2f4d1f20f3e9] Generating PDF...
+2026-01-03 18:53:56 - src.translator.api - INFO - [STREAM 43f09c7b-bda9-4cad-9131-2f4d1f20f3e9] Using PyMuPDF to preserve PDF formatting
+2026-01-03 18:53:56 - src.translator.pdf_formatter - INFO - Translating PDF with formatting preservation
+2026-01-03 18:53:56 - src.translator.pdf_formatter - INFO - Input: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/tmpsfgwkvts.pdf
+2026-01-03 18:53:56 - src.translator.pdf_formatter - INFO - Output: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/tmpgnnjb_xf.pdf
+2026-01-03 18:53:56 - src.translator.pdf_formatter - INFO - Number of translated paragraphs: 18
+2026-01-03 18:53:56 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] Reading PDF: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/tmpsfgwkvts.pdf
+2026-01-03 18:53:56 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] Absolute path: /private/var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/tmpsfgwkvts.pdf
+2026-01-03 18:53:56 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] File hash: 5d8bac2b5f3b93e3a8a4d7373852e903
+2026-01-03 18:53:56 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] File size: 187,007 bytes
+2026-01-03 18:53:56 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] PDF opened, pages: 1
+2026-01-03 18:53:56 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] First page first chunk: Umsatzdetails
+www.commerzbank.de
+IBAN: DE49 1008 0000 0272 7699 00 | 0-Euro-Konto
+BIC: DRESDEFF100
+K...
+2026-01-03 18:53:56 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] Extracted 1 paragraphs
+2026-01-03 18:53:56 - src.translator.pdf_formatter - INFO - Extracted 1 original paragraphs from PDF
+2026-01-03 18:53:56 - src.translator.pdf_formatter - WARNING - Paragraph count mismatch: 1 original vs 18 translated
+2026-01-03 18:53:56 - src.translator.pdf_formatter - WARNING - Will attempt to map paragraphs by position
+2026-01-03 18:53:56 - src.translator.pdf_formatter - INFO - Opened PDF with 1 pages
+2026-01-03 18:53:56 - src.translator.pdf_formatter - INFO - Processing page 1
+2026-01-03 18:53:56 - src.translator.pdf_formatter - INFO - Page 1: Found 11 paragraph groups
+2026-01-03 18:53:56 - src.translator.pdf_formatter - INFO - Page 1: Starting with translation_idx=0, total translations=18
+2026-01-03 18:53:56 - src.translator.pdf_formatter - INFO - Page 1: Redacting all text spans to remove original text
+2026-01-03 18:53:56 - src.translator.pdf_formatter - INFO - Page 1: Will replace 11 paragraphs with translations
+2026-01-03 18:53:56 - src.translator.pdf_formatter - INFO - Page 1: Re-inserting 11 translated paragraphs
+2026-01-03 18:53:56 - src.translator.pdf_formatter - INFO - Page 1: Inserting translation 0: '# TRADUZIONE...' (font: Arial, size: 14.0)
+2026-01-03 18:53:56 - src.translator.pdf_formatter - WARNING - Page 1: insert_textbox overflow (rc=-7.8), trying insert_text
+2026-01-03 18:53:56 - src.translator.pdf_formatter - INFO - Page 1: Successfully inserted text using insert_text
+2026-01-03 18:53:56 - src.translator.pdf_formatter - INFO - Page 1: Inserting translation 1: '## Testo tradotto...' (font: Arial Bold, size: 7.5)
+2026-01-03 18:53:56 - src.translator.pdf_formatter - WARNING - Page 1: insert_textbox overflow (rc=-3.4), trying insert_text
+2026-01-03 18:53:56 - src.translator.pdf_formatter - INFO - Page 1: Successfully inserted text using insert_text
+2026-01-03 18:53:56 - src.translator.pdf_formatter - INFO - Page 1: Inserting translation 2: '**Dettagli delle transazioni**  
+www.commerzbank.d...' (font: Arial Bold, size: 7.5)
+2026-01-03 18:53:56 - src.translator.pdf_formatter - WARNING - Page 1: insert_textbox overflow (rc=-189.6), trying insert_text
+2026-01-03 18:53:56 - src.translator.pdf_formatter - INFO - Page 1: Successfully inserted text using insert_text
+2026-01-03 18:53:56 - src.translator.pdf_formatter - INFO - Page 1: Inserting translation 3: '---...' (font: Arial, size: 7.5)
+2026-01-03 18:53:56 - src.translator.pdf_formatter - WARNING - Page 1: insert_textbox overflow (rc=-3.6), trying insert_text
+2026-01-03 18:53:56 - src.translator.pdf_formatter - INFO - Page 1: Successfully inserted text using insert_text
+2026-01-03 18:53:56 - src.translator.pdf_formatter - INFO - Page 1: Inserting translation 4: '## TABELLA COMPARATIVA E NOTE...' (font: Arial, size: 7.5)
+2026-01-03 18:53:56 - src.translator.pdf_formatter - WARNING - Page 1: insert_textbox overflow (rc=-3.6), trying insert_text
+2026-01-03 18:53:56 - src.translator.pdf_formatter - INFO - Page 1: Successfully inserted text using insert_text
+2026-01-03 18:53:56 - src.translator.pdf_formatter - INFO - Page 1: Inserting translation 5: '| **Originale (DE)** | **Traduzione (IT)** | **Spi...' (font: Arial, size: 7.5)
+2026-01-03 18:53:56 - src.translator.pdf_formatter - WARNING - Page 1: insert_textbox overflow (rc=-488.0), trying insert_text
+2026-01-03 18:53:56 - src.translator.pdf_formatter - INFO - Page 1: Successfully inserted text using insert_text
+2026-01-03 18:53:56 - src.translator.pdf_formatter - INFO - Page 1: Inserting translation 6: '---...' (font: Arial, size: 7.5)
+2026-01-03 18:53:56 - src.translator.pdf_formatter - WARNING - Page 1: insert_textbox overflow (rc=-2.6), trying insert_text
+2026-01-03 18:53:56 - src.translator.pdf_formatter - INFO - Page 1: Successfully inserted text using insert_text
+2026-01-03 18:53:56 - src.translator.pdf_formatter - INFO - Page 1: Inserting translation 7: '## NOTE METODOLOGICHE E CONTESTUALI...' (font: Arial, size: 7.5)
+2026-01-03 18:53:56 - src.translator.pdf_formatter - INFO - Page 1: Successfully inserted text using insert_textbox (rc=5.5)
+2026-01-03 18:53:56 - src.translator.pdf_formatter - INFO - Page 1: Inserting translation 8: '### 1. **Natura del documento**
+Questo è un **estr...' (font: Arial, size: 7.5)
+2026-01-03 18:53:56 - src.translator.pdf_formatter - WARNING - Page 1: insert_textbox overflow (rc=-105.2), trying insert_text
+2026-01-03 18:53:56 - src.translator.pdf_formatter - INFO - Page 1: Successfully inserted text using insert_text
+2026-01-03 18:53:56 - src.translator.pdf_formatter - INFO - Page 1: Inserting translation 9: '### 2. **Scelte terminologiche bancarie**
+La termi...' (font: Arial Bold, size: 7.5)
+2026-01-03 18:53:56 - src.translator.pdf_formatter - WARNING - Page 1: insert_textbox overflow (rc=-96.6), trying insert_text
+2026-01-03 18:53:56 - src.translator.pdf_formatter - INFO - Page 1: Successfully inserted text using insert_text
+2026-01-03 18:53:56 - src.translator.pdf_formatter - INFO - Page 1: Inserting translation 10: '### 3. **Elemento di incertezza: "Adresse Baustell...' (font: Arial, size: 6.0)
+2026-01-03 18:53:56 - src.translator.pdf_formatter - WARNING - Page 1: insert_textbox overflow (rc=-1528.6), trying insert_text
+2026-01-03 18:53:56 - src.translator.pdf_formatter - INFO - Page 1: Successfully inserted text using insert_text
+2026-01-03 18:53:56 - src.translator.pdf_formatter - INFO - Saved translated PDF with preserved formatting to /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/tmpgnnjb_xf.pdf
+2026-01-03 18:53:56 - src.translator.api - INFO - [STREAM 43f09c7b-bda9-4cad-9131-2f4d1f20f3e9] PDF generated with formatting preservation: 203,253 bytes
+2026-01-03 18:53:56 - src.translator.api - INFO - [STREAM 43f09c7b-bda9-4cad-9131-2f4d1f20f3e9] PDF stored for download
+INFO:     127.0.0.1:62673 - "GET /api/glossary/glossary/content HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62675 - "GET /api/glossary/glossary/content HTTP/1.1" 200 OK
+2026-01-03 18:54:01 - src.translator.claude_client - INFO - ================================================================================
+2026-01-03 18:54:01 - src.translator.claude_client - INFO - ✅ CLAUDE API STREAMING COMPLETED
+2026-01-03 18:54:01 - src.translator.claude_client - INFO - ================================================================================
+2026-01-03 18:54:01 - src.translator.claude_client - INFO - ⏱️  Total duration: 35.51 seconds
+2026-01-03 18:54:01 - src.translator.claude_client - INFO - ================================================================================
+2026-01-03 18:54:01 - src.translator.api - INFO - [STREAM 58d308f7-58f9-4fee-86d0-7cff92af13b8] Generating PDF...
+2026-01-03 18:54:01 - src.translator.api - INFO - [STREAM 58d308f7-58f9-4fee-86d0-7cff92af13b8] Using PyMuPDF to preserve PDF formatting
+2026-01-03 18:54:01 - src.translator.pdf_formatter - INFO - Translating PDF with formatting preservation
+2026-01-03 18:54:01 - src.translator.pdf_formatter - INFO - Input: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/tmphxwp7a06.pdf
+2026-01-03 18:54:01 - src.translator.pdf_formatter - INFO - Output: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/tmppig1x8jc.pdf
+2026-01-03 18:54:01 - src.translator.pdf_formatter - INFO - Number of translated paragraphs: 18
+2026-01-03 18:54:01 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] Reading PDF: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/tmphxwp7a06.pdf
+2026-01-03 18:54:01 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] Absolute path: /private/var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/tmphxwp7a06.pdf
+2026-01-03 18:54:01 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] File hash: 5d8bac2b5f3b93e3a8a4d7373852e903
+2026-01-03 18:54:01 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] File size: 187,007 bytes
+2026-01-03 18:54:01 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] PDF opened, pages: 1
+2026-01-03 18:54:01 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] First page first chunk: Umsatzdetails
+www.commerzbank.de
+IBAN: DE49 1008 0000 0272 7699 00 | 0-Euro-Konto
+BIC: DRESDEFF100
+K...
+2026-01-03 18:54:01 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] Extracted 1 paragraphs
+2026-01-03 18:54:01 - src.translator.pdf_formatter - INFO - Extracted 1 original paragraphs from PDF
+2026-01-03 18:54:01 - src.translator.pdf_formatter - WARNING - Paragraph count mismatch: 1 original vs 18 translated
+2026-01-03 18:54:01 - src.translator.pdf_formatter - WARNING - Will attempt to map paragraphs by position
+2026-01-03 18:54:01 - src.translator.pdf_formatter - INFO - Opened PDF with 1 pages
+2026-01-03 18:54:01 - src.translator.pdf_formatter - INFO - Processing page 1
+2026-01-03 18:54:01 - src.translator.pdf_formatter - INFO - Page 1: Found 11 paragraph groups
+2026-01-03 18:54:01 - src.translator.pdf_formatter - INFO - Page 1: Starting with translation_idx=0, total translations=18
+2026-01-03 18:54:01 - src.translator.pdf_formatter - INFO - Page 1: Redacting all text spans to remove original text
+2026-01-03 18:54:01 - src.translator.pdf_formatter - INFO - Page 1: Will replace 11 paragraphs with translations
+2026-01-03 18:54:01 - src.translator.pdf_formatter - INFO - Page 1: Re-inserting 11 translated paragraphs
+2026-01-03 18:54:01 - src.translator.pdf_formatter - INFO - Page 1: Inserting translation 0: '# TRADUZIONE...' (font: Arial, size: 14.0)
+2026-01-03 18:54:01 - src.translator.pdf_formatter - WARNING - Page 1: insert_textbox overflow (rc=-7.8), trying insert_text
+2026-01-03 18:54:01 - src.translator.pdf_formatter - INFO - Page 1: Successfully inserted text using insert_text
+2026-01-03 18:54:01 - src.translator.pdf_formatter - INFO - Page 1: Inserting translation 1: '## Testo tradotto...' (font: Arial Bold, size: 7.5)
+2026-01-03 18:54:01 - src.translator.pdf_formatter - WARNING - Page 1: insert_textbox overflow (rc=-3.4), trying insert_text
+2026-01-03 18:54:01 - src.translator.pdf_formatter - INFO - Page 1: Successfully inserted text using insert_text
+2026-01-03 18:54:01 - src.translator.pdf_formatter - INFO - Page 1: Inserting translation 2: '**Dettagli delle transazioni**  
+www.commerzbank.d...' (font: Arial Bold, size: 7.5)
+2026-01-03 18:54:01 - src.translator.pdf_formatter - WARNING - Page 1: insert_textbox overflow (rc=-189.6), trying insert_text
+2026-01-03 18:54:01 - src.translator.pdf_formatter - INFO - Page 1: Successfully inserted text using insert_text
+2026-01-03 18:54:01 - src.translator.pdf_formatter - INFO - Page 1: Inserting translation 3: '---...' (font: Arial, size: 7.5)
+2026-01-03 18:54:01 - src.translator.pdf_formatter - WARNING - Page 1: insert_textbox overflow (rc=-3.6), trying insert_text
+2026-01-03 18:54:01 - src.translator.pdf_formatter - INFO - Page 1: Successfully inserted text using insert_text
+2026-01-03 18:54:01 - src.translator.pdf_formatter - INFO - Page 1: Inserting translation 4: '## TABELLA COMPARATIVA E NOTE...' (font: Arial, size: 7.5)
+2026-01-03 18:54:01 - src.translator.pdf_formatter - WARNING - Page 1: insert_textbox overflow (rc=-3.6), trying insert_text
+2026-01-03 18:54:01 - src.translator.pdf_formatter - INFO - Page 1: Successfully inserted text using insert_text
+2026-01-03 18:54:01 - src.translator.pdf_formatter - INFO - Page 1: Inserting translation 5: '| **Originale (DE)** | **Traduzione (IT)** | **Spi...' (font: Arial, size: 7.5)
+2026-01-03 18:54:01 - src.translator.pdf_formatter - WARNING - Page 1: insert_textbox overflow (rc=-457.0), trying insert_text
+2026-01-03 18:54:01 - src.translator.pdf_formatter - INFO - Page 1: Successfully inserted text using insert_text
+2026-01-03 18:54:01 - src.translator.pdf_formatter - INFO - Page 1: Inserting translation 6: '---...' (font: Arial, size: 7.5)
+2026-01-03 18:54:01 - src.translator.pdf_formatter - WARNING - Page 1: insert_textbox overflow (rc=-2.6), trying insert_text
+2026-01-03 18:54:01 - src.translator.pdf_formatter - INFO - Page 1: Successfully inserted text using insert_text
+2026-01-03 18:54:01 - src.translator.pdf_formatter - INFO - Page 1: Inserting translation 7: '## NOTE METODOLOGICHE E CONTESTUALI...' (font: Arial, size: 7.5)
+2026-01-03 18:54:01 - src.translator.pdf_formatter - INFO - Page 1: Successfully inserted text using insert_textbox (rc=5.5)
+2026-01-03 18:54:01 - src.translator.pdf_formatter - INFO - Page 1: Inserting translation 8: '### 1. **Natura del documento**
+Questo è un **estr...' (font: Arial, size: 7.5)
+2026-01-03 18:54:01 - src.translator.pdf_formatter - WARNING - Page 1: insert_textbox overflow (rc=-94.9), trying insert_text
+2026-01-03 18:54:01 - src.translator.pdf_formatter - INFO - Page 1: Successfully inserted text using insert_text
+2026-01-03 18:54:01 - src.translator.pdf_formatter - INFO - Page 1: Inserting translation 9: '### 2. **Scelte terminologiche bancarie**
+- **"Ums...' (font: Arial Bold, size: 7.5)
+2026-01-03 18:54:01 - src.translator.pdf_formatter - WARNING - Page 1: insert_textbox overflow (rc=-138.0), trying insert_text
+2026-01-03 18:54:01 - src.translator.pdf_formatter - INFO - Page 1: Successfully inserted text using insert_text
+2026-01-03 18:54:01 - src.translator.pdf_formatter - INFO - Page 1: Inserting translation 10: '### 3. **Elementi invariati**
+- **IBAN, BIC, codic...' (font: Arial, size: 6.0)
+2026-01-03 18:54:01 - src.translator.pdf_formatter - WARNING - Page 1: insert_textbox overflow (rc=-1042.2), trying insert_text
+2026-01-03 18:54:01 - src.translator.pdf_formatter - INFO - Page 1: Successfully inserted text using insert_text
+2026-01-03 18:54:01 - src.translator.pdf_formatter - INFO - Saved translated PDF with preserved formatting to /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/tmppig1x8jc.pdf
+2026-01-03 18:54:01 - src.translator.api - INFO - [STREAM 58d308f7-58f9-4fee-86d0-7cff92af13b8] PDF generated with formatting preservation: 203,211 bytes
+2026-01-03 18:54:01 - src.translator.api - INFO - [STREAM 58d308f7-58f9-4fee-86d0-7cff92af13b8] PDF stored for download
+2026-01-03 18:54:02 - src.translator.api - INFO - [DOWNLOAD STREAM 58d308f7-58f9-4fee-86d0-7cff92af13b8] Serving PDF from memory: 203,211 bytes
+INFO:     127.0.0.1:62680 - "GET /api/translate-stream/58d308f7-58f9-4fee-86d0-7cff92af13b8/download HTTP/1.1" 200 OK
+2026-01-03 18:54:32 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
+2026-01-03 18:54:32 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
+2026-01-03 18:54:32 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
+[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
+INFO:     127.0.0.1:62714 - "GET /api/prompt HTTP/1.1" 200 OK
+2026-01-03 18:54:32 - src.translator.api - INFO - [PROMPT ACCESS] X-User-Role: admin, X-Username: admin
+2026-01-03 18:54:32 - src.translator.api - INFO - [PROMPT ACCESS] Admin check result: True
+2026-01-03 18:54:32 - src.translator.api - INFO - [PROMPT ACCESS] Access granted for admin user: admin
+[prompt] Loaded custom prompt template from /Users/enrico/workspace/translator/prompt.md
+INFO:     127.0.0.1:62716 - "GET /api/prompt HTTP/1.1" 200 OK
+2026-01-03 18:54:52 - src.translator.api - INFO - Detected language: de (prob: 1.00) -> de
+INFO:     127.0.0.1:62738 - "POST /api/detect-language HTTP/1.1" 200 OK
+2026-01-03 18:54:58 - src.translator.api - INFO - [STREAM 271fd657-df81-424e-b650-e885c2e1ebe9] Starting streaming translation
+2026-01-03 18:54:58 - src.translator.processing - INFO - [_read_file_as_text] Reading entire file as text: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/tmpovc6z2m7.pdf
+2026-01-03 18:54:58 - src.translator.processing - INFO - [_read_file_as_text] File type: .pdf
+2026-01-03 18:54:58 - src.translator.processing - INFO - [_read_file_as_text] File hash: 5d8bac2b5f3b93e3a8a4d7373852e903
+2026-01-03 18:54:58 - src.translator.processing - INFO - [_read_file_as_text] File size: 187,007 bytes
+2026-01-03 18:54:58 - src.translator.processing - INFO - [_read_file_as_text] Extracted text length: 457 characters
+2026-01-03 18:54:58 - src.translator.processing - INFO - [_read_file_as_text] First 200 chars: Umsatzdetails
+www.commerzbank.de
+IBAN: DE49 1008 0000 0272 7699 00 | 0-Euro-Konto
+BIC: DRESDEFF100
+Kontowährung: EUR
+Kontoinhaber: Enrico Mariotti
+Buchungstag: 2024-09-06
+Umsatzart: Überweisung
+Erik I...
+INFO:     127.0.0.1:62747 - "POST /api/translate-stream HTTP/1.1" 200 OK
+2026-01-03 18:54:58 - src.translator.claude_client - INFO - ================================================================================
+2026-01-03 18:54:58 - src.translator.claude_client - INFO - 🔄 STREAMING CLAUDE API REQUEST
+2026-01-03 18:54:58 - src.translator.claude_client - INFO - ================================================================================
+2026-01-03 18:54:58 - src.translator.claude_client - INFO - 📊 Document details:
+2026-01-03 18:54:58 - src.translator.claude_client - INFO -   - Document length: 457 characters
+2026-01-03 18:54:58 - src.translator.claude_client - INFO -   - Source: de -> Target: it
+2026-01-03 18:54:58 - src.translator.claude_client - INFO -   - Glossary matches: 1
+2026-01-03 18:54:58 - src.translator.claude_client - INFO -   - Memory hits: 0
+2026-01-03 18:54:58 - src.translator.claude_client - INFO -   - Reference doc pairs: 0
+2026-01-03 18:54:58 - src.translator.claude_client - INFO - 📏 Prompt details:
+2026-01-03 18:54:58 - src.translator.claude_client - INFO -   - Total prompt length: 997 characters (~249 tokens)
+2026-01-03 18:54:58 - src.translator.claude_client - INFO - 🎯 Model: claude-sonnet-4-5-20250929
+2026-01-03 18:54:58 - src.translator.claude_client - INFO - ⏱️  Starting streaming translation...
+2026-01-03 18:54:58 - src.translator.claude_client - INFO - ================================================================================
+2026-01-03 18:55:00 - httpx - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-01-03 18:55:00 - src.translator.api - INFO - [STREAM 52f3a583-d7cc-4256-b6b8-725b72d938ce] Starting streaming translation
+2026-01-03 18:55:00 - src.translator.processing - INFO - [_read_file_as_text] Reading entire file as text: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/tmp1yjvcp8y.pdf
+2026-01-03 18:55:00 - src.translator.processing - INFO - [_read_file_as_text] File type: .pdf
+2026-01-03 18:55:00 - src.translator.processing - INFO - [_read_file_as_text] File hash: 5d8bac2b5f3b93e3a8a4d7373852e903
+2026-01-03 18:55:00 - src.translator.processing - INFO - [_read_file_as_text] File size: 187,007 bytes
+2026-01-03 18:55:01 - src.translator.processing - INFO - [_read_file_as_text] Extracted text length: 457 characters
+2026-01-03 18:55:01 - src.translator.processing - INFO - [_read_file_as_text] First 200 chars: Umsatzdetails
+www.commerzbank.de
+IBAN: DE49 1008 0000 0272 7699 00 | 0-Euro-Konto
+BIC: DRESDEFF100
+Kontowährung: EUR
+Kontoinhaber: Enrico Mariotti
+Buchungstag: 2024-09-06
+Umsatzart: Überweisung
+Erik I...
+INFO:     127.0.0.1:62751 - "GET /api/translate/streaming/status HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:62750 - "POST /api/translate-stream HTTP/1.1" 200 OK
+2026-01-03 18:55:01 - src.translator.claude_client - INFO - ================================================================================
+2026-01-03 18:55:01 - src.translator.claude_client - INFO - 🔄 STREAMING CLAUDE API REQUEST
+2026-01-03 18:55:01 - src.translator.claude_client - INFO - ================================================================================
+2026-01-03 18:55:01 - src.translator.claude_client - INFO - 📊 Document details:
+2026-01-03 18:55:01 - src.translator.claude_client - INFO -   - Document length: 457 characters
+2026-01-03 18:55:01 - src.translator.claude_client - INFO -   - Source: de -> Target: it
+2026-01-03 18:55:01 - src.translator.claude_client - INFO -   - Glossary matches: 1
+2026-01-03 18:55:01 - src.translator.claude_client - INFO -   - Memory hits: 0
+2026-01-03 18:55:01 - src.translator.claude_client - INFO -   - Reference doc pairs: 0
+2026-01-03 18:55:01 - src.translator.claude_client - INFO - 📏 Prompt details:
+2026-01-03 18:55:01 - src.translator.claude_client - INFO -   - Total prompt length: 997 characters (~249 tokens)
+2026-01-03 18:55:01 - src.translator.claude_client - INFO - 🎯 Model: claude-sonnet-4-5-20250929
+2026-01-03 18:55:01 - src.translator.claude_client - INFO - ⏱️  Starting streaming translation...
+2026-01-03 18:55:01 - src.translator.claude_client - INFO - ================================================================================
+2026-01-03 18:55:03 - httpx - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2026-01-03 18:55:06 - src.translator.claude_client - INFO - ================================================================================
+2026-01-03 18:55:06 - src.translator.claude_client - INFO - ✅ CLAUDE API STREAMING COMPLETED
+2026-01-03 18:55:06 - src.translator.claude_client - INFO - ================================================================================
+2026-01-03 18:55:06 - src.translator.claude_client - INFO - ⏱️  Total duration: 7.27 seconds
+2026-01-03 18:55:06 - src.translator.claude_client - INFO - ================================================================================
+2026-01-03 18:55:06 - src.translator.api - INFO - [STREAM 271fd657-df81-424e-b650-e885c2e1ebe9] Generating PDF...
+2026-01-03 18:55:06 - src.translator.api - INFO - [STREAM 271fd657-df81-424e-b650-e885c2e1ebe9] Using PyMuPDF to preserve PDF formatting
+2026-01-03 18:55:06 - src.translator.pdf_formatter - INFO - Translating PDF with formatting preservation
+2026-01-03 18:55:06 - src.translator.pdf_formatter - INFO - Input: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/tmpovc6z2m7.pdf
+2026-01-03 18:55:06 - src.translator.pdf_formatter - INFO - Output: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/tmpua20wg6g.pdf
+2026-01-03 18:55:06 - src.translator.pdf_formatter - INFO - Number of translated paragraphs: 2
+2026-01-03 18:55:06 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] Reading PDF: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/tmpovc6z2m7.pdf
+2026-01-03 18:55:06 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] Absolute path: /private/var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/tmpovc6z2m7.pdf
+2026-01-03 18:55:06 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] File hash: 5d8bac2b5f3b93e3a8a4d7373852e903
+2026-01-03 18:55:06 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] File size: 187,007 bytes
+2026-01-03 18:55:06 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] PDF opened, pages: 1
+2026-01-03 18:55:06 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] First page first chunk: Umsatzdetails
+www.commerzbank.de
+IBAN: DE49 1008 0000 0272 7699 00 | 0-Euro-Konto
+BIC: DRESDEFF100
+K...
+2026-01-03 18:55:06 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] Extracted 1 paragraphs
+2026-01-03 18:55:06 - src.translator.pdf_formatter - INFO - Extracted 1 original paragraphs from PDF
+2026-01-03 18:55:06 - src.translator.pdf_formatter - WARNING - Paragraph count mismatch: 1 original vs 2 translated
+2026-01-03 18:55:06 - src.translator.pdf_formatter - WARNING - Will attempt to map paragraphs by position
+2026-01-03 18:55:06 - src.translator.pdf_formatter - INFO - Opened PDF with 1 pages
+2026-01-03 18:55:06 - src.translator.pdf_formatter - INFO - Processing page 1
+2026-01-03 18:55:06 - src.translator.pdf_formatter - INFO - Page 1: Found 11 paragraph groups
+2026-01-03 18:55:06 - src.translator.pdf_formatter - INFO - Page 1: Starting with translation_idx=0, total translations=2
+2026-01-03 18:55:06 - src.translator.pdf_formatter - INFO - Page 1: Redacting all text spans to remove original text
+2026-01-03 18:55:06 - src.translator.pdf_formatter - INFO - Page 1: Will replace 2 paragraphs with translations
+2026-01-03 18:55:06 - src.translator.pdf_formatter - INFO - Page 1: No more translations available, stopping at paragraph 2
+2026-01-03 18:55:06 - src.translator.pdf_formatter - INFO - Page 1: Re-inserting 2 translated paragraphs
+2026-01-03 18:55:06 - src.translator.pdf_formatter - INFO - Page 1: Inserting translation 0: '# Traduzione in italiano...' (font: Arial, size: 14.0)
+2026-01-03 18:55:06 - src.translator.pdf_formatter - WARNING - Page 1: insert_textbox overflow (rc=-7.8), trying insert_text
+2026-01-03 18:55:06 - src.translator.pdf_formatter - INFO - Page 1: Successfully inserted text using insert_text
+2026-01-03 18:55:06 - src.translator.pdf_formatter - INFO - Page 1: Inserting translation 1: '## Dettagli della transazione
+www.commerzbank.de
+I...' (font: Arial Bold, size: 7.5)
+2026-01-03 18:55:06 - src.translator.pdf_formatter - WARNING - Page 1: insert_textbox overflow (rc=-148.0), trying insert_text
+2026-01-03 18:55:06 - src.translator.pdf_formatter - INFO - Page 1: Successfully inserted text using insert_text
+2026-01-03 18:55:06 - src.translator.pdf_formatter - INFO - Saved translated PDF with preserved formatting to /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/tmpua20wg6g.pdf
+2026-01-03 18:55:06 - src.translator.api - INFO - [STREAM 271fd657-df81-424e-b650-e885c2e1ebe9] PDF generated with formatting preservation: 199,677 bytes
+2026-01-03 18:55:06 - src.translator.api - INFO - [STREAM 271fd657-df81-424e-b650-e885c2e1ebe9] PDF stored for download
+2026-01-03 18:55:06 - src.translator.claude_client - INFO - ================================================================================
+2026-01-03 18:55:06 - src.translator.claude_client - INFO - ✅ CLAUDE API STREAMING COMPLETED
+2026-01-03 18:55:06 - src.translator.claude_client - INFO - ================================================================================
+2026-01-03 18:55:06 - src.translator.claude_client - INFO - ⏱️  Total duration: 5.33 seconds
+2026-01-03 18:55:06 - src.translator.claude_client - INFO - ================================================================================
+2026-01-03 18:55:06 - src.translator.api - INFO - [STREAM 52f3a583-d7cc-4256-b6b8-725b72d938ce] Generating PDF...
+2026-01-03 18:55:06 - src.translator.api - INFO - [STREAM 52f3a583-d7cc-4256-b6b8-725b72d938ce] Using PyMuPDF to preserve PDF formatting
+2026-01-03 18:55:06 - src.translator.pdf_formatter - INFO - Translating PDF with formatting preservation
+2026-01-03 18:55:06 - src.translator.pdf_formatter - INFO - Input: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/tmp1yjvcp8y.pdf
+2026-01-03 18:55:06 - src.translator.pdf_formatter - INFO - Output: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/tmpk6yqp0pw.pdf
+2026-01-03 18:55:06 - src.translator.pdf_formatter - INFO - Number of translated paragraphs: 2
+2026-01-03 18:55:06 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] Reading PDF: /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/tmp1yjvcp8y.pdf
+2026-01-03 18:55:06 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] Absolute path: /private/var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/tmp1yjvcp8y.pdf
+2026-01-03 18:55:06 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] File hash: 5d8bac2b5f3b93e3a8a4d7373852e903
+2026-01-03 18:55:06 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] File size: 187,007 bytes
+2026-01-03 18:55:06 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] PDF opened, pages: 1
+2026-01-03 18:55:06 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] First page first chunk: Umsatzdetails
+www.commerzbank.de
+IBAN: DE49 1008 0000 0272 7699 00 | 0-Euro-Konto
+BIC: DRESDEFF100
+K...
+2026-01-03 18:55:06 - src.translator.pdf_io - INFO - [read_paragraphs_from_pdf] Extracted 1 paragraphs
+2026-01-03 18:55:06 - src.translator.pdf_formatter - INFO - Extracted 1 original paragraphs from PDF
+2026-01-03 18:55:06 - src.translator.pdf_formatter - WARNING - Paragraph count mismatch: 1 original vs 2 translated
+2026-01-03 18:55:06 - src.translator.pdf_formatter - WARNING - Will attempt to map paragraphs by position
+2026-01-03 18:55:06 - src.translator.pdf_formatter - INFO - Opened PDF with 1 pages
+2026-01-03 18:55:06 - src.translator.pdf_formatter - INFO - Processing page 1
+2026-01-03 18:55:06 - src.translator.pdf_formatter - INFO - Page 1: Found 11 paragraph groups
+2026-01-03 18:55:06 - src.translator.pdf_formatter - INFO - Page 1: Starting with translation_idx=0, total translations=2
+2026-01-03 18:55:06 - src.translator.pdf_formatter - INFO - Page 1: Redacting all text spans to remove original text
+2026-01-03 18:55:06 - src.translator.pdf_formatter - INFO - Page 1: Will replace 2 paragraphs with translations
+2026-01-03 18:55:06 - src.translator.pdf_formatter - INFO - Page 1: No more translations available, stopping at paragraph 2
+2026-01-03 18:55:06 - src.translator.pdf_formatter - INFO - Page 1: Re-inserting 2 translated paragraphs
+2026-01-03 18:55:06 - src.translator.pdf_formatter - INFO - Page 1: Inserting translation 0: '# Traduzione in italiano...' (font: Arial, size: 14.0)
+2026-01-03 18:55:06 - src.translator.pdf_formatter - WARNING - Page 1: insert_textbox overflow (rc=-7.8), trying insert_text
+2026-01-03 18:55:06 - src.translator.pdf_formatter - INFO - Page 1: Successfully inserted text using insert_text
+2026-01-03 18:55:06 - src.translator.pdf_formatter - INFO - Page 1: Inserting translation 1: '## Dettagli della transazione
+www.commerzbank.de
+I...' (font: Arial Bold, size: 7.5)
+2026-01-03 18:55:06 - src.translator.pdf_formatter - WARNING - Page 1: insert_textbox overflow (rc=-148.0), trying insert_text
+2026-01-03 18:55:06 - src.translator.pdf_formatter - INFO - Page 1: Successfully inserted text using insert_text
+2026-01-03 18:55:06 - src.translator.pdf_formatter - INFO - Saved translated PDF with preserved formatting to /var/folders/w7/wsfvt7nd4y96pfgcf0_9x2_h0000gp/T/tmpk6yqp0pw.pdf
+2026-01-03 18:55:06 - src.translator.api - INFO - [STREAM 52f3a583-d7cc-4256-b6b8-725b72d938ce] PDF generated with formatting preservation: 199,677 bytes
+2026-01-03 18:55:06 - src.translator.api - INFO - [STREAM 52f3a583-d7cc-4256-b6b8-725b72d938ce] PDF stored for download
+INFO:     127.0.0.1:62761 - "GET /api/glossary/glossary/content HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62763 - "GET /api/glossary/glossary/content HTTP/1.1" 200 OK
+2026-01-03 18:55:23 - src.translator.api - INFO - [DOWNLOAD STREAM 52f3a583-d7cc-4256-b6b8-725b72d938ce] Serving PDF from memory: 199,677 bytes
+INFO:     127.0.0.1:62781 - "GET /api/translate-stream/52f3a583-d7cc-4256-b6b8-725b72d938ce/download HTTP/1.1" 200 OK
+rom memory: 199,677 bytes

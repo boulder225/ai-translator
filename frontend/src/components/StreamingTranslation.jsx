@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { startTranslationStreaming } from '../services/api';
+import { startTranslationStreaming, downloadStreamingPdf } from '../services/api';
 import EditableTranslatedText from './EditableTranslatedText';
 import './TranslationStatus.css';
 
@@ -9,6 +9,8 @@ function StreamingTranslation({ file, options, onComplete, onReset }) {
   const [translatedText, setTranslatedText] = useState('');
   const [status, setStatus] = useState('streaming'); // 'streaming', 'completed', 'error'
   const [error, setError] = useState(null);
+  const [sessionId, setSessionId] = useState(null); // Store session ID for PDF download
+  const [downloading, setDownloading] = useState(false);
   const [stats, setStats] = useState({
     characters: 0,
     words: 0,
@@ -81,10 +83,11 @@ function StreamingTranslation({ file, options, onComplete, onReset }) {
           });
         },
         // onComplete callback
-        (fullText, message, apiStats) => {
+        (fullText, message, apiStats, apiSessionId) => {
           setTranslatedText(fullText);
           translatedTextRef.current = fullText; // Update ref
           setStatus('completed');
+          setSessionId(apiSessionId); // Store session ID for PDF download
           updateStats(fullText); // Pass fullText directly to avoid stale state
           if (apiStats) {
             setTranslationStats(apiStats);
@@ -111,6 +114,23 @@ function StreamingTranslation({ file, options, onComplete, onReset }) {
       if (statsIntervalRef.current) {
         clearInterval(statsIntervalRef.current);
       }
+    }
+  };
+
+  const handleDownloadPdf = async () => {
+    if (!sessionId) {
+      alert('No PDF available for download');
+      return;
+    }
+
+    setDownloading(true);
+    try {
+      await downloadStreamingPdf(sessionId);
+    } catch (error) {
+      console.error('Download failed:', error);
+      alert('Failed to download PDF: ' + (error.message || 'Unknown error'));
+    } finally {
+      setDownloading(false);
     }
   };
 
@@ -218,6 +238,15 @@ function StreamingTranslation({ file, options, onComplete, onReset }) {
 
         {(status === 'completed' || status === 'error') && (
           <div className="action-buttons" style={{ marginTop: '1rem' }}>
+            {status === 'completed' && sessionId && (
+              <button
+                className="button"
+                onClick={handleDownloadPdf}
+                disabled={downloading}
+              >
+                {downloading ? 'Downloading...' : '📄 Download PDF'}
+              </button>
+            )}
             <button className="button button-secondary" onClick={onReset}>
               {status === 'error' ? 'Try Again' : 'Translate Another Document'}
             </button>
